@@ -14,9 +14,19 @@ type Recipe {
 """Date custom scalar type"""
 scalar Date
 
+"""whisky"""
+type Whisky {
+  id: ID!
+  title: String!
+  description: String
+  age: Float!
+  creationDate: Date!
+}
+
 type Query {
   recipe(id: String!): Recipe!
   recipes(skip: Int = 0, take: Int = 25): [Recipe!]!
+  whiskyList(skip: Int = 0, take: Int = 25): [Whisky!]!
 }
 
 type Mutation {

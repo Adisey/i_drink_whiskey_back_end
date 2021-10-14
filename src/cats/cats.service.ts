@@ -9,13 +9,6 @@ export class CatsService {
   constructor(@InjectModel('Cat') private readonly catModel: Model<Cat>) {}
 
   async create(createCatDto: CreateCatDto): Promise<Cat> {
-    console.log(
-      +new Date(),
-      '-(CatsService)->',
-      typeof createCatDto,
-      `-createCatDto->`,
-      createCatDto,
-    );
     const createdCat = new this.catModel(createCatDto);
 
     return createdCat.save();
