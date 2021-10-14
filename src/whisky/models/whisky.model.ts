@@ -5,6 +5,9 @@ export class Whisky {
   @Field((type) => ID)
   id: string;
 
+  // @Field()
+  // id: string;
+
   @Field()
   title: string;
 
@@ -12,8 +15,8 @@ export class Whisky {
   description?: string;
 
   @Field()
-  age: Number;
+  age: number;
 
   @Field()
-  creationDate: Date;
+  creationDate?: Date;
 }

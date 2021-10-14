@@ -32,6 +32,7 @@ type Query {
 type Mutation {
   addRecipe(newRecipeData: NewRecipeInput!): Recipe!
   removeRecipe(id: String!): Boolean!
+  addWhisky(newWhiskyData: NewWhiskyInput!): Whisky!
 }
 
 input NewRecipeInput {
@@ -40,6 +41,14 @@ input NewRecipeInput {
   ingredients: [String!]!
 }
 
+input NewWhiskyInput {
+  title: String!
+  description: String
+  age: Float
+  creationDate: Date
+}
+
 type Subscription {
   recipeAdded: Recipe!
+  whiskyAdded: Whisky!
 }

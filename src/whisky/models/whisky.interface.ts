@@ -5,5 +5,5 @@ export interface IWhiskyDB extends Document {
   readonly title: string;
   readonly age: number;
   readonly description: string;
-  readonly creationDate: Date;
+  readonly creationDate?: Date;
 }
