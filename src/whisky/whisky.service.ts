@@ -25,9 +25,7 @@ export class WhiskyService {
   //
   async findAll(listArgs: ListArgs): Promise<Whisky[]> {
     // ToDo: 14.10.2021 - Add pagination
-    const aa = await this.whiskyModel.find().exec();
-    console.log(+new Date(), '-(findAll)->', typeof aa, `-aa->`, aa);
-    return aa; //.map((i) => ({ id: i._id, ...i }));
+    return await this.whiskyModel.find().exec();
   }
   //
   // async remove(id: string): Promise<boolean> {
