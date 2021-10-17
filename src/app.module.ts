@@ -8,10 +8,10 @@ import { DogsModule } from './dogs/dogs.module';
 import { RecipesModule } from './recipes/recipes.module';
 import { WhiskyModule } from './whisky/whisky.module';
 
-const dbDatabase = process.env.DB_DATABASE || 'test_2';
-const dbIp = process.env.DB_IP || '192.168.50.200';
+const dbDatabase = process.env.DB_DATABASE || 'test';
+const dbUrl = process.env.DB_URL || 'localhost';
 const dbPort = process.env.DB_PORT || '27017';
-const mongoDB = `mongodb://${dbIp}:${dbPort}/${dbDatabase}`;
+const mongoDB = `mongodb://${dbUrl}:${dbPort}/${dbDatabase}`;
 console.log(+new Date(), `mongoDB:`, mongoDB);
 
 @Module({
