@@ -5,7 +5,6 @@ import { MongooseModule } from '@nestjs/mongoose';
 import * as dotenv from 'dotenv';
 
 // Domains
-import { CatsModule } from './cats/cats.module';
 import { RecipesModule } from './recipes/recipes.module';
 
 import { WhiskyModule } from './whisky/whisky.module';
@@ -24,7 +23,6 @@ console.log(+new Date(), `mongoDB:`, mongoDB);
       useUnifiedTopology: true,
       useNewUrlParser: true,
     }),
-    CatsModule,
     RecipesModule,
     WhiskyModule,
     GraphQLModule.forRoot({
