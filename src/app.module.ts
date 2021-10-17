@@ -5,8 +5,6 @@ import { MongooseModule } from '@nestjs/mongoose';
 import * as dotenv from 'dotenv';
 
 // Domains
-import { RecipesModule } from './recipes/recipes.module';
-
 import { WhiskyModule } from './whisky/whisky.module';
 
 dotenv.config();
@@ -23,7 +21,6 @@ console.log(+new Date(), `mongoDB:`, mongoDB);
       useUnifiedTopology: true,
       useNewUrlParser: true,
     }),
-    RecipesModule,
     WhiskyModule,
     GraphQLModule.forRoot({
       installSubscriptionHandlers: true,
