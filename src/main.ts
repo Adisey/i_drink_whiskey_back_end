@@ -5,7 +5,7 @@ async function main() {
   const backPort = process.env.BACK_PORT || '4000';
   const app = await NestFactory.create(AppModule);
   await app.listen(backPort);
-  console.log(+new Date(), 'listen port:', backPort);
+  console.log(+new Date(), 'Server listen port:', backPort);
 }
 
 main();

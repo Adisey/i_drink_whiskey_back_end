@@ -13,7 +13,7 @@ const dbDatabase = process.env.DB_DATABASE || 'test';
 const dbUrl = process.env.DB_URL || 'localhost';
 const dbPort = process.env.DB_PORT || '27017';
 const mongoDB = `mongodb://${dbUrl}:${dbPort}/${dbDatabase}`;
-console.log(+new Date(), `mongoDB:`, mongoDB);
+console.log(+new Date(), `Use mongoDB:`, mongoDB);
 
 @Module({
   imports: [
