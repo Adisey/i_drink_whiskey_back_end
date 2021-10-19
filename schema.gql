@@ -10,12 +10,21 @@ type WhiskyGraphQLModel {
   age: Float
 }
 
+"""country"""
+type CountryGraphQLModel {
+  _id: String
+  name: String!
+  description: String
+}
+
 type Query {
   whiskyList(skip: Int = 0, take: Int = 25): [WhiskyGraphQLModel!]!
+  countryList(skip: Int = 0, take: Int = 25): [CountryGraphQLModel!]!
 }
 
 type Mutation {
   addWhisky(newWhiskyData: NewWhiskyInput!): WhiskyGraphQLModel!
+  addCountry(newCountryData: NewCountryInput!): CountryGraphQLModel!
 }
 
 input NewWhiskyInput {
@@ -30,6 +39,12 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 """
 scalar DateTime
 
+input NewCountryInput {
+  name: String!
+  description: String
+}
+
 type Subscription {
   whiskyAdded: WhiskyGraphQLModel!
+  countryAdded: CountryGraphQLModel!
 }

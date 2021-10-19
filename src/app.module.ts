@@ -7,6 +7,7 @@ import { getMongoConfig } from 'src/configs/mongo.config';
 
 // Domains
 import { WhiskyModule } from './whisky/whisky.module';
+import { CountryModule } from 'src/country/country.module';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { WhiskyModule } from './whisky/whisky.module';
       useFactory: getMongoConfig,
     }),
     WhiskyModule,
+    CountryModule,
     GraphQLModule.forRoot({
       installSubscriptionHandlers: true,
       autoSchemaFile: 'schema.gql',

@@ -1,4 +1,3 @@
-// import { NotFoundException } from '@nestjs/common';
 import { Args, Mutation, Query, Resolver, Subscription } from '@nestjs/graphql';
 import { PubSub } from 'graphql-subscriptions';
 import { WhiskyService } from './whisky.service';
@@ -6,8 +5,8 @@ import { ListArgs } from 'src/global/dto/list.args';
 import {
   NewWhiskyInput,
   WhiskyGraphQLModel,
-} from 'src/whisky/models/whisky.model.GraphQL';
-import { CreateWhiskyDto } from 'src/whisky/models/whisky.model.DB';
+} from './models/whisky.model.GraphQL';
+import { CreateWhiskyDto } from './models/whisky.model.DB';
 
 const pubSub = new PubSub();
 
