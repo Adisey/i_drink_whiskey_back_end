@@ -1,14 +1,17 @@
 // import { NotFoundException } from '@nestjs/common';
 import { Args, Mutation, Query, Resolver, Subscription } from '@nestjs/graphql';
 import { PubSub } from 'graphql-subscriptions';
-import { Whisky } from './models/whisky.model';
 import { WhiskyService } from './whisky.service';
 import { ListArgs } from 'src/global/dto/list.args';
-import { NewWhiskyInput } from 'src/whisky/models/new-whisky.input';
+import {
+  NewWhiskyInput,
+  WhiskyGraphQLModel,
+} from 'src/whisky/models/whisky.model.GraphQL';
+import { CreateWhiskyDto } from 'src/whisky/models/whisky.model.DB';
 
 const pubSub = new PubSub();
 
-@Resolver((of) => Whisky)
+@Resolver((of) => WhiskyGraphQLModel)
 export class WhiskyResolver {
   constructor(private readonly whiskyService: WhiskyService) {}
 
@@ -21,16 +24,20 @@ export class WhiskyResolver {
   //   return recipe;
   // }
   //
-  @Query((returns) => [Whisky])
-  async whiskyList(@Args() listArgs: ListArgs): Promise<Whisky[]> {
-    return await this.whiskyService.findAll(listArgs);
+  @Query((returns) => [WhiskyGraphQLModel])
+  async whiskyList(@Args() listArgs: ListArgs): Promise<WhiskyGraphQLModel[]> {
+    const aa = await this.whiskyService.findAll(listArgs);
+    console.log(+new Date(), '-()->', typeof aa, `-aa->`, aa);
+    return aa as unknown as WhiskyGraphQLModel[];
   }
 
-  @Mutation((returns) => Whisky)
+  @Mutation((returns) => WhiskyGraphQLModel)
   async addWhisky(
     @Args('newWhiskyData') newWhiskyData: NewWhiskyInput,
-  ): Promise<Whisky> {
-    const whisky = await this.whiskyService.create(newWhiskyData);
+  ): Promise<WhiskyGraphQLModel> {
+    const whisky = (await this.whiskyService.create(
+      newWhiskyData as CreateWhiskyDto,
+    )) as unknown as WhiskyGraphQLModel;
     pubSub.publish('whiskyAdded', { whiskyAdded: whisky });
     return whisky;
   }
@@ -40,7 +47,7 @@ export class WhiskyResolver {
   //   return this.recipesService.remove(id);
   // }
   //
-  @Subscription((returns) => Whisky)
+  @Subscription(() => WhiskyGraphQLModel)
   whiskyAdded() {
     return pubSub.asyncIterator('whiskyAdded');
   }

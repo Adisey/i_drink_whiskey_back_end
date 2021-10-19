@@ -1,34 +1,22 @@
-import { Model } from 'mongoose';
 import { Injectable } from '@nestjs/common';
-import { ListArgs } from 'src/global/dto/list.args';
-import { InjectModel } from '@nestjs/mongoose';
-import { Whisky } from './models/whisky.model';
-import { IWhiskyDB } from './models/whisky.interface';
-import { NewWhiskyInput } from 'src/whisky/models/new-whisky.input';
-// import { NewRecipeInput } from './dto/new-recipe.input';
-//
+import { InjectModel } from 'nestjs-typegoose';
+import { DocumentType, ModelType } from '@typegoose/typegoose/lib/types';
+import { ListArgs } from '../global/dto/list.args';
+import { CreateWhiskyDto, WhiskyDBModel } from './models/whisky.model.DB';
+
 @Injectable()
 export class WhiskyService {
   constructor(
-    @InjectModel('Whisky') private readonly whiskyModel: Model<IWhiskyDB>,
+    @InjectModel(WhiskyDBModel)
+    private readonly whiskyModel: ModelType<WhiskyDBModel>,
   ) {}
-  async create(data: NewWhiskyInput): Promise<Whisky> {
-    const createdWhisky = await new this.whiskyModel(data);
-    return createdWhisky.save();
-    // return newWhisky;
+
+  async create(data: CreateWhiskyDto): Promise<DocumentType<WhiskyDBModel>> {
+    return await this.whiskyModel.create(data);
   }
 
-  //
-  // async findOneById(id: string): Promise<Recipe> {
-  //   return {} as any;
-  // }
-  //
-  async findAll(listArgs: ListArgs): Promise<Whisky[]> {
+  async findAll(listArgs: ListArgs): Promise<DocumentType<WhiskyDBModel>[]> {
     // ToDo: 14.10.2021 - Add pagination
     return await this.whiskyModel.find().exec();
   }
-  //
-  // async remove(id: string): Promise<boolean> {
-  //   return true;
-  // }
 }

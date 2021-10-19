@@ -1,14 +1,22 @@
+// Core
 import { Module } from '@nestjs/common';
-import { MongooseModule } from '@nestjs/mongoose';
-import { DateScalar } from '../common/scalars/date.scalar';
+import { TypegooseModule } from 'nestjs-typegoose';
+
 import { WhiskyResolver } from './whisky.resolver';
 import { WhiskyService } from './whisky.service';
-import { WhiskySchema } from './models/whisky.schema';
+import { WhiskyDBModel } from './models/whisky.model.DB';
 
 @Module({
   imports: [
-    MongooseModule.forFeature([{ name: 'Whisky', schema: WhiskySchema }]),
+    TypegooseModule.forFeature([
+      {
+        typegooseClass: WhiskyDBModel,
+        schemaOptions: {
+          collection: 'Whisky',
+        },
+      },
+    ]),
   ],
-  providers: [WhiskyResolver, WhiskyService, DateScalar],
+  providers: [WhiskyService, WhiskyResolver],
 })
 export class WhiskyModule {}
