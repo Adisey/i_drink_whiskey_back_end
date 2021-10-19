@@ -8,10 +8,6 @@ import { getMongoConfig } from 'src/configs/mongo.config';
 // Domains
 import { WhiskyModule } from './whisky/whisky.module';
 
-// ToDo: 19.10.2021 - Remove this
-import * as dotenv from 'dotenv';
-dotenv.config();
-
 @Module({
   imports: [
     ConfigModule.forRoot(),
