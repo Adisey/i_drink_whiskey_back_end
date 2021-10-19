@@ -26,7 +26,7 @@ export class CountryResolver {
 
   @Mutation((returns) => CountryGraphQLModel)
   async addCountry(
-    @Args('newCountryData') newCountryData: NewCountryInput,
+    @Args('data') newCountryData: NewCountryInput,
   ): Promise<CountryGraphQLModel> {
     const country = (await this.countryService.create(
       newCountryData as CreateCountryDto,

@@ -23,8 +23,8 @@ type Query {
 }
 
 type Mutation {
-  addWhisky(newWhiskyData: NewWhiskyInput!): WhiskyGraphQLModel!
-  addCountry(newCountryData: NewCountryInput!): CountryGraphQLModel!
+  addWhisky(data: NewWhiskyInput!): WhiskyGraphQLModel!
+  addCountry(data: NewCountryInput!): CountryGraphQLModel!
 }
 
 input NewWhiskyInput {

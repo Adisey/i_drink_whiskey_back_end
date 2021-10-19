@@ -32,7 +32,7 @@ export class WhiskyResolver {
 
   @Mutation((returns) => WhiskyGraphQLModel)
   async addWhisky(
-    @Args('newWhiskyData') newWhiskyData: NewWhiskyInput,
+    @Args('data') newWhiskyData: NewWhiskyInput,
   ): Promise<WhiskyGraphQLModel> {
     const whisky = (await this.whiskyService.create(
       newWhiskyData as CreateWhiskyDto,
