@@ -15,9 +15,14 @@ export class UserService {
     return await this.userModel.create(data);
   }
 
+  async findUserByRole(role: string): Promise<DocumentType<UserDBModel>> {
+    return await this.userModel.findOne({ role }).exec();
+  }
+
   async findUserByEmail(email: string): Promise<DocumentType<UserDBModel>> {
     return await this.userModel.findOne({ email }).exec();
   }
+
   async deleteByEmail(
     email: string,
   ): Promise<DocumentType<UserDBModel> | null> {

@@ -14,7 +14,23 @@ const pubSub = new PubSub();
 
 @Resolver((of) => UserGraphQLModel)
 export class UserResolver {
-  constructor(private readonly userService: UserService) {}
+  constructor(private readonly userService: UserService) {
+    async function checkDefaultAdmin(userService) {
+      const admin = await userService.findUserByRole(ADMIN_ROLE);
+      if (!admin) {
+        const newAdmin = await userService.create({
+          email: 'admin',
+          password: 'admin',
+          role: ADMIN_ROLE,
+        });
+        console.log(+new Date(), 'Add default admin:', newAdmin.email);
+      }
+    }
+
+    setTimeout(() => {
+      checkDefaultAdmin(userService);
+    });
+  }
 
   @Query(() => [UserGraphQLModel])
   async userList(@Args() listArgs: ListArgs): Promise<UserGraphQLModel[]> {
@@ -34,7 +50,7 @@ export class UserResolver {
     const newUser: CreateUserDto = {
       email: newUserData.email,
       passwordHash: await hash(newUserData.password, salt),
-      role: isAdmin ? ADMIN_ROLE : '1',
+      role: !isAdmin ? ADMIN_ROLE : '1',
     };
     const user = (await this.userService.create(
       newUser,
