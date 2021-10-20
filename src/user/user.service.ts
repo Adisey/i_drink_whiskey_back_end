@@ -15,8 +15,13 @@ export class UserService {
     return await this.userModel.create(data);
   }
 
-  async findUserByEmail(email: string) {
-    return this.userModel.findOne({ email }).exec();
+  async findUserByEmail(email: string): Promise<DocumentType<UserDBModel>> {
+    return await this.userModel.findOne({ email }).exec();
+  }
+  async deleteByEmail(
+    email: string,
+  ): Promise<DocumentType<UserDBModel> | null> {
+    return await this.userModel.findOneAndDelete({ email }).exec();
   }
 
   async findAll(listArgs: ListArgs): Promise<DocumentType<UserDBModel>[]> {

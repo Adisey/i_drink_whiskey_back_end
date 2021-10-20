@@ -8,7 +8,7 @@ import { ListArgs } from 'src/global/dto/list.args';
 import { UserService } from './user.service';
 import { NewUserInput, UserGraphQLModel } from './models/user.model.GraphQL';
 import { CreateUserDto } from './models/user.model.DB';
-import { ADMIN_ROLE } from './user.consts';
+import { ADMIN_ROLE, showRole } from './user.consts';
 
 const pubSub = new PubSub();
 
@@ -16,11 +16,11 @@ const pubSub = new PubSub();
 export class UserResolver {
   constructor(private readonly userService: UserService) {}
 
-  @Query((returns) => [UserGraphQLModel])
+  @Query(() => [UserGraphQLModel])
   async userList(@Args() listArgs: ListArgs): Promise<UserGraphQLModel[]> {
     return (await this.userService.findAll(listArgs)).map((u) => ({
       email: u.email,
-      role: u.role === ADMIN_ROLE ? 'Admin' : 'User',
+      role: showRole(u.role),
     }));
   }
 
@@ -39,8 +39,20 @@ export class UserResolver {
     const user = (await this.userService.create(
       newUser,
     )) as unknown as UserGraphQLModel;
+    user.role = showRole(user.role);
     console.log(+new Date(), '-(userAdded)->', isAdmin, newUser);
     pubSub.publish('userAdded', { userAdded: user });
+    return user;
+  }
+
+  @Mutation(() => UserGraphQLModel)
+  async deleteUserByEmail(
+    @Args('email') email: string,
+  ): Promise<UserGraphQLModel> {
+    const user = (await this.userService.deleteByEmail(
+      email,
+    )) as unknown as UserGraphQLModel;
+    user.role = showRole(user.role);
     return user;
   }
 

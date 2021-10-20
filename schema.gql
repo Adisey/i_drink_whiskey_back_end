@@ -33,6 +33,7 @@ type Mutation {
   addWhisky(data: NewWhiskyInput!): WhiskyGraphQLModel!
   addCountry(data: NewCountryInput!): CountryGraphQLModel!
   addUser(data: NewUserInput!): UserGraphQLModel!
+  deleteUserByEmail(email: String!): UserGraphQLModel!
 }
 
 input NewWhiskyInput {
