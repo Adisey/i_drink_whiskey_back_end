@@ -2,13 +2,17 @@
 import { UsePipes, ValidationPipe } from '@nestjs/common';
 import { Args, Mutation, Query, Resolver, Subscription } from '@nestjs/graphql';
 import { PubSub } from 'graphql-subscriptions';
-import { genSalt, hash, compare } from 'bcryptjs';
+import { compare } from 'bcryptjs';
 
 import { ListArgs } from 'src/global/dto/list.args';
 import { UserService } from './user.service';
-import { NewUserInput, UserGraphQLModel } from './models/user.model.GraphQL';
+import {
+  NewUserInput,
+  UserGraphQLModel,
+  UserTokenGraphQLModel,
+} from './models/user.model.GraphQL';
 import { CreateUserDto } from './models/user.model.DB';
-import { ADMIN_ROLE, showRole } from './user.consts';
+import { ADMIN_ROLE, passwordHash, showRole } from './user.consts';
 
 const pubSub = new PubSub();
 
@@ -20,10 +24,10 @@ export class UserResolver {
       if (!admin) {
         const newAdmin = await userService.create({
           email: 'admin',
-          password: 'admin',
+          passwordHash: await passwordHash('admin'),
           role: ADMIN_ROLE,
         });
-        console.log(+new Date(), 'Add default admin:', newAdmin.email);
+        console.warn(+new Date(), 'Add default admin:', newAdmin.email);
       }
     }
 
@@ -41,16 +45,29 @@ export class UserResolver {
   }
 
   @UsePipes(new ValidationPipe())
+  @Mutation(() => UserTokenGraphQLModel)
+  async userLogin(
+    @Args('data') user: NewUserInput,
+  ): Promise<UserTokenGraphQLModel> {
+    const foundUser = await this.userService.findUserByEmail(user.email);
+
+    if (!foundUser || !(await compare(user.password, foundUser.passwordHash))) {
+      return { access_token: null };
+    }
+
+    return { access_token: await this.userService.getToken(foundUser.email) };
+  }
+
+  @UsePipes(new ValidationPipe())
   @Mutation(() => UserGraphQLModel)
   async addUser(
     @Args('data') newUserData: NewUserInput,
     isAdmin = false,
   ): Promise<UserGraphQLModel> {
-    const salt = await genSalt(10);
     const newUser: CreateUserDto = {
       email: newUserData.email,
-      passwordHash: await hash(newUserData.password, salt),
-      role: !isAdmin ? ADMIN_ROLE : '1',
+      passwordHash: await passwordHash(newUserData.password),
+      role: isAdmin ? ADMIN_ROLE : '1',
     };
     const user = (await this.userService.create(
       newUser,

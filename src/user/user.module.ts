@@ -1,10 +1,14 @@
 // Core
 import { Module } from '@nestjs/common';
 import { TypegooseModule } from 'nestjs-typegoose';
+import { JwtModule } from '@nestjs/jwt';
 
-import { UserResolver } from 'src/user/user.resolver';
-import { UserService } from 'src/user/user.service';
-import { UserDBModel } from 'src/user/models/user.model.DB';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import { getJWTConfig } from 'src/configs/jwt.config';
+
+import { UserResolver } from './user.resolver';
+import { UserService } from './user.service';
+import { UserDBModel } from './models/user.model.DB';
 
 @Module({
   imports: [
@@ -16,6 +20,12 @@ import { UserDBModel } from 'src/user/models/user.model.DB';
         },
       },
     ]),
+    JwtModule.registerAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: getJWTConfig
+    })
+
   ],
   providers: [UserService, UserResolver],
 })

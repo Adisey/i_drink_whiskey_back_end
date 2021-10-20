@@ -23,6 +23,11 @@ type UserGraphQLModel {
   role: String
 }
 
+"""user"""
+type UserTokenGraphQLModel {
+  access_token: String
+}
+
 type Query {
   whiskyList(skip: Int = 0, take: Int = 25): [WhiskyGraphQLModel!]!
   countryList(skip: Int = 0, take: Int = 25): [CountryGraphQLModel!]!
@@ -32,6 +37,7 @@ type Query {
 type Mutation {
   addWhisky(data: NewWhiskyInput!): WhiskyGraphQLModel!
   addCountry(data: NewCountryInput!): CountryGraphQLModel!
+  userLogin(data: NewUserInput!): UserTokenGraphQLModel!
   addUser(data: NewUserInput!): UserGraphQLModel!
   deleteUserByEmail(email: String!): UserGraphQLModel!
 }
