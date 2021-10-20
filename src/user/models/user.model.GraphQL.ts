@@ -19,8 +19,4 @@ export class UserGraphQLModel {
 
   @Field({ nullable: true })
   role?: string;
-
-  // ToDo: 20.10.2021 - remove later
-  @Field({ nullable: true })
-  password?: string;
 }

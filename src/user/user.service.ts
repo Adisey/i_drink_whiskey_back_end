@@ -15,6 +15,10 @@ export class UserService {
     return await this.userModel.create(data);
   }
 
+  async findUserByEmail(email: string) {
+    return this.userModel.findOne({ email }).exec();
+  }
+
   async findAll(listArgs: ListArgs): Promise<DocumentType<UserDBModel>[]> {
     // ToDo: 14.10.2021 - Add pagination
     return await this.userModel.find().exec();

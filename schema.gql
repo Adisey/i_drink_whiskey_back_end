@@ -21,7 +21,6 @@ type CountryGraphQLModel {
 type UserGraphQLModel {
   email: String!
   role: String
-  password: String
 }
 
 type Query {

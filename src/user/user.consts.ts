@@ -1,1 +1,1 @@
-export const adminRole = '9';
+export const ADMIN_ROLE = '9';

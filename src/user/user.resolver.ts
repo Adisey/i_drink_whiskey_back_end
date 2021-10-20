@@ -1,10 +1,14 @@
+//Core
 import { UsePipes, ValidationPipe } from '@nestjs/common';
 import { Args, Mutation, Query, Resolver, Subscription } from '@nestjs/graphql';
 import { PubSub } from 'graphql-subscriptions';
-import { UserService } from './user.service';
+import { genSalt, hash, compare } from 'bcryptjs';
+
 import { ListArgs } from 'src/global/dto/list.args';
+import { UserService } from './user.service';
 import { NewUserInput, UserGraphQLModel } from './models/user.model.GraphQL';
 import { CreateUserDto } from './models/user.model.DB';
+import { ADMIN_ROLE } from './user.consts';
 
 const pubSub = new PubSub();
 
@@ -14,28 +18,28 @@ export class UserResolver {
 
   @Query((returns) => [UserGraphQLModel])
   async userList(@Args() listArgs: ListArgs): Promise<UserGraphQLModel[]> {
-    const aa = await this.userService.findAll(listArgs);
-    console.log(+new Date(), '-(userList)->', typeof aa, `-aa->`, aa);
-    const bb: UserGraphQLModel[] = aa.map((u) => ({
+    return (await this.userService.findAll(listArgs)).map((u) => ({
       email: u.email,
-      password: u.passwordHash,
+      role: u.role === ADMIN_ROLE ? 'Admin' : 'User',
     }));
-    console.log(+new Date(), '-(userList)->', typeof bb, `-bb->`, bb);
-    return bb;
   }
 
   @UsePipes(new ValidationPipe())
-  @Mutation((returns) => UserGraphQLModel)
+  @Mutation(() => UserGraphQLModel)
   async addUser(
     @Args('data') newUserData: NewUserInput,
+    isAdmin = false,
   ): Promise<UserGraphQLModel> {
+    const salt = await genSalt(10);
     const newUser: CreateUserDto = {
       email: newUserData.email,
-      passwordHash: '++++',
+      passwordHash: await hash(newUserData.password, salt),
+      role: isAdmin ? ADMIN_ROLE : '1',
     };
     const user = (await this.userService.create(
       newUser,
     )) as unknown as UserGraphQLModel;
+    console.log(+new Date(), '-(userAdded)->', isAdmin, newUser);
     pubSub.publish('userAdded', { userAdded: user });
     return user;
   }
