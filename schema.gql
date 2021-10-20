@@ -17,14 +17,23 @@ type CountryGraphQLModel {
   description: String
 }
 
+"""user"""
+type UserGraphQLModel {
+  email: String!
+  role: String
+  password: String
+}
+
 type Query {
   whiskyList(skip: Int = 0, take: Int = 25): [WhiskyGraphQLModel!]!
   countryList(skip: Int = 0, take: Int = 25): [CountryGraphQLModel!]!
+  userList(skip: Int = 0, take: Int = 25): [UserGraphQLModel!]!
 }
 
 type Mutation {
   addWhisky(data: NewWhiskyInput!): WhiskyGraphQLModel!
   addCountry(data: NewCountryInput!): CountryGraphQLModel!
+  addUser(data: NewUserInput!): UserGraphQLModel!
 }
 
 input NewWhiskyInput {
@@ -44,7 +53,13 @@ input NewCountryInput {
   description: String
 }
 
+input NewUserInput {
+  email: String!
+  password: String!
+}
+
 type Subscription {
   whiskyAdded: WhiskyGraphQLModel!
   countryAdded: CountryGraphQLModel!
+  userAdded: UserGraphQLModel!
 }
