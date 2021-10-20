@@ -1,4 +1,4 @@
-// import { NotFoundException } from '@nestjs/common';
+import { UsePipes, ValidationPipe } from '@nestjs/common';
 import { Args, Mutation, Query, Resolver, Subscription } from '@nestjs/graphql';
 import { PubSub } from 'graphql-subscriptions';
 import { CountryService } from './country.service';
@@ -24,6 +24,7 @@ export class CountryResolver {
     return aa as unknown as CountryGraphQLModel[];
   }
 
+  @UsePipes(new ValidationPipe())
   @Mutation((returns) => CountryGraphQLModel)
   async addCountry(
     @Args('data') newCountryData: NewCountryInput,

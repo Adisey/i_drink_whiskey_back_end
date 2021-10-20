@@ -7,6 +7,7 @@ import {
   WhiskyGraphQLModel,
 } from './models/whisky.model.GraphQL';
 import { CreateWhiskyDto } from './models/whisky.model.DB';
+import { UsePipes, ValidationPipe } from '@nestjs/common';
 
 const pubSub = new PubSub();
 
@@ -30,6 +31,7 @@ export class WhiskyResolver {
     return aa as unknown as WhiskyGraphQLModel[];
   }
 
+  @UsePipes(new ValidationPipe())
   @Mutation((returns) => WhiskyGraphQLModel)
   async addWhisky(
     @Args('data') newWhiskyData: NewWhiskyInput,
