@@ -11,6 +11,7 @@ import {
 } from 'src/auth/models/auth.model.GraphQL';
 import { compare } from 'bcryptjs';
 import { UserService } from 'src/user/user.service';
+import { JwtPayload } from 'src/auth/models/auth.model';
 
 @Injectable()
 export class AuthService {
@@ -23,10 +24,9 @@ export class AuthService {
   ) {}
 
   async getToken(email: string) {
-    const payload = {
+    const payload: JwtPayload = {
       email,
-      iat: +new Date(),
-      nbf: +new Date(),
+      nbf: +(+new Date() / 1000).toFixed(),
       exp: expToken(),
     };
     return await this.jwtService.signAsync(payload);

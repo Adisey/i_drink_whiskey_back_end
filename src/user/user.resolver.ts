@@ -1,5 +1,5 @@
 //Core
-import { UsePipes, ValidationPipe } from '@nestjs/common';
+import { UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
 import { Args, Mutation, Query, Resolver, Subscription } from '@nestjs/graphql';
 import { PubSub } from 'graphql-subscriptions';
 
@@ -8,6 +8,7 @@ import { ListArgs } from 'src/global/dto/list.args';
 import { UserService } from './user.service';
 import { NewUserInput, UserGraphQLModel } from './models/user.model.GraphQL';
 import { CreateUserDto } from './models/user.model.DB';
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 
 const pubSub = new PubSub();
 
@@ -32,6 +33,7 @@ export class UserResolver {
   }
 
   @Query(() => [UserGraphQLModel])
+  @UseGuards(JwtAuthGuard)
   async userList(@Args() listArgs: ListArgs): Promise<UserGraphQLModel[]> {
     return (await this.userService.findAll(listArgs)).map((u) => ({
       email: u.email,
