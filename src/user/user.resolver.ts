@@ -8,7 +8,8 @@ import { ListArgs } from 'src/global/dto/list.args';
 import { UserService } from './user.service';
 import { NewUserInput, UserGraphQLModel } from './models/user.model.GraphQL';
 import { CreateUserDto } from './models/user.model.DB';
-import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
+import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
+import { AdminGuard } from 'src/auth/guards/admin.guard';
 
 const pubSub = new PubSub();
 
@@ -43,6 +44,7 @@ export class UserResolver {
 
   @UsePipes(new ValidationPipe())
   @Mutation(() => UserGraphQLModel)
+  @UseGuards(JwtAuthGuard, AdminGuard)
   async addUser(
     @Args('data') newUserData: NewUserInput,
     isAdmin = false,
@@ -62,6 +64,7 @@ export class UserResolver {
   }
 
   @Mutation(() => UserGraphQLModel)
+  @UseGuards(JwtAuthGuard, AdminGuard)
   async deleteUserByEmail(
     @Args('email') email: string,
   ): Promise<UserGraphQLModel> {
