@@ -2,17 +2,12 @@
 import { UsePipes, ValidationPipe } from '@nestjs/common';
 import { Args, Mutation, Query, Resolver, Subscription } from '@nestjs/graphql';
 import { PubSub } from 'graphql-subscriptions';
-import { compare } from 'bcryptjs';
 
+import { ADMIN_ROLE, passwordHash, showRole } from 'src/configs/auth.config';
 import { ListArgs } from 'src/global/dto/list.args';
 import { UserService } from './user.service';
-import {
-  NewUserInput,
-  UserGraphQLModel,
-  UserTokenGraphQLModel,
-} from './models/user.model.GraphQL';
+import { NewUserInput, UserGraphQLModel } from './models/user.model.GraphQL';
 import { CreateUserDto } from './models/user.model.DB';
-import { ADMIN_ROLE, passwordHash, showRole } from './user.consts';
 
 const pubSub = new PubSub();
 
@@ -42,20 +37,6 @@ export class UserResolver {
       email: u.email,
       role: showRole(u.role),
     }));
-  }
-
-  @UsePipes(new ValidationPipe())
-  @Mutation(() => UserTokenGraphQLModel)
-  async userLogin(
-    @Args('data') user: NewUserInput,
-  ): Promise<UserTokenGraphQLModel> {
-    const foundUser = await this.userService.findUserByEmail(user.email);
-
-    if (!foundUser || !(await compare(user.password, foundUser.passwordHash))) {
-      return { access_token: null };
-    }
-
-    return { access_token: await this.userService.getToken(foundUser.email) };
   }
 
   @UsePipes(new ValidationPipe())

@@ -9,5 +9,3 @@ export const passwordHash = async (password: string): Promise<string> => {
   const salt = await genSalt(10);
   return await hash(password, salt);
 };
-
-

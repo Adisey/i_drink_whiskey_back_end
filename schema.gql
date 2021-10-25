@@ -2,12 +2,15 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-"""whisky"""
-type WhiskyGraphQLModel {
-  _id: String
-  title: String!
-  description: String
-  age: Float
+"""user"""
+type UserGraphQLModel {
+  email: String!
+  role: String
+}
+
+"""auth"""
+type AuthTokenGraphQLModel {
+  access_token: String
 }
 
 """country"""
@@ -17,29 +20,41 @@ type CountryGraphQLModel {
   description: String
 }
 
-"""user"""
-type UserGraphQLModel {
-  email: String!
-  role: String
-}
-
-"""user"""
-type UserTokenGraphQLModel {
-  access_token: String
+"""whisky"""
+type WhiskyGraphQLModel {
+  _id: String
+  title: String!
+  description: String
+  age: Float
 }
 
 type Query {
-  whiskyList(skip: Int = 0, take: Int = 25): [WhiskyGraphQLModel!]!
   countryList(skip: Int = 0, take: Int = 25): [CountryGraphQLModel!]!
   userList(skip: Int = 0, take: Int = 25): [UserGraphQLModel!]!
+  whiskyList(skip: Int = 0, take: Int = 25): [WhiskyGraphQLModel!]!
 }
 
 type Mutation {
-  addWhisky(data: NewWhiskyInput!): WhiskyGraphQLModel!
+  login(data: LoginUser!): AuthTokenGraphQLModel!
   addCountry(data: NewCountryInput!): CountryGraphQLModel!
-  userLogin(data: NewUserInput!): UserTokenGraphQLModel!
   addUser(data: NewUserInput!): UserGraphQLModel!
   deleteUserByEmail(email: String!): UserGraphQLModel!
+  addWhisky(data: NewWhiskyInput!): WhiskyGraphQLModel!
+}
+
+input LoginUser {
+  email: String!
+  password: String!
+}
+
+input NewCountryInput {
+  name: String!
+  description: String
+}
+
+input NewUserInput {
+  email: String!
+  password: String!
 }
 
 input NewWhiskyInput {
@@ -54,18 +69,8 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 """
 scalar DateTime
 
-input NewCountryInput {
-  name: String!
-  description: String
-}
-
-input NewUserInput {
-  email: String!
-  password: String!
-}
-
 type Subscription {
-  whiskyAdded: WhiskyGraphQLModel!
   countryAdded: CountryGraphQLModel!
   userAdded: UserGraphQLModel!
+  whiskyAdded: WhiskyGraphQLModel!
 }

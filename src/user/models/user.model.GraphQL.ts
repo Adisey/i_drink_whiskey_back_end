@@ -20,9 +20,3 @@ export class UserGraphQLModel {
   @Field({ nullable: true })
   role?: string;
 }
-
-@ObjectType({ description: 'user' })
-export class UserTokenGraphQLModel {
-  @Field({ nullable: true })
-  access_token: string;
-}

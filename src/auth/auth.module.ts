@@ -6,9 +6,10 @@ import { JwtModule } from '@nestjs/jwt';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { getJWTConfig } from 'src/configs/jwt.config';
 
-import { UserResolver } from './user.resolver';
-import { UserService } from './user.service';
-import { UserDBModel } from './models/user.model.DB';
+import { UserDBModel } from 'src/user/models/user.model.DB';
+import { UserService } from 'src/user/user.service';
+import { AuthResolver } from './auth.resolver';
+import { AuthService } from './auth.service';
 
 @Module({
   imports: [
@@ -16,7 +17,7 @@ import { UserDBModel } from './models/user.model.DB';
       {
         typegooseClass: UserDBModel,
         schemaOptions: {
-          collection: 'User',
+          collection: 'Auth',
         },
       },
     ]),
@@ -26,6 +27,6 @@ import { UserDBModel } from './models/user.model.DB';
       useFactory: getJWTConfig,
     }),
   ],
-  providers: [UserService, UserResolver],
+  providers: [AuthService, AuthResolver, UserService],
 })
-export class UserModule {}
+export class AuthModule {}

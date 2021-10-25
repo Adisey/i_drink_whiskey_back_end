@@ -6,9 +6,10 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { getMongoConfig } from 'src/configs/mongo.config';
 
 // Domains
+import { AuthModule } from 'src/auth/auth.module';
+import { CountryModule } from './country/country.module';
+import { UserModule } from './user/user.module';
 import { WhiskyModule } from './whisky/whisky.module';
-import { CountryModule } from 'src/country/country.module';
-import { UserModule } from 'src/user/user.module';
 
 @Module({
   imports: [
@@ -18,12 +19,14 @@ import { UserModule } from 'src/user/user.module';
       inject: [ConfigService],
       useFactory: getMongoConfig,
     }),
-    WhiskyModule,
+    AuthModule,
     CountryModule,
     UserModule,
+    WhiskyModule,
     GraphQLModule.forRoot({
       installSubscriptionHandlers: true,
       autoSchemaFile: 'schema.gql',
+      context: ({ req }: any) => ({ req }),
     }),
   ],
 })
