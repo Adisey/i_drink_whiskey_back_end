@@ -6,6 +6,7 @@ import { UserResolver } from './user.resolver';
 import { UserService } from './user.service';
 import { UserDBModel } from './models/user.model.DB';
 import { JwtStrategy } from 'src/auth/jwt.strategy';
+import { ConfigService } from '@nestjs/config';
 
 @Module({
   imports: [
@@ -18,7 +19,7 @@ import { JwtStrategy } from 'src/auth/jwt.strategy';
       },
     ]),
   ],
-  // ToDo: 25.10.2021 - move JwtStrategy UP
-  providers: [UserService, UserResolver, JwtStrategy],
+  // ToDo: 25.10.2021 - move JwtStrategy & ConfigService to UP
+  providers: [UserService, UserResolver, JwtStrategy, ConfigService],
 })
 export class UserModule {}
