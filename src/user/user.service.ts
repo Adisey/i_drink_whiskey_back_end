@@ -35,9 +35,16 @@ export class UserService {
     return await this.userModel.findOneAndDelete({ email }).exec();
   }
 
-  async findAll(listArgs: ListArgs): Promise<DocumentType<UserDBModel>[]> {
+  async findAll({
+    limit,
+    skip,
+  }: ListArgs): Promise<DocumentType<UserDBModel>[]> {
     // ToDo: 14.10.2021 - Add pagination
-    return await this.userModel.find().exec();
+    // ToDo: 27.10.2021 - Add total for responce
+    return this.userModel.aggregate([
+      { $limit: skip + limit },
+      { $skip: skip },
+    ]);
   }
 
   async updateById(id: string, dto: IDbCreateUser) {

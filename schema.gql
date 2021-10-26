@@ -29,9 +29,9 @@ type WhiskyGraphQLModel {
 }
 
 type Query {
-  countryList(skip: Int = 0, take: Int = 25): [CountryGraphQLModel!]!
-  userList(skip: Int = 0, take: Int = 25): [UserGraphQLModel!]!
-  whiskyList(skip: Int = 0, take: Int = 25): [WhiskyGraphQLModel!]!
+  countryList(skip: Int = 0, limit: Int = 5): [CountryGraphQLModel!]!
+  userList(skip: Int = 0, limit: Int = 5): [UserGraphQLModel!]!
+  whiskyList(skip: Int = 0, limit: Int = 5): [WhiskyGraphQLModel!]!
 }
 
 type Mutation {
