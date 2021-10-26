@@ -29,20 +29,20 @@ type WhiskyGraphQLModel {
 }
 
 type Query {
-  countryList(skip: Int = 0, limit: Int = 5): [CountryGraphQLModel!]!
-  userList(skip: Int = 0, limit: Int = 5): [UserGraphQLModel!]!
-  whiskyList(skip: Int = 0, limit: Int = 5): [WhiskyGraphQLModel!]!
+  countryList(skip: Int = 0, limit: Int = 25): [CountryGraphQLModel!]!
+  userList(skip: Int = 0, limit: Int = 25): [UserGraphQLModel!]!
+  whiskyList(skip: Int = 0, limit: Int = 25): [WhiskyGraphQLModel!]!
 }
 
 type Mutation {
-  login(data: LoginUser!): AuthTokenGraphQLModel!
+  login(data: Login!): AuthTokenGraphQLModel!
   addCountry(data: NewCountryInput!): CountryGraphQLModel!
   addUser(data: NewUserInput!): UserGraphQLModel!
   deleteUserByEmail(email: String!): UserGraphQLModel!
   addWhisky(data: NewWhiskyInput!): WhiskyGraphQLModel!
 }
 
-input LoginUser {
+input Login {
   email: String!
   password: String!
 }

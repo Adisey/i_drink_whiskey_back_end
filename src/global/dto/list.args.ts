@@ -10,5 +10,5 @@ export class ListArgs {
   @Field((type) => Int)
   @Min(1)
   @Max(50)
-  limit = 5;
+  limit = 25;
 }
