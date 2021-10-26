@@ -1,7 +1,7 @@
 import { Base, TimeStamps } from '@typegoose/typegoose/lib/defaultClasses';
 import { prop } from '@typegoose/typegoose';
 
-export type CreateUserDto = {
+export type IDbCreateUser = {
   email: string;
   passwordHash: string;
   role?: string;

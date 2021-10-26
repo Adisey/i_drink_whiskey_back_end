@@ -7,7 +7,7 @@ import { ADMIN_ROLE, passwordHash, showRole } from 'src/configs/auth.config';
 import { ListArgs } from 'src/global/dto/list.args';
 import { UserService } from './user.service';
 import { NewUserInput, UserGraphQLModel } from './models/user.model.GraphQL';
-import { CreateUserDto } from './models/user.model.DB';
+import { IDbCreateUser } from './models/user.model.DB';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { AdminGuard } from 'src/auth/guards/admin.guard';
 
@@ -49,7 +49,7 @@ export class UserResolver {
     @Args('data') newUserData: NewUserInput,
     isAdmin = false,
   ): Promise<UserGraphQLModel> {
-    const newUser: CreateUserDto = {
+    const newUser: IDbCreateUser = {
       email: newUserData.email,
       passwordHash: await passwordHash(newUserData.password),
       role: isAdmin ? ADMIN_ROLE : '1',
