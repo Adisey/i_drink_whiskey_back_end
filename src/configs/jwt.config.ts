@@ -11,6 +11,10 @@ export const getJWTConfig = async (
   };
 };
 
-export const expToken = (): number => {
-  return +((+new Date() + 7 * 24 * 60 * 60 * 1000) / 1000).toFixed();
+export const nbfToken = (): number => {
+  return Math.round(+new Date() / 1000);
+};
+
+export const expAccessToken = (): number => {
+  return Math.round((+new Date() + 7 * 24 * 60 * 60 * 1000) / 1000);
 };

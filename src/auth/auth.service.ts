@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from 'nestjs-typegoose';
 import { ModelType } from '@typegoose/typegoose/lib/types';
 import { JwtService } from '@nestjs/jwt';
-import { expToken } from 'src/configs/jwt.config';
+import { expAccessToken, nbfToken } from 'src/configs/jwt.config';
 import { UserDBModel } from 'src/user/models/user.model.DB';
 import { Args } from '@nestjs/graphql';
 import {
@@ -23,11 +23,11 @@ export class AuthService {
     private readonly jwtService: JwtService,
   ) {}
 
-  async getToken(email: string) {
+  async getAccessToken(email: string) {
     const payload: JwtPayload = {
       email,
-      nbf: +(+new Date() / 1000).toFixed(),
-      exp: expToken(),
+      nbf: nbfToken(),
+      exp: expAccessToken(),
     };
     return await this.jwtService.signAsync(payload);
   }
@@ -39,6 +39,6 @@ export class AuthService {
       return { access_token: null };
     }
 
-    return { access_token: await this.getToken(foundUser.email) };
+    return { access_token: await this.getAccessToken(foundUser.email) };
   }
 }
