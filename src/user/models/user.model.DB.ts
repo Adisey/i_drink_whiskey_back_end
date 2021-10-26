@@ -1,5 +1,5 @@
 import { Base, TimeStamps } from '@typegoose/typegoose/lib/defaultClasses';
-import { prop } from '@typegoose/typegoose';
+import { index, prop } from '@typegoose/typegoose';
 
 export type IDbCreateUser = {
   email: string;
@@ -8,6 +8,7 @@ export type IDbCreateUser = {
 };
 
 export interface UserDBModel extends Base {}
+@index({ email: 'text' })
 export class UserDBModel extends TimeStamps {
   @prop({ unique: true })
   email: string;

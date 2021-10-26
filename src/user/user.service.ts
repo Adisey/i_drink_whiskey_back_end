@@ -41,10 +41,9 @@ export class UserService {
   }: ListArgs): Promise<DocumentType<UserDBModel>[]> {
     // ToDo: 14.10.2021 - Add pagination
     // ToDo: 27.10.2021 - Add total for responce
-    return this.userModel.aggregate([
-      { $limit: skip + limit },
-      { $skip: skip },
-    ]);
+    return this.userModel
+      .aggregate([{ $limit: skip + limit }, { $skip: skip }])
+      .exec();
   }
 
   async updateById(id: string, dto: IDbCreateUser) {
