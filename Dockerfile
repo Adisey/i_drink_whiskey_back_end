@@ -17,7 +17,7 @@ RUN rm -rf node_modules
 RUN yarn cache clean
 
 # install production dependencies only
-RUN yarn install --production
+RUN yarn install --production --ignore-scripts --prefer-offline
 
 EXPOSE 4000
 
