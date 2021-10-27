@@ -11,7 +11,8 @@ COPY ./src /usr/src/app/src
 
 RUN ./node_modules/.bin/nest build
 # Prune off the dev dependencies after build step
-RUN yarn install --production
+#RUN yarn install --production
+RUN npm prune --production
 
 EXPOSE 4000
 
