@@ -10,6 +10,8 @@ COPY ./*.* /usr/src/app/
 COPY ./src /usr/src/app/src
 
 RUN ./node_modules/.bin/nest build
+# Prune off the dev dependencies after build step
+RUN yarn install --production
 
 EXPOSE 4000
 
