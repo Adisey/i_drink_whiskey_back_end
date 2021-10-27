@@ -11,14 +11,6 @@ COPY ./src /usr/src/app/src
 
 RUN ./node_modules/.bin/nest build
 
-# clean all depencies
-RUN rm -rf src
-RUN rm -rf node_modules
-RUN yarn cache clean
-
-# install production dependencies only
-RUN yarn install --production --ignore-scripts --prefer-offline
-
 EXPOSE 4000
 
 CMD ["node", "dist/main.js"]
