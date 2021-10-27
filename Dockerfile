@@ -10,9 +10,14 @@ COPY ./*.* /usr/src/app/
 COPY ./src /usr/src/app/src
 
 RUN ./node_modules/.bin/nest build
-# Prune off the dev dependencies after build step
-#RUN yarn install --production
-RUN npm prune --production
+
+# clean all depencies
+RUN rm -rf src
+RUN rm -rf node_modules
+RUN yarn cache clean
+
+# install production dependencies only
+RUN yarn install --production
 
 EXPOSE 4000
 
