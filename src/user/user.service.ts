@@ -40,7 +40,7 @@ export class UserService {
     skip,
   }: ListArgs): Promise<DocumentType<UserDBModel>[]> {
     // ToDo: 14.10.2021 - Add pagination
-    // ToDo: 27.10.2021 - Add total for responce
+    // ToDo: 27.10.2021 - Add total for responds
     return this.userModel
       .aggregate([{ $limit: skip + limit }, { $skip: skip }])
       .exec();
