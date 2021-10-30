@@ -20,6 +20,12 @@ type CountryGraphQLModel {
   description: String
 }
 
+"""file"""
+type FilesGraphQLModel {
+  fileName: String!
+  description: String
+}
+
 """whisky"""
 type WhiskyGraphQLModel {
   _id: String
@@ -37,6 +43,7 @@ type Query {
 type Mutation {
   login(data: Login!): AuthTokenGraphQLModel!
   addCountry(data: NewCountryInput!): CountryGraphQLModel!
+  uploadFile(file: Upload!): FilesGraphQLModel!
   addUser(data: NewUserInput!): UserGraphQLModel!
   deleteUserByEmail(email: String!): UserGraphQLModel!
   addWhisky(data: NewWhiskyInput!): WhiskyGraphQLModel!
@@ -51,6 +58,9 @@ input NewCountryInput {
   name: String!
   description: String
 }
+
+"""The `Upload` scalar type represents a file upload."""
+scalar Upload
 
 input NewUserInput {
   email: String!

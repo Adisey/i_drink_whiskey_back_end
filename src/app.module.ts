@@ -8,6 +8,7 @@ import { getMongoConfig } from 'src/configs/mongo.config';
 // Domains
 import { AuthModule } from 'src/auth/auth.module';
 import { CountryModule } from './country/country.module';
+import { FilesModule } from './files/files.module';
 import { UserModule } from './user/user.module';
 import { WhiskyModule } from './whisky/whisky.module';
 
@@ -21,6 +22,7 @@ import { WhiskyModule } from './whisky/whisky.module';
     }),
     AuthModule,
     CountryModule,
+    FilesModule,
     UserModule,
     WhiskyModule,
     GraphQLModule.forRoot({
