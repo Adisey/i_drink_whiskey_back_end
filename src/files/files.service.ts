@@ -6,14 +6,24 @@ import { ensureDir } from 'fs-extra';
 import { Upload } from 'graphql-upload';
 import { createWriteStream } from 'fs';
 import { asyncWebpConvert } from 'src/files/instruments';
-import { getUploadConfig, IGUploadConfig } from '../configs/upload.config';
+import {
+  getUploadConfig,
+  getUploadConfig2,
+  IGUploadConfig,
+} from '../configs/upload.config';
 import { ConfigService } from '@nestjs/config';
+import { AppConfigService } from 'src/configs/app.config.service';
 
 @Injectable()
 export class FilesService {
   private readonly uploadConfig: Promise<IGUploadConfig>;
-  constructor(private readonly configService: ConfigService) {
+  private readonly newUploadConfig: Promise<IGUploadConfig>;
+  constructor(
+    private readonly configService: ConfigService,
+    private readonly appConfigService: AppConfigService,
+  ) {
     this.uploadConfig = getUploadConfig(configService);
+    this.newUploadConfig = getUploadConfig2(appConfigService);
   }
 
   async saveFiles2({
@@ -21,6 +31,14 @@ export class FilesService {
     filename,
   }: Upload): Promise<FileElementResponse> {
     const { uploadDir } = await this.uploadConfig;
+    const uploadDir2 = (await this.newUploadConfig).uploadDir;
+    console.log(
+      +new Date(),
+      '-()->',
+      typeof uploadDir2,
+      `-uploadDir2->`,
+      uploadDir2,
+    );
     const dateFolder = format(new Date(), 'yyyy-MM-dd');
     const uploadFolder = `${path}/${uploadDir}/${dateFolder}`;
     await ensureDir(uploadFolder);
