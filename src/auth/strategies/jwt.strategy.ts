@@ -4,19 +4,18 @@ import { ExtractJwt, Strategy } from 'passport-jwt';
 import { AuthenticationError } from 'apollo-server-core';
 import { UserService } from 'src/user/user.service';
 import { IAuthValidUser, JwtPayload } from 'src/auth/models/auth.model';
-import { ConfigService } from '@nestjs/config';
-import { JWT_KEY } from 'src/configs/jwt.config';
+import { AppConfigService } from 'src/configs/app.config.service';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
   constructor(
     private readonly userService: UserService,
-    private readonly configService: ConfigService,
+    private readonly appConfigService: AppConfigService,
   ) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       ignoreExpiration: false,
-      secretOrKey: configService.get(JWT_KEY),
+      secretOrKey: appConfigService.getENV('JWT_SECRET'),
     });
   }
 
