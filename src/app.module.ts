@@ -6,7 +6,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { getMongoConfig } from 'src/configs/mongo.config';
 
 // Domains
-import { AppConfigModule } from 'src/configs/app.config.service';
+// import { AppConfigModule } from 'src/configs/app.config.service';
 import { AuthModule } from 'src/auth/auth.module';
 import { CountryModule } from './country/country.module';
 import { FilesModule } from './files/files.module';
@@ -16,7 +16,7 @@ import { WhiskyModule } from './whisky/whisky.module';
 @Module({
   imports: [
     ConfigModule.forRoot(),
-    AppConfigModule.forRoot(),
+    // AppConfigModule.forRoot(),
     TypegooseModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],

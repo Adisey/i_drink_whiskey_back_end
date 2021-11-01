@@ -5,15 +5,15 @@ import { path } from 'app-root-path';
 import { ensureDir } from 'fs-extra';
 import { Upload } from 'graphql-upload';
 import { createWriteStream } from 'fs';
-import { AppConfigService } from 'src/configs/app.config.service';
+import { ConfigService } from 'src/configs/app.config.service';
 import { asyncWebpConvert } from 'src/files/instruments';
 import { getUploadConfig, IGUploadConfig } from '../configs/upload.config';
 
 @Injectable()
 export class FilesService {
   private readonly uploadConfig: Promise<IGUploadConfig>;
-  constructor(private readonly appConfigService: AppConfigService) {
-    this.uploadConfig = getUploadConfig(appConfigService);
+  constructor(private readonly configService: ConfigService) {
+    this.uploadConfig = getUploadConfig(configService);
   }
 
   async saveFiles2({

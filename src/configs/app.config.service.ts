@@ -1,14 +1,6 @@
-import { Injectable } from '@nestjs/common';
-import { ConfigModule, ConfigService } from '@nestjs/config';
+import { ConfigService as MainConfigService } from '@nestjs/config';
 
-export class AppConfigModule extends ConfigModule {
-  constructor() {
-    super();
-  }
-}
-
-@Injectable()
-export class AppConfigService extends ConfigService {
+class AppConfigService extends MainConfigService {
   constructor() {
     super();
   }
@@ -92,6 +84,9 @@ export class AppConfigService extends ConfigService {
     }
   }
 }
+
+// @Injectable()
+export class ConfigService extends AppConfigService {}
 
 type envDefault = {
   default?: string;

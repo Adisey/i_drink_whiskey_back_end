@@ -4,18 +4,19 @@ import { ExtractJwt, Strategy } from 'passport-jwt';
 import { AuthenticationError } from 'apollo-server-core';
 import { UserService } from 'src/user/user.service';
 import { IAuthValidUser, JwtPayload } from 'src/auth/models/auth.model';
-import { AppConfigService } from 'src/configs/app.config.service';
+import { ConfigService } from 'src/configs/app.config.service';
+// import { AppConfigService } from 'src/configs/app.config.service';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
   constructor(
     private readonly userService: UserService,
-    private readonly appConfigService: AppConfigService,
+    private readonly configService: ConfigService,
   ) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       ignoreExpiration: false,
-      secretOrKey: appConfigService.getENV('JWT_SECRET'),
+      secretOrKey: configService.getENV('JWT_SECRET'),
     });
   }
 
