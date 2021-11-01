@@ -1,6 +1,6 @@
 import { ConfigService as MainConfigService } from '@nestjs/config';
 
-class AppConfigService extends MainConfigService {
+export class ConfigService extends MainConfigService {
   constructor() {
     super();
   }
@@ -86,7 +86,7 @@ class AppConfigService extends MainConfigService {
 }
 
 // @Injectable()
-export class ConfigService extends AppConfigService {}
+// export class ConfigService extends AppConfigService {}
 
 type envDefault = {
   default?: string;

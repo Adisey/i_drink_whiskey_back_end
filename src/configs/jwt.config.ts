@@ -1,13 +1,10 @@
 import { ConfigService } from 'src/configs/app.config.service';
 import { JwtModuleOptions } from '@nestjs/jwt';
 
-export const JWT_KEY = 'JWT_SECRET';
-
-export const getJWTConfig = async (
-  configService: ConfigService,
-): Promise<JwtModuleOptions> => {
+export const getJWTConfig = async (): Promise<JwtModuleOptions> => {
+  const configService = new ConfigService();
   return {
-    secret: configService.get(JWT_KEY),
+    secret: configService.getENV('JWT_SECRET'),
   };
 };
 
