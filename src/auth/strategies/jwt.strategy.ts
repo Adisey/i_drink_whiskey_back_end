@@ -5,7 +5,6 @@ import { AuthenticationError } from 'apollo-server-core';
 import { UserService } from 'src/user/user.service';
 import { IAuthValidUser, JwtPayload } from 'src/auth/models/auth.model';
 import { ConfigService } from 'src/configs/app.config.service';
-// import { AppConfigService } from 'src/configs/app.config.service';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {

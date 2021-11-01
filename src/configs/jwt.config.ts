@@ -1,4 +1,4 @@
-import { ConfigService } from '@nestjs/config';
+import { ConfigService } from 'src/configs/app.config.service';
 import { JwtModuleOptions } from '@nestjs/jwt';
 
 export const JWT_KEY = 'JWT_SECRET';
