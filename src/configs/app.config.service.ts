@@ -6,7 +6,7 @@ export class ConfigService extends MainConfigService {
   }
 
   getENV(key: ENV_KEY): string {
-    console.log(+new Date(), '-(getENV)->', typeof key, `-key->`, key);
+    console.log(+new Date(), '-( getENV )->', typeof key, `-key->`, key);
     const value = this.get<string>(key as string);
 
     const message = APP_ENV[key].error
@@ -16,7 +16,7 @@ export class ConfigService extends MainConfigService {
       : `Value ${key} not found!`;
     console.log(
       +new Date(),
-      '-(getENV)->',
+      '-( getENV )->',
       typeof message,
       `-message->`,
       message,
@@ -24,7 +24,7 @@ export class ConfigService extends MainConfigService {
     if (value) {
       console.log(
         +new Date(),
-        '-(getENV)-Found Value->',
+        '-( getENV )-Found Value->',
         `-key->`,
         key,
         typeof value,
@@ -35,7 +35,7 @@ export class ConfigService extends MainConfigService {
     } else if (APP_ENV[key].error) {
       console.log(
         +new Date(),
-        '-(getENV)-Found ERROR->',
+        '-( getENV )-Found ERROR->',
         `-key->`,
         key,
         typeof value,
@@ -48,7 +48,7 @@ export class ConfigService extends MainConfigService {
     } else if (APP_ENV[key].warning) {
       console.log(
         +new Date(),
-        '-(getENV)-Found MESSAGE->',
+        '-( getENV )-Found MESSAGE->',
         `-key->`,
         key,
         typeof value,
@@ -61,7 +61,7 @@ export class ConfigService extends MainConfigService {
     if (!value && APP_ENV[key].default) {
       console.log(
         +new Date(),
-        '-(getENV)-Found Default->',
+        '-( getENV )-Found Default->',
         `-key->`,
         key,
         typeof value,
@@ -72,7 +72,7 @@ export class ConfigService extends MainConfigService {
     } else {
       console.log(
         +new Date(),
-        '-(getENV)-NOT Found & NOT Default->',
+        '-( getENV )-NOT Found & NOT Default->',
         `-key->`,
         key,
         typeof value,
