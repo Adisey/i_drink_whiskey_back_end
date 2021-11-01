@@ -1,19 +1,18 @@
 import { ConfigService } from 'src/configs/app.config.service';
 import { TypegooseModuleOptions } from 'nestjs-typegoose';
 
-export const getMongoConfig = async (
-  configService: ConfigService,
-): Promise<TypegooseModuleOptions> => {
+export const getMongoConfig = async (): Promise<TypegooseModuleOptions> => {
   return {
-    uri: getMongoString(configService),
+    uri: getMongoString(),
     ...getMongoOptions(),
   };
 };
 
-const getMongoString = (configService: ConfigService) => {
-  const dbDatabase = configService.get('DB_DATABASE') || 'test';
-  const dbUrl = configService.get('DB_URL') || 'localhost';
-  const dbPort = configService.get('DB_PORT') || '27017';
+const getMongoString = () => {
+  const configService = new ConfigService();
+  const dbDatabase = configService.getENV('DB_DATABASE');
+  const dbUrl = configService.getENV('DB_URL');
+  const dbPort = configService.getENV('DB_PORT');
   const mongoDB = `mongodb://${dbUrl}:${dbPort}/${dbDatabase}`;
   console.log(+new Date(), `Use mongoDB:`, mongoDB);
 

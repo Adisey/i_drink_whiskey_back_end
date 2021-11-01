@@ -2,11 +2,10 @@
 import { Module } from '@nestjs/common';
 import { GraphQLModule } from '@nestjs/graphql';
 import { TypegooseModule } from 'nestjs-typegoose';
-import { ConfigModule, ConfigService } from '@nestjs/config';
+import { ConfigModule } from '@nestjs/config';
 import { getMongoConfig } from 'src/configs/mongo.config';
 
 // Domains
-// import { ConfigService } from 'src/configs/app.config.service';
 import { AuthModule } from 'src/auth/auth.module';
 import { CountryModule } from './country/country.module';
 import { FilesModule } from './files/files.module';
@@ -17,8 +16,6 @@ import { WhiskyModule } from './whisky/whisky.module';
   imports: [
     ConfigModule.forRoot(),
     TypegooseModule.forRootAsync({
-      imports: [ConfigModule],
-      inject: [ConfigService],
       useFactory: getMongoConfig,
     }),
     AuthModule,

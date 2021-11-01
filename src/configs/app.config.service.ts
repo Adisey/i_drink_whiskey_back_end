@@ -102,9 +102,12 @@ type ENV_KEY = keyof typeof APP_ENV;
 
 const APP_ENV: IAPP_ENV = {
   BACK_PORT: { default: '4000', warning: 'BackEnd use default port' },
-  DB_DATABASE: { default: 'test', warning: 'BackEnd use default DB name' },
-  DB_URL: { default: 'DB', warning: 'BackEnd use default DB host' },
-  DB_PORT: { default: '27017', warning: 'BackEnd use default DB port' },
+  DB_DATABASE: {
+    default: 'test',
+    warning: 'BackEnd use default MongoDB base name',
+  },
+  DB_PORT: { default: '27017', warning: 'BackEnd use default MongoDB port' },
+  DB_URL: { default: 'localhost', warning: 'BackEnd use default MongoDB host' },
   JWT_SECRET: { default: 'MY_SECRET', warning: 'BackEnd use default secret' },
   UPLOAD_DIR: {
     error: 'Not specified directory to upload files',
