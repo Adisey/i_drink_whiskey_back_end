@@ -13,10 +13,6 @@ export class FilesResolver {
     @Args({ name: 'file', type: () => GraphQLUpload })
     file: Upload,
   ): Promise<FilesGraphQLModel> {
-    console.log(+new Date(), '-(1)->', typeof file, `-file->`, file);
-
-    const aaa = await this.filesService.saveFiles2(file);
-
-    return { fileName: aaa.name, description: aaa.url };
+    return await this.filesService.saveFiles(file);
   }
 }

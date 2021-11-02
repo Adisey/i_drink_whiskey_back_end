@@ -1,3 +1,2 @@
-export { MFile } from './mfile.class';
-export { FilesGraphQLModel } from './files.model.GraphQL';
-export { FileElementResponse } from './file-element.reposonse';
+export { FilesGraphQLModel, FileUploadInfo } from './files.model.GraphQL';
+export { FilesDBModel } from './files.model.DB';

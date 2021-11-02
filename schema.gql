@@ -22,8 +22,12 @@ type CountryGraphQLModel {
 
 """file"""
 type FilesGraphQLModel {
-  fileName: String!
-  description: String
+  originFileName: String
+  originFilePath: String
+  webpFilePath: String
+  originFileSize: Float
+  mimetype: String
+  ownerName: String
 }
 
 """whisky"""
