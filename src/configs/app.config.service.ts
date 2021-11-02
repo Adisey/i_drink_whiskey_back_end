@@ -1,12 +1,16 @@
 import { ConfigService as MainConfigService } from '@nestjs/config';
+import { ShutdownService } from 'src/shutdown/shutdown.service';
 
 export class ConfigService extends MainConfigService {
+  // ToDo: 02.11.2021 - I want to use global ShutdownService. Neet do it
+  private readonly shutdownService: ShutdownService;
   constructor() {
     super();
+    this.shutdownService = new ShutdownService();
   }
 
   getENV(key: ENV_KEY): string {
-    console.log(+new Date(), '-( getENV )->', typeof key, `-key->`, key);
+    // console.log(+new Date(), '-( getENV )->', typeof key, `-key->`, key);
     const value = this.get<string>(key as string);
 
     const message = APP_ENV[key].error
@@ -14,71 +18,75 @@ export class ConfigService extends MainConfigService {
       : APP_ENV[key].warning
       ? `${APP_ENV[key].warning}: ${key}`
       : `Value ${key} not found!`;
-    console.log(
-      +new Date(),
-      '-( getENV )->',
-      typeof message,
-      `-message->`,
-      message,
-    );
+    // console.log(
+    //   +new Date(),
+    //   '-( getENV )->',
+    //   typeof message,
+    //   `-message->`,
+    //   message,
+    // );
     if (value) {
-      console.log(
-        +new Date(),
-        '-( getENV )-Found Value->',
-        `-key->`,
-        key,
-        typeof value,
-        `-value->`,
-        value,
-      );
+      // console.log(
+      //   +new Date(),
+      //   '-( getENV )-Found Value->',
+      //   `-key->`,
+      //   key,
+      //   typeof value,
+      //   `-value->`,
+      //   value,
+      // );
       return value;
     } else if (APP_ENV[key].error) {
-      console.log(
-        +new Date(),
-        '-( getENV )-Found ERROR->',
-        `-key->`,
-        key,
-        typeof value,
-        `-value->`,
-        value,
-      );
+      // console.log(
+      //   +new Date(),
+      //   '-( getENV )-Found ERROR->',
+      //   `-key->`,
+      //   key,
+      //   typeof value,
+      //   `-value->`,
+      //   value,
+      // );
 
       console.error(message);
-      throw new Error(message);
+      setTimeout(() => {
+        this.shutdownService.down();
+      }, 5000);
+
+      // throw new Error(message);
     } else if (APP_ENV[key].warning) {
-      console.log(
-        +new Date(),
-        '-( getENV )-Found MESSAGE->',
-        `-key->`,
-        key,
-        typeof value,
-        `-value->`,
-        value,
-      );
+      // console.log(
+      //   +new Date(),
+      //   '-( getENV )-Found MESSAGE->',
+      //   `-key->`,
+      //   key,
+      //   typeof value,
+      //   `-value->`,
+      //   value,
+      // );
       console.warn(message);
     }
 
     if (!value && APP_ENV[key].default) {
-      console.log(
-        +new Date(),
-        '-( getENV )-Found Default->',
-        `-key->`,
-        key,
-        typeof value,
-        `-value->`,
-        value,
-      );
+      // console.log(
+      //   +new Date(),
+      //   '-( getENV )-Found Default->',
+      //   `-key->`,
+      //   key,
+      //   typeof value,
+      //   `-value->`,
+      //   value,
+      // );
       return APP_ENV[key].default;
     } else {
-      console.log(
-        +new Date(),
-        '-( getENV )-NOT Found & NOT Default->',
-        `-key->`,
-        key,
-        typeof value,
-        `-value->`,
-        value,
-      );
+      // console.log(
+      //   +new Date(),
+      //   '-( getENV )-NOT Found & NOT Default->',
+      //   `-key->`,
+      //   key,
+      //   typeof value,
+      //   `-value->`,
+      //   value,
+      // );
 
       throw new Error(message);
     }
