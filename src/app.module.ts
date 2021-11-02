@@ -11,11 +11,11 @@ import { FilesModule } from './files/files.module';
 import { UserModule } from './user/user.module';
 import { WhiskyModule } from './whisky/whisky.module';
 import { ShutdownModule } from 'src/shutdown/shutdown.module';
-import { ConfigModule } from 'src/configs/configModule';
+import { AppConfigModule } from 'src/configs/app.config.module';
 
 @Module({
   imports: [
-    ConfigModule.forRoot(),
+    AppConfigModule.forRoot(),
     TypegooseModule.forRootAsync({
       useFactory: getMongoConfig,
     }),

@@ -9,8 +9,8 @@ export class ShutdownService implements OnModuleDestroy {
   // Create an rxjs Subject that your application can subscribe to
   private shutdownListener$: Subject<void> = new Subject();
   private close: clf;
+
   addClose(fn: clf) {
-    console.log(+new Date(), '-(addClose)->', typeof fn, `-fn->`, fn);
     this.close = fn;
   }
 

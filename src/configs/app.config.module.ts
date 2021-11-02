@@ -7,4 +7,4 @@ import { ConfigModule as MainConfigModule } from '@nestjs/config';
 @Module({
   providers: [ConfigService, ShutdownService],
 })
-export class ConfigModule extends MainConfigModule {}
+export class AppConfigModule extends MainConfigModule {}
