@@ -2,11 +2,11 @@
 import { Module } from '@nestjs/common';
 import { TypegooseModule } from 'nestjs-typegoose';
 
+import { ConfigService } from '../../configs/app.config.service';
+import { JwtStrategy } from '../auth/strategies/jwt.strategy';
 import { UserResolver } from './user.resolver';
 import { UserService } from './user.service';
 import { UserDBModel } from './models/user.model.DB';
-import { JwtStrategy } from 'src/auth/strategies/jwt.strategy';
-import { ConfigService } from 'src/configs/app.config.service';
 
 @Module({
   imports: [

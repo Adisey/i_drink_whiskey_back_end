@@ -19,11 +19,9 @@ async function main() {
 
   const backPort = process.env.BACK_PORT || '4000';
   app.use(graphqlUploadExpress({ maxFileSize: 1000000, maxFiles: 10 }));
-  app.get(ShutdownService).subscribeToShutdown(() => app.close());
-  // app.get(UsersService).addClose(() => shutdown());
   app.enableShutdownHooks();
   await app.listen(backPort);
-  // app.get(ShutdownService2).subscribeToShutdown2(() => shutdown());
+  app.get(ShutdownService).subscribeToShutdown(() => app.close());
   app.get(ShutdownService).addClose(() => shutdown());
 
   console.log(+new Date(), 'Server listen port:', backPort);

@@ -1,5 +1,5 @@
 import { Field, InputType, ObjectType } from '@nestjs/graphql';
-import { NewUserInput } from 'src/user/models/user.model.GraphQL';
+import { NewUserInput } from '../../user/models/user.model.GraphQL';
 
 @InputType()
 export class Login extends NewUserInput {}

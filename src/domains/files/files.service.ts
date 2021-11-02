@@ -1,13 +1,14 @@
 import { Injectable } from '@nestjs/common';
-import { FileElementResponse } from 'src/files/models/file-element.reposonse';
 import { format } from 'date-fns';
 import { path } from 'app-root-path';
 import { ensureDir } from 'fs-extra';
 import { Upload } from 'graphql-upload';
 import { createWriteStream } from 'fs';
-import { ConfigService } from 'src/configs/app.config.service';
-import { asyncWebpConvert } from 'src/files/instruments';
-import { getUploadConfig, IGUploadConfig } from '../configs/upload.config';
+
+import { ConfigService } from '../../configs/app.config.service';
+import { getUploadConfig, IGUploadConfig } from '../../configs/upload.config';
+import { asyncWebpConvert } from './instruments';
+import { FileElementResponse } from './models/file-element.reposonse';
 
 @Injectable()
 export class FilesService {

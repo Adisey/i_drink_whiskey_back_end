@@ -1,14 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { expAccessToken, nbfToken } from 'src/configs/jwt.config';
 import { Args } from '@nestjs/graphql';
-import {
-  AuthTokenGraphQLModel,
-  Login,
-} from 'src/auth/models/auth.model.GraphQL';
 import { compare } from 'bcryptjs';
-import { UserService } from 'src/user/user.service';
-import { JwtPayload } from 'src/auth/models/auth.model';
+import { expAccessToken, nbfToken } from '../../configs/jwt.config';
+import { AuthTokenGraphQLModel, Login } from './models/auth.model.GraphQL';
+import { UserService } from '../user/user.service';
+import { JwtPayload } from '../auth/models/auth.model';
 
 @Injectable()
 export class AuthService {

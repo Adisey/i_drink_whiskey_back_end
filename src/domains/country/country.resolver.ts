@@ -1,8 +1,9 @@
 import { UsePipes, ValidationPipe } from '@nestjs/common';
 import { Args, Mutation, Query, Resolver, Subscription } from '@nestjs/graphql';
 import { PubSub } from 'graphql-subscriptions';
+
+import { ListArgs } from '../../global/dto/list.args';
 import { CountryService } from './country.service';
-import { ListArgs } from 'src/global/dto/list.args';
 import {
   NewCountryInput,
   CountryGraphQLModel,

@@ -1,9 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from 'nestjs-typegoose';
 import { DocumentType, ModelType } from '@typegoose/typegoose/lib/types';
-import { ListArgs } from '../global/dto/list.args';
+
+import { ListArgs } from '../../global/dto/list.args';
+import { isRoleAdmin } from '../../configs/auth.config';
 import { IDbCreateUser, UserDBModel } from './models/user.model.DB';
-import { isRoleAdmin } from 'src/configs/auth.config';
 
 @Injectable()
 export class UserService {

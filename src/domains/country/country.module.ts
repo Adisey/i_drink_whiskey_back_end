@@ -2,9 +2,9 @@
 import { Module } from '@nestjs/common';
 import { TypegooseModule } from 'nestjs-typegoose';
 
-import { CountryResolver } from 'src/country/country.resolver';
-import { CountryService } from 'src/country/country.service';
-import { CountryDBModel } from 'src/country/models/country.model.DB';
+import { CountryResolver } from './country.resolver';
+import { CountryService } from './country.service';
+import { CountryDBModel } from './models/country.model.DB';
 
 @Module({
   imports: [

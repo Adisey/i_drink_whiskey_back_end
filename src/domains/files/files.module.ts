@@ -1,7 +1,8 @@
 import { Module } from '@nestjs/common';
+
+import { ConfigService } from '../../configs/app.config.service';
 import { FilesService } from './files.service';
 import { FilesResolver } from './files.resolver';
-import { ConfigService } from 'src/configs/app.config.service';
 
 @Module({
   providers: [FilesService, FilesResolver, ConfigService],

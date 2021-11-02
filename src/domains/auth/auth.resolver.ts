@@ -7,7 +7,7 @@ import {
   Login,
   AuthGraphQLModel,
   AuthTokenGraphQLModel,
-} from './models/auth.model.GraphQL';
+} from 'src/domains/auth/models/auth.model.GraphQL';
 
 @Resolver(() => AuthGraphQLModel)
 export class AuthResolver {

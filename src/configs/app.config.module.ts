@@ -1,8 +1,8 @@
 // Core
 import { Module } from '@nestjs/common';
-import { ConfigService } from './app.config.service';
-import { ShutdownService } from 'src/shutdown/shutdown.service';
 import { ConfigModule as MainConfigModule } from '@nestjs/config';
+import { ShutdownService } from '../shutdown/shutdown.service';
+import { ConfigService } from './app.config.service';
 
 @Module({
   providers: [ConfigService, ShutdownService],

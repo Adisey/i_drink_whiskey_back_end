@@ -4,14 +4,15 @@ import { GraphQLModule } from '@nestjs/graphql';
 import { TypegooseModule } from 'nestjs-typegoose';
 import { getMongoConfig } from 'src/configs/mongo.config';
 
+import { AppConfigModule } from './configs/app.config.module';
+import { ShutdownModule } from './shutdown/shutdown.module';
+
 // Domains
-import { AuthModule } from 'src/auth/auth.module';
-import { CountryModule } from './country/country.module';
-import { FilesModule } from './files/files.module';
-import { UserModule } from './user/user.module';
-import { WhiskyModule } from './whisky/whisky.module';
-import { ShutdownModule } from 'src/shutdown/shutdown.module';
-import { AppConfigModule } from 'src/configs/app.config.module';
+import { AuthModule } from './domains/auth/auth.module';
+import { CountryModule } from './domains/country/country.module';
+import { FilesModule } from './domains/files/files.module';
+import { UserModule } from './domains/user/user.module';
+import { WhiskyModule } from './domains/whisky/whisky.module';
 
 @Module({
   imports: [

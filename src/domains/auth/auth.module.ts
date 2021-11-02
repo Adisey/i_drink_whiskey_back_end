@@ -4,11 +4,11 @@ import { TypegooseModule } from 'nestjs-typegoose';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 
-import { getJWTConfig } from 'src/configs/jwt.config';
-import { UserService } from 'src/user/user.service';
+import { getJWTConfig } from '../../configs/jwt.config';
+import { UserService } from '../user/user.service';
+import { UserDBModel } from '../user/models/user.model.DB';
 import { AuthResolver } from './auth.resolver';
 import { AuthService } from './auth.service';
-import { UserDBModel } from 'src/user/models/user.model.DB';
 
 @Module({
   imports: [

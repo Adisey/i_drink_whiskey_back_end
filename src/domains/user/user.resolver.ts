@@ -3,13 +3,13 @@ import { UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
 import { Args, Mutation, Query, Resolver, Subscription } from '@nestjs/graphql';
 import { PubSub } from 'graphql-subscriptions';
 
-import { ADMIN_ROLE, passwordHash, showRole } from 'src/configs/auth.config';
-import { ListArgs } from 'src/global/dto/list.args';
+import { ADMIN_ROLE, passwordHash, showRole } from '../../configs/auth.config';
+import { ListArgs } from '../../global/dto/list.args';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { AdminGuard } from '../auth/guards/admin.guard';
 import { UserService } from './user.service';
 import { NewUserInput, UserGraphQLModel } from './models/user.model.GraphQL';
 import { IDbCreateUser } from './models/user.model.DB';
-import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
-import { AdminGuard } from 'src/auth/guards/admin.guard';
 
 const pubSub = new PubSub();
 

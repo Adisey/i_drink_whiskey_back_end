@@ -1,7 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from 'nestjs-typegoose';
 import { DocumentType, ModelType } from '@typegoose/typegoose/lib/types';
-import { ListArgs } from '../global/dto/list.args';
+
+import { ListArgs } from '../../global/dto/list.args';
 import { CreateCountryDto, CountryDBModel } from './models/country.model.DB';
 
 @Injectable()

@@ -1,13 +1,14 @@
 import { Args, Mutation, Query, Resolver, Subscription } from '@nestjs/graphql';
 import { PubSub } from 'graphql-subscriptions';
+import { UsePipes, ValidationPipe } from '@nestjs/common';
+
+import { ListArgs } from '../../global/dto/list.args';
 import { WhiskyService } from './whisky.service';
-import { ListArgs } from 'src/global/dto/list.args';
 import {
   NewWhiskyInput,
   WhiskyGraphQLModel,
 } from './models/whisky.model.GraphQL';
 import { CreateWhiskyDto } from './models/whisky.model.DB';
-import { UsePipes, ValidationPipe } from '@nestjs/common';
 
 const pubSub = new PubSub();
 
