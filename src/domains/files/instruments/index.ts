@@ -16,3 +16,9 @@ export const asyncWebpConvert = async (file: string): Promise<string> => {
     return '';
   }
 };
+
+type IFileType = 'image';
+
+export const checkMimeType = (mimetype: string, type: IFileType): boolean => {
+  return mimetype.includes(`${type}/`);
+};

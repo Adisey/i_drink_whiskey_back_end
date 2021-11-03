@@ -20,7 +20,7 @@ export class FilesService {
     this.uploadConfig = getUploadConfig(configService);
   }
 
-  async saveFiles2Disk({
+  async savePicture2Disk({
     createReadStream,
     mimetype,
     filename,
@@ -56,23 +56,13 @@ export class FilesService {
     };
   }
 
-  async saveFiles(uploadFile: Upload): Promise<FilesGraphQLModel> {
-    // ToDo: 02.11.2021 - add check is Image
-    console.log(
-      +new Date(),
-      '-(saveFiles)-1->',
-      typeof uploadFile,
-      `-uploadFile->`,
-      uploadFile,
-    );
-    const file: FileUploadInfo = await this.saveFiles2Disk(uploadFile);
+  async savePicture(uploadFile: Upload): Promise<FilesGraphQLModel> {
+    const file: FileUploadInfo = await this.savePicture2Disk(uploadFile);
 
     const fileInfo: FilesGraphQLModel = {
       ...file,
-    };
-    return {
-      ...file,
       ownerName: 'Me',
     };
+    return fileInfo;
   }
 }

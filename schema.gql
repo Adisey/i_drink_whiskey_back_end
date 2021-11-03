@@ -47,7 +47,7 @@ type Query {
 type Mutation {
   login(data: Login!): AuthTokenGraphQLModel!
   addCountry(data: NewCountryInput!): CountryGraphQLModel!
-  uploadFile(file: Upload!): FilesGraphQLModel!
+  uploadPicture(file: Upload!): FilesGraphQLModel!
   addUser(data: NewUserInput!): UserGraphQLModel!
   deleteUserByEmail(email: String!): UserGraphQLModel!
   addWhisky(data: NewWhiskyInput!): WhiskyGraphQLModel!
