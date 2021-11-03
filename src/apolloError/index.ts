@@ -7,7 +7,7 @@ export function graphQLError(errorType: IGraphQLErrorType) {
   );
 }
 
-type IGraphQLErrorCode = 'BAD_FILE_TYPE';
+type IGraphQLErrorCode = 'FILE_TYPE_BAD' | 'FILE_SAVE_ERROR';
 type IGraphQLErrorItem = {
   message: string;
   code: IGraphQLErrorCode;
@@ -16,11 +16,31 @@ type IGraphQLErrorItem = {
 type IGraphQLErrorList = {
   [id: string]: IGraphQLErrorItem;
 };
-type IGraphQLErrorType = keyof typeof errorList;
+
+export type IGraphQLErrorType = keyof typeof errorList;
 
 const errorList: IGraphQLErrorList = {
-  isNotPicture: {
+  fileIsNotPicture: {
     message: 'This file is not picture',
-    code: 'BAD_FILE_TYPE',
+    code: 'FILE_TYPE_BAD',
   },
+  fileSaveError: {
+    message: 'File save error',
+    code: 'FILE_SAVE_ERROR',
+  },
+};
+
+export function graphQLMessage(messageType: IGraphQLMessageType) {
+  return messageList[messageType];
+}
+
+type IGraphQLMessageType = keyof typeof messageList;
+
+type IGraphQLMessageList = {
+  [id: string]: string;
+};
+
+const messageList: IGraphQLMessageList = {
+  uploadOk: 'Upload Ok',
+  convertWebpError: 'Error covert file to webp',
 };

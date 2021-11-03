@@ -28,6 +28,8 @@ type FilesGraphQLModel {
   originFileSize: Float
   mimetype: String
   ownerName: String
+  message: String
+  errorType: String
 }
 
 """whisky"""

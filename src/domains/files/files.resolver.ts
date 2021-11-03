@@ -26,6 +26,12 @@ export class FilesResolver {
       throw graphQLError('isNotPicture');
     }
 
-    return await this.filesService.savePicture(file);
+    const fileInfo = await this.filesService.savePicture(file);
+
+    if (fileInfo.errorType) {
+      throw graphQLError(fileInfo.errorType);
+    }
+
+    return fileInfo;
   }
 }
