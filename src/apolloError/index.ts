@@ -1,46 +1,34 @@
 import { ApolloError } from 'apollo-server-errors';
 
-export function graphQLError(errorType: IGraphQLErrorType) {
-  return new ApolloError(
-    errorList[errorType].message,
-    errorList[errorType].code,
-  );
-}
+type IMessageItem = { message: string };
+type IMessageList = { [key: string]: IMessageItem };
+export type IMessageType = keyof typeof messageList;
 
-type IGraphQLErrorCode = 'FILE_TYPE_BAD' | 'FILE_SAVE_ERROR';
-type IGraphQLErrorItem = {
-  message: string;
-  code: IGraphQLErrorCode;
+const messageList: IMessageList = {
+  FILE_PICTURE_TYPE_BAD: { message: 'This file is not picture' },
+  FILE_SAVE_ERROR: { message: 'File save error' },
+  FILE_CONVERT_WEBP_ERROR: { message: 'Error covert file to webp' },
+  FILE_UPLOAD_OK: { message: 'Upload Ok' },
 };
 
-type IGraphQLErrorList = {
-  [id: string]: IGraphQLErrorItem;
+export const emitGraphQLError = (errorType: IMessageType) => {
+  return new ApolloError(messageList[errorType].message, errorType as string);
+};
+export const getMessage = (errorType: IMessageType): string => {
+  return messageList[errorType].message;
 };
 
-export type IGraphQLErrorType = keyof typeof errorList;
+// ToDo: 04.11.2021 - check by type IMessageType is not work
+const errorType: IMessageType = 'FILE_UPLOAD_OK++';
 
-const errorList: IGraphQLErrorList = {
-  fileIsNotPicture: {
-    message: 'This file is not picture',
-    code: 'FILE_TYPE_BAD',
-  },
-  fileSaveError: {
-    message: 'File save error',
-    code: 'FILE_SAVE_ERROR',
-  },
-};
+console.log(
+  +new Date(),
+  '-(*******)->',
+  typeof errorType,
+  `-errorType->`,
+  errorType,
+);
 
-export function graphQLMessage(messageType: IGraphQLMessageType) {
-  return messageList[messageType];
-}
-
-type IGraphQLMessageType = keyof typeof messageList;
-
-type IGraphQLMessageList = {
-  [id: string]: string;
-};
-
-const messageList: IGraphQLMessageList = {
-  uploadOk: 'Upload Ok',
-  convertWebpError: 'Error covert file to webp',
-};
+// const aa = getMessage('FILE_PICTURE_TYPE_BAD_xx');
+//
+// console.log(+new Date(), '-()->', typeof aa, `-aa->`, aa);

@@ -1,15 +1,14 @@
 import { Field, ObjectType } from '@nestjs/graphql';
-import { IGraphQLErrorType } from 'src/apolloError';
+import { IMessageType } from 'src/apolloError';
 
 export class FileUploadInfo {
   isUpload: boolean;
-  message: string;
   mimetype: string;
   originFileName: string;
   originFilePath: string;
   originFileSize: number;
   webpFilePath: string;
-  errorType?: IGraphQLErrorType;
+  errorType?: IMessageType;
 }
 
 @ObjectType({ description: 'file' })
@@ -34,7 +33,4 @@ export class FilesGraphQLModel {
 
   @Field({ nullable: true })
   message?: string;
-
-  @Field({ nullable: true })
-  errorType?: string;
 }

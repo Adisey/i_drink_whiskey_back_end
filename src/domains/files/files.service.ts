@@ -5,14 +5,12 @@ import { ensureDir } from 'fs-extra';
 import { Upload } from 'graphql-upload';
 import { createWriteStream, statSync } from 'fs';
 
-import { graphQLMessage } from '../../apolloError';
+import {} from '../../apolloError';
 import { ConfigService } from '../../configs/app.config.service';
 import { getUploadConfig, IGUploadConfig } from '../../configs/upload.config';
 import { asyncWebpConvert } from './instruments';
-import {
-  FilesGraphQLModel,
-  FileUploadInfo,
-} from './models/files.model.GraphQL';
+import { FileUploadInfo } from './models/files.model.GraphQL';
+import { IMessageType } from '../../apolloError';
 
 @Injectable()
 export class FilesService {
@@ -26,8 +24,8 @@ export class FilesService {
     mimetype,
     filename,
   }: Upload): Promise<FileUploadInfo> {
-    let message = graphQLMessage('uploadOk');
-    let errorType = 'fileSaveError';
+    let errorType: IMessageType = 'FILE_UPLOAD_OK';
+    let webpFile = '';
     const { uploadDir } = await this.uploadConfig;
     const dateFolder = format(new Date(), 'yyyy-MM-dd');
     const uploadFolder = `${uploadDir}/${dateFolder}`;
@@ -35,32 +33,24 @@ export class FilesService {
     const absoluteFolder = `${currentPath}/${uploadFolder}`;
     await ensureDir(absoluteFolder);
     const uploadFile = `${absoluteFolder}/${filename}`;
-    console.log(+new Date(), `-uploadFile->`, uploadFile);
-    const isUpload = await new Promise(async (resolve, reject) =>
+    let isUpload = await new Promise(async (resolve, reject) =>
       createReadStream()
         .pipe(createWriteStream(uploadFile))
         .on('finish', () => resolve(true))
         .on('error', () => reject(false)),
     );
-    console.log(+new Date(), '-()->', typeof isUpload, `-isUpload->`, isUpload);
-
-    if (!isUpload) {
-      errorType = 'fileSaveError';
-    }
-
-    const webpFile = !isUpload
-      ? ''
-      : (await asyncWebpConvert(uploadFile)) || '';
-
-    if (!webpFile) {
-      message = graphQLMessage('convertWebpError');
-      console.warn(message, filename);
-    }
 
     const { size } = await statSync(uploadFile);
 
+    isUpload = isUpload && size;
+
     if (!isUpload) {
-      errorType = 'fileSaveError';
+      errorType = 'FILE_SAVE_ERROR';
+    } else {
+      webpFile = await asyncWebpConvert(uploadFile);
+      if (!webpFile) {
+        errorType = 'FILE_CONVERT_WEBP_ERROR';
+      }
     }
 
     return {
@@ -70,19 +60,17 @@ export class FilesService {
       webpFilePath: webpFile.replace(currentPath + '/', ''),
       isUpload: !!isUpload,
       mimetype,
-      message,
       errorType,
     };
   }
 
-  async savePicture(uploadFile: Upload): Promise<FilesGraphQLModel> {
+  async savePicture(uploadFile: Upload): Promise<FileUploadInfo> {
     const file: FileUploadInfo = await this.savePicture2Disk(uploadFile);
 
-    const fileInfo: FilesGraphQLModel = {
+    const fileInfo: FileUploadInfo = {
       ...file,
-      ownerName: 'Me',
-      errorType: file.errorType as string,
     };
+    console.log(+new Date(), '-(savePicture)->', `-fileInfo->`, fileInfo);
     return fileInfo;
   }
 }

@@ -29,7 +29,6 @@ type FilesGraphQLModel {
   mimetype: String
   ownerName: String
   message: String
-  errorType: String
 }
 
 """whisky"""
