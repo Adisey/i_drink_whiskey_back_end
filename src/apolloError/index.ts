@@ -8,6 +8,7 @@ const messageList: IMessageList = {
   FILE_PICTURE_TYPE_BAD: { message: 'This file is not picture' },
   FILE_SAVE_ERROR: { message: 'File save error' },
   FILE_CONVERT_WEBP_ERROR: { message: 'Error covert file to webp' },
+  FILE_SAVE_DB_INFO_ERROR: { message: 'Error save file info to DB' },
   FILE_UPLOAD_OK: { message: 'Upload Ok' },
 };
 

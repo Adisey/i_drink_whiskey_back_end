@@ -4,18 +4,26 @@ import { path } from 'app-root-path';
 import { ensureDir } from 'fs-extra';
 import { Upload } from 'graphql-upload';
 import { createWriteStream, statSync } from 'fs';
+import { InjectModel } from 'nestjs-typegoose';
+import { DocumentType, ModelType } from '@typegoose/typegoose/lib/types';
 
-import {} from '../../apolloError';
 import { ConfigService } from '../../configs/app.config.service';
 import { getUploadConfig, IGUploadConfig } from '../../configs/upload.config';
 import { asyncWebpConvert } from './instruments';
 import { FileUploadInfo } from './models/files.model.GraphQL';
 import { IMessageType } from '../../apolloError';
+import { FilesDBModel } from './models';
+import { ISaveFileParams } from './models/files.model';
+import { FileDBInfo } from './models/files.model.DB';
 
 @Injectable()
 export class FilesService {
   private readonly uploadConfig: Promise<IGUploadConfig>;
-  constructor(private readonly configService: ConfigService) {
+  constructor(
+    @InjectModel(FilesDBModel)
+    private readonly filesModel: ModelType<FilesDBModel>,
+    private readonly configService: ConfigService,
+  ) {
     this.uploadConfig = getUploadConfig(configService);
   }
 
@@ -64,13 +72,29 @@ export class FilesService {
     };
   }
 
-  async savePicture(uploadFile: Upload): Promise<FileUploadInfo> {
+  async savePictureInfo(data: FileDBInfo): Promise<DocumentType<FilesDBModel>> {
+    return await this.filesModel.create(data);
+  }
+
+  async savePicture({
+    uploadFile,
+    userName,
+  }: ISaveFileParams): Promise<FileUploadInfo> {
     const file: FileUploadInfo = await this.savePicture2Disk(uploadFile);
 
-    const fileInfo: FileUploadInfo = {
-      ...file,
-    };
-    console.log(+new Date(), '-(savePicture)->', `-fileInfo->`, fileInfo);
-    return fileInfo;
+    if (file.isUpload) {
+      const dbInfo = await this.savePictureInfo({
+        ...file,
+        ownerName: userName,
+      });
+      if (dbInfo._id) {
+        file._id = dbInfo._id.toString();
+      } else {
+        file.isUpload = false;
+        file.errorType = 'FILE_SAVE_DB_INFO_ERROR';
+      }
+    }
+
+    return file;
   }
 }

@@ -1,10 +1,18 @@
 import { Base, TimeStamps } from '@typegoose/typegoose/lib/defaultClasses';
 import { index, prop } from '@typegoose/typegoose';
 
+export class FileDBInfo {
+  mimetype: string;
+  originFileName: string;
+  originFilePath: string;
+  originFileSize: number;
+  ownerName: string;
+  webpFilePath?: string;
+}
+
 export interface FilesDBModel extends Base {}
 @index({ originFileName: 'text' })
 export class FilesDBModel extends TimeStamps {
-  // @prop({ unique: true })
   @prop()
   originFileName: string;
 
@@ -19,6 +27,9 @@ export class FilesDBModel extends TimeStamps {
 
   @prop()
   originFileDate: string;
+
+  @prop()
+  mimetype: string;
 
   @prop()
   ownerName: string;

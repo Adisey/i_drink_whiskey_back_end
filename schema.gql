@@ -22,6 +22,7 @@ type CountryGraphQLModel {
 
 """file"""
 type FilesGraphQLModel {
+  _id: String
   originFileName: String
   originFilePath: String
   webpFilePath: String
