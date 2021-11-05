@@ -42,6 +42,7 @@ type WhiskyGraphQLModel {
 
 type Query {
   countryList(skip: Int = 0, limit: Int = 25): [CountryGraphQLModel!]!
+  pictureList(skip: Int = 0, limit: Int = 25): [FilesGraphQLModel!]!
   userList(skip: Int = 0, limit: Int = 25): [UserGraphQLModel!]!
   whiskyList(skip: Int = 0, limit: Int = 25): [WhiskyGraphQLModel!]!
 }

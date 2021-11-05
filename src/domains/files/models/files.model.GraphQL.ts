@@ -38,3 +38,5 @@ export class FilesGraphQLModel {
   @Field({ nullable: true })
   message?: string;
 }
+
+export type FilesGraphQLListModel = Omit<FilesGraphQLModel, 'message'>[];

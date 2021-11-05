@@ -7,12 +7,13 @@ import { createWriteStream, statSync } from 'fs';
 import { InjectModel } from 'nestjs-typegoose';
 import { DocumentType, ModelType } from '@typegoose/typegoose/lib/types';
 
+import { ListArgs } from '../../global/dto/list.args';
 import { ConfigService } from '../../configs/app.config.service';
 import { getUploadConfig, IGUploadConfig } from '../../configs/upload.config';
-import { asyncWebpConvert } from './instruments';
-import { FileUploadInfo } from './models/files.model.GraphQL';
 import { IMessageType } from '../../apolloError';
+import { asyncWebpConvert } from './instruments';
 import { FilesDBModel } from './models';
+import { FileUploadInfo } from './models/files.model.GraphQL';
 import { ISaveFileParams } from './models/files.model';
 import { FileDBInfo } from './models/files.model.DB';
 
@@ -96,5 +97,14 @@ export class FilesService {
     }
 
     return file;
+  }
+
+  async findAll({
+    limit,
+    skip,
+  }: ListArgs): Promise<DocumentType<FilesDBModel>[]> {
+    return await this.filesModel
+      .aggregate([{ $limit: skip + limit }, { $skip: skip }])
+      .exec();
   }
 }

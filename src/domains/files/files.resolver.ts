@@ -1,9 +1,10 @@
-import { Args, Mutation, Resolver } from '@nestjs/graphql';
+import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { UseGuards } from '@nestjs/common';
 import { GraphQLUpload, Upload } from 'graphql-upload';
-
 import { emitGraphQLError, getMessage, IMessageType } from '../../apolloError';
-import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+
+import { ListArgs } from '../../global/dto/list.args';
+import { AdminGuard, JwtAuthGuard } from '../auth/guards/';
 import { CurrentUserName } from '../auth/instruments';
 import { FilesGraphQLModel } from './models';
 import { FilesService } from './files.service';
@@ -44,5 +45,14 @@ export class FilesResolver {
       ownerName,
       _id: fileInfo._id,
     };
+  }
+
+  @Query(() => [FilesGraphQLModel])
+  @UseGuards(JwtAuthGuard, AdminGuard)
+  async pictureList(@Args() listArgs: ListArgs): Promise<FilesGraphQLModel[]> {
+    return (await this.filesService.findAll(listArgs)).map((i) => ({
+      ...i,
+      _id: i._id.toString(),
+    }));
   }
 }
