@@ -1,4 +1,5 @@
 import { ApolloError } from 'apollo-server-errors';
+import { Logger } from '@nestjs/common';
 
 type IMessageItem = { message: string };
 type IMessageList = { [key: string]: IMessageItem };
@@ -22,13 +23,7 @@ export const getMessage = (errorType: IMessageType): string => {
 // ToDo: 04.11.2021 - check by type IMessageType is not work
 const errorType: IMessageType = 'FILE_UPLOAD_OK++';
 
-console.log(
-  +new Date(),
-  '-(*******)->',
-  typeof errorType,
-  `-errorType->`,
-  errorType,
-);
+Logger.error('Not Check this ERROR', errorType);
 
 // const aa = getMessage('FILE_PICTURE_TYPE_BAD_xx');
 //

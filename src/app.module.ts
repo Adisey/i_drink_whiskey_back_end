@@ -4,6 +4,7 @@ import { GraphQLModule } from '@nestjs/graphql';
 import { TypegooseModule } from 'nestjs-typegoose';
 import { getMongoConfig } from 'src/configs/mongo.config';
 
+// System
 import { AppConfigModule } from './configs/app.config.module';
 import { ShutdownModule } from './shutdown/shutdown.module';
 
@@ -20,17 +21,17 @@ import { WhiskyModule } from './domains/whisky/whisky.module';
     TypegooseModule.forRootAsync({
       useFactory: getMongoConfig,
     }),
+    GraphQLModule.forRoot({
+      installSubscriptionHandlers: true,
+      autoSchemaFile: 'schema.gql',
+      context: ({ req }: any) => ({ req }),
+    }),
     AuthModule,
     CountryModule,
     FilesModule,
     ShutdownModule,
     UserModule,
     WhiskyModule,
-    GraphQLModule.forRoot({
-      installSubscriptionHandlers: true,
-      autoSchemaFile: 'schema.gql',
-      context: ({ req }: any) => ({ req }),
-    }),
   ],
 })
 export class AppModule {}

@@ -1,4 +1,6 @@
+import { Logger } from '@nestjs/common';
 import { ConfigService as MainConfigService } from '@nestjs/config';
+
 import { APP_ENV, ENV_KEY } from './app.config.env';
 import { ShutdownService } from '../shutdown/shutdown.service';
 
@@ -11,10 +13,10 @@ export class ConfigService extends MainConfigService {
   }
 
   shutdownTry(message: string) {
-    console.error(message);
-    console.warn('Server Down after 5 sec');
+    Logger.error(message, 'Shutdown');
+    Logger.warn('Server Down after 5 sec', 'Shutdown');
     setTimeout(() => {
-      console.warn('Server Start Down');
+      Logger.warn('Server Start Down', 'Shutdown');
       this.shutdownService.down();
     }, 5000);
   }
@@ -29,10 +31,10 @@ export class ConfigService extends MainConfigService {
     if (value) {
       return value;
     } else if (APP_ENV[key].error) {
-      console.error(message);
+      Logger.error(message, 'ENV');
       this.shutdownTry(message);
     } else if (APP_ENV[key].warning) {
-      console.warn(message);
+      Logger.warn(message, 'ENV');
     }
 
     if (!value && APP_ENV[key].default) {
