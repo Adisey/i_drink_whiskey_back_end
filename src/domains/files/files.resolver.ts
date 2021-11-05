@@ -43,7 +43,7 @@ export class FilesResolver {
       ...fileInfo,
       message: getMessage(fileInfo.errorType),
       ownerName,
-      _id: fileInfo._id,
+      _id: fileInfo._id.toString(),
     };
   }
 

@@ -12,10 +12,12 @@ import { ConfigService } from '../../configs/app.config.service';
 import { getUploadConfig, IGUploadConfig } from '../../configs/upload.config';
 import { IMessageType } from '../../apolloError';
 import { asyncWebpConvert } from './instruments';
-import { FilesDBModel } from './models';
-import { FileUploadInfo } from './models/files.model.GraphQL';
-import { ISaveFileParams } from './models/files.model';
-import { FileDBInfo } from './models/files.model.DB';
+import {
+  FilesDBModel,
+  FileDBInfo,
+  FileUploadInfo,
+  ISaveFileParams,
+} from './models';
 
 @Injectable()
 export class FilesService {
@@ -89,7 +91,7 @@ export class FilesService {
         ownerName: userName,
       });
       if (dbInfo._id) {
-        file._id = dbInfo._id.toString();
+        file._id = dbInfo._id;
       } else {
         file.isUpload = false;
         file.errorType = 'FILE_SAVE_DB_INFO_ERROR';
