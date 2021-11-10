@@ -5,10 +5,10 @@ import { emitGraphQLError, getMessage, IMessageType } from '../../apolloError';
 
 import { ListArgs } from '../../global/dto/list.args';
 import { AdminGuard, JwtAuthGuard } from '../auth/guards/';
-import { CurrentUserName } from '../auth/instruments';
 import { FilesGraphQLModel } from './models';
 import { FilesService } from './files.service';
 import { checkMimeType } from './instruments';
+import { User } from 'src/domains/auth/decorators/user.decorator';
 
 @Resolver(() => FilesGraphQLModel)
 export class FilesResolver {
@@ -19,7 +19,7 @@ export class FilesResolver {
   async uploadPicture(
     @Args({ name: 'file', type: () => GraphQLUpload })
     file: Upload,
-    @CurrentUserName() ownerName: string,
+    @User('email') ownerName: string,
   ): Promise<FilesGraphQLModel> {
     const { mimetype, filename } = file;
 

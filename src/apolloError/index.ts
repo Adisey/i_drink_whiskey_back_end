@@ -20,7 +20,7 @@ export const getMessage = (errorType: IMessageType): string => {
   return messageList[errorType].message;
 };
 
-// ToDo: 04.11.2021 - check by type IMessageType is not work
+// ToDo: 04.11.2021 - check by type IMessageType is not work (look C:\Data\MyWhiskyApp\back\dist\apolloError\index.d.ts or IContentRequestUserFields)
 const errorType: IMessageType = 'FILE_UPLOAD_OK++';
 
 Logger.error('Not Check this ERROR', errorType);
