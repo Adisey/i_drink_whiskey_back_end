@@ -1,11 +1,13 @@
 import { ApolloError } from 'apollo-server-errors';
 
 const messageList = {
-  FILE_PICTURE_TYPE_BAD: 'This file is not picture',
-  FILE_SAVE_ERROR: 'File save error',
   FILE_CONVERT_WEBP_ERROR: 'Error covert file to webp',
+  FILE_PICTURE_TYPE_BAD: 'This file is not picture',
   FILE_SAVE_DB_INFO_ERROR: 'Error save file info to DB',
+  FILE_SAVE_ERROR: 'File save error',
   FILE_UPLOAD_OK: 'Upload Ok',
+  RIGHTS_NOT_ENOUGH: 'You are not enough rights for this operation.',
+  TOKEN_INVALID: 'Could not authenticate with token!',
 };
 
 export type IMessageType = keyof typeof messageList;
