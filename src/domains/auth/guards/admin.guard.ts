@@ -1,4 +1,9 @@
-import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
+import {
+  CanActivate,
+  ExecutionContext,
+  Injectable,
+  Logger,
+} from '@nestjs/common';
 import { AuthenticationError } from 'apollo-server-core';
 import { GqlExecutionContext } from '@nestjs/graphql';
 
@@ -14,6 +19,8 @@ export class AdminGuard implements CanActivate {
     if (req.user.role && isRoleAdmin(req.user.role)) {
       return true;
     }
-    throw new AuthenticationError(getMessage('RIGHTS_NOT_ENOUGH'));
+    const message = getMessage('RIGHTS_NOT_ENOUGH');
+    Logger.error(message, 'AdminGuard ');
+    throw new AuthenticationError(message);
   }
 }

@@ -1,5 +1,6 @@
 import { TypegooseModuleOptions } from 'nestjs-typegoose';
 import { ConfigService } from './app.config.service';
+import { Logger } from '@nestjs/common';
 
 export const getMongoConfig = async (): Promise<TypegooseModuleOptions> => {
   return {
@@ -14,7 +15,7 @@ const getMongoString = () => {
   const dbUrl = configService.getENV('DB_URL');
   const dbPort = configService.getENV('DB_PORT');
   const mongoDB = `mongodb://${dbUrl}:${dbPort}/${dbDatabase}`;
-  console.log(+new Date(), `Use mongoDB:`, mongoDB);
+  Logger.log(mongoDB, 'Use mongoDB');
 
   return mongoDB;
 };
