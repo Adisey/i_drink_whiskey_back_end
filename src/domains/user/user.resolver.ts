@@ -1,5 +1,5 @@
 //Core
-import { UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
+import { Logger, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
 import { Args, Mutation, Query, Resolver, Subscription } from '@nestjs/graphql';
 import { PubSub } from 'graphql-subscriptions';
 
@@ -18,16 +18,20 @@ export class UserResolver {
   constructor(private readonly userService: UserService) {
     async function checkDefaultAdmin(userService) {
       const admin = await userService.findUserByRole(ADMIN_ROLE);
+      const user = 'admin',
+        passport = 'admin';
       if (!admin) {
-        const newAdmin = await userService.create({
-          email: 'admin',
-          passwordHash: await passwordHash('admin'),
+        await userService.create({
+          email: user,
+          passwordHash: await passwordHash(passport),
           role: ADMIN_ROLE,
         });
-        console.warn(+new Date(), 'Add default admin:', newAdmin.email);
+        Logger.warn(
+          `Add default admin - "${user}:${passport}"`,
+          'Initialization DB',
+        );
       }
     }
-
     setTimeout(() => {
       checkDefaultAdmin(userService);
     });
@@ -58,7 +62,6 @@ export class UserResolver {
       newUser,
     )) as unknown as UserGraphQLModel;
     user.role = showRole(user.role);
-    console.log(+new Date(), '-(userAdded)->', isAdmin, newUser);
     pubSub.publish('userAdded', { userAdded: user });
     return user;
   }
