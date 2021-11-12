@@ -13,8 +13,8 @@ import {
 export class AuthResolver {
   constructor(private readonly authService: AuthService) {}
 
-  @UsePipes(new ValidationPipe())
   @Mutation(() => AuthTokenGraphQLModel)
+  @UsePipes(new ValidationPipe())
   async login(@Args('data') dto: Login): Promise<AuthTokenGraphQLModel> {
     return this.authService.login(dto);
   }

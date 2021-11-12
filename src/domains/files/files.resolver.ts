@@ -1,5 +1,5 @@
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
-import { UseGuards } from '@nestjs/common';
+import { UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
 import { GraphQLUpload, Upload } from 'graphql-upload';
 import { emitGraphQLError, getMessage, IMessageType } from '../../apolloError';
 
@@ -16,6 +16,7 @@ export class FilesResolver {
 
   @Mutation(() => FilesGraphQLModel)
   @UseGuards(JwtAuthGuard)
+  // @UsePipes(new ValidationPipe())
   async uploadPicture(
     @Args({ name: 'file', type: () => GraphQLUpload })
     file: Upload,
@@ -49,6 +50,7 @@ export class FilesResolver {
 
   @Query(() => [FilesGraphQLModel])
   @UseGuards(JwtAuthGuard, AdminGuard)
+  @UsePipes(new ValidationPipe())
   async pictureList(@Args() listArgs: ListArgs): Promise<FilesGraphQLModel[]> {
     return (await this.filesService.findAll(listArgs)).map((i) => ({
       ...i,

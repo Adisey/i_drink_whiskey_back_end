@@ -25,8 +25,8 @@ export class CountryResolver {
     return aa as unknown as CountryGraphQLModel[];
   }
 
-  @UsePipes(new ValidationPipe())
   @Mutation((returns) => CountryGraphQLModel)
+  @UsePipes(new ValidationPipe())
   async addCountry(
     @Args('data') newCountryData: NewCountryInput,
   ): Promise<CountryGraphQLModel> {

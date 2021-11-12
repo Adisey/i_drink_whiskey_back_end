@@ -46,9 +46,9 @@ export class UserResolver {
     }));
   }
 
-  @UsePipes(new ValidationPipe())
   @Mutation(() => UserGraphQLModel)
   @UseGuards(JwtAuthGuard, AdminGuard)
+  @UsePipes(new ValidationPipe())
   async addUser(
     @Args('data') newUserData: NewUserInput,
     isAdmin = false,

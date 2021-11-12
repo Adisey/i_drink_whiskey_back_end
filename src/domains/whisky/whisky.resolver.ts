@@ -32,8 +32,8 @@ export class WhiskyResolver {
     return aa as unknown as WhiskyGraphQLModel[];
   }
 
-  @UsePipes(new ValidationPipe())
   @Mutation((returns) => WhiskyGraphQLModel)
+  @UsePipes(new ValidationPipe())
   async addWhisky(
     @Args('data') newWhiskyData: NewWhiskyInput,
   ): Promise<WhiskyGraphQLModel> {
