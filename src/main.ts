@@ -1,16 +1,18 @@
 import { NestFactory } from '@nestjs/core';
+import { Logger } from '@nestjs/common';
+import { NestExpressApplication } from '@nestjs/platform-express';
 import { graphqlUploadExpress } from 'graphql-upload';
 import { AppModule } from './app.module';
 import * as dotenv from 'dotenv';
 import { ShutdownService } from 'src/shutdown/shutdown.service';
 
 async function main() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
   function shutdown() {
-    console.log(+new Date(), `--(SHUTDOWN)- AFTER 5 sec->`);
+    Logger.warn(`--(App)- AFTER 5 sec->`, 'SHUTDOWN');
     setTimeout(() => {
-      console.log(+new Date(), `--(SHUTDOWN)-CLOSE->`);
+      Logger.warn(`--(App)-CLOSE->`, 'SHUTDOWN');
       app.close();
     }, 5000);
   }
@@ -18,13 +20,14 @@ async function main() {
   dotenv.config();
 
   const backPort = process.env.BACK_PORT || '4000';
+
   app.use(graphqlUploadExpress({ maxFileSize: 1000000, maxFiles: 10 }));
   app.enableShutdownHooks();
-  await app.listen(backPort);
+  await app.listen(backPort, () => {
+    Logger.log('Server started', 'Server listen port:' + backPort, 'Server');
+  });
   app.get(ShutdownService).subscribeToShutdown(() => app.close());
   app.get(ShutdownService).addClose(() => shutdown());
-
-  console.log(+new Date(), 'Server listen port:', backPort);
 }
 
 main();

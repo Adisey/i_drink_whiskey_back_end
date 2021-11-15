@@ -25,6 +25,8 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
     if (!foundUser) {
       throw new AuthenticationError(
         'Could not log-in with the provided credentials',
+        // ToDo: 12.11.2021 - use getMessage
+        // ToDo: 12.11.2021 - add Logger
       );
     }
 
