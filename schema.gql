@@ -29,7 +29,24 @@ type FilesGraphQLModel {
   originFileSize: Float
   mimetype: String
   ownerName: String
+}
+
+"""Upload file"""
+type FilesGraphQLUploadModel {
+  _id: String
+  originFileName: String
+  originFilePath: String
+  webpFilePath: String
+  originFileSize: Float
+  mimetype: String
+  ownerName: String
   message: String
+}
+
+"""File list"""
+type FilesGraphQLListModel {
+  list: [FilesGraphQLModel!]!
+  totalCount: Float!
 }
 
 """whisky"""
@@ -42,7 +59,7 @@ type WhiskyGraphQLModel {
 
 type Query {
   countryList(skip: Int = 0, limit: Int = 25): [CountryGraphQLModel!]!
-  pictureList(skip: Int = 0, limit: Int = 25): [FilesGraphQLModel!]!
+  pictureList(pageNumber: Int = 1, pageSize: Int = 5, find: String = ""): FilesGraphQLListModel!
   userList(skip: Int = 0, limit: Int = 25): [UserGraphQLModel!]!
   whiskyList(skip: Int = 0, limit: Int = 25): [WhiskyGraphQLModel!]!
 }
@@ -50,7 +67,7 @@ type Query {
 type Mutation {
   login(data: Login!): AuthTokenGraphQLModel!
   addCountry(data: NewCountryInput!): CountryGraphQLModel!
-  uploadPicture(file: Upload!): FilesGraphQLModel!
+  uploadPicture(file: Upload!): FilesGraphQLUploadModel!
   addUser(data: NewUserInput!): UserGraphQLModel!
   deleteUserByEmail(email: String!): UserGraphQLModel!
   addWhisky(data: NewWhiskyInput!): WhiskyGraphQLModel!

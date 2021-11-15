@@ -7,7 +7,7 @@ import { createWriteStream, statSync } from 'fs';
 import { InjectModel } from 'nestjs-typegoose';
 import { DocumentType, ModelType } from '@typegoose/typegoose/lib/types';
 
-import { ListArgs } from '../../global/dto/list.args';
+import { ListArgs, ListArgsNEW } from '../../global/dto/list.args';
 import { ConfigService } from '../../configs/app.config.service';
 import { getUploadConfig, IGUploadConfig } from '../../configs/upload.config';
 import { IMessageType } from '../../apolloError';
@@ -17,6 +17,7 @@ import {
   FileDBInfo,
   FileUploadInfo,
   ISaveFileParams,
+  FilesGraphQLListModel,
 } from './models';
 
 @Injectable()
@@ -102,11 +103,30 @@ export class FilesService {
   }
 
   async findAll({
-    limit,
-    skip,
-  }: ListArgs): Promise<DocumentType<FilesDBModel>[]> {
-    return await this.filesModel
-      .aggregate([{ $limit: skip + limit }, { $skip: skip }])
+    pageNumber,
+    pageSize,
+    find,
+  }: ListArgsNEW): Promise<FilesGraphQLListModel> {
+    const findQuery = find ? { $text: { $search: '$' + find + '$' } } : {};
+
+    const count = await this.filesModel
+      .aggregate()
+      .match(findQuery)
+      .count('count')
       .exec();
+
+    const skip = pageNumber ? (pageNumber - 1) * pageSize : pageNumber;
+
+    const list = await this.filesModel
+      .aggregate()
+      .match(findQuery)
+      .skip(skip)
+      .limit(pageSize)
+      .exec();
+
+    return {
+      list,
+      totalCount: count[0]?.count || 0,
+    };
   }
 }

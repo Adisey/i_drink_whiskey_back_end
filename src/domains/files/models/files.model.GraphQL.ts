@@ -22,9 +22,19 @@ export class FilesGraphQLModel {
 
   @Field({ nullable: true })
   ownerName?: string;
+}
 
+@ObjectType({ description: 'Upload file' })
+export class FilesGraphQLUploadModel extends FilesGraphQLModel {
   @Field({ nullable: true })
   message?: string;
 }
 
-export type FilesGraphQLListModel = Omit<FilesGraphQLModel, 'message'>[];
+@ObjectType({ description: 'File list' })
+export class FilesGraphQLListModel {
+  @Field(() => [FilesGraphQLModel])
+  list: FilesGraphQLModel[];
+
+  @Field()
+  totalCount: number;
+}

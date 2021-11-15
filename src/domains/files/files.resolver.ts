@@ -3,25 +3,26 @@ import { UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
 import { GraphQLUpload, Upload } from 'graphql-upload';
 import { emitGraphQLError, getMessage, IMessageType } from '../../apolloError';
 
-import { ListArgs } from '../../global/dto/list.args';
+import { ListArgs, ListArgsNEW } from '../../global/dto/list.args';
 import { AdminGuard, JwtAuthGuard } from '../auth/guards/';
-import { FilesGraphQLModel } from './models';
+import { FilesGraphQLListModel, FilesGraphQLModel } from './models';
 import { FilesService } from './files.service';
 import { checkMimeType } from './instruments';
 import { User } from 'src/domains/auth/decorators/user.decorator';
+import { FilesGraphQLUploadModel } from 'src/domains/files/models/files.model.GraphQL';
 
 @Resolver(() => FilesGraphQLModel)
 export class FilesResolver {
   constructor(private readonly filesService: FilesService) {}
 
-  @Mutation(() => FilesGraphQLModel)
+  @Mutation(() => FilesGraphQLUploadModel)
   @UseGuards(JwtAuthGuard)
   // @UsePipes(new ValidationPipe())
   async uploadPicture(
     @Args({ name: 'file', type: () => GraphQLUpload })
     file: Upload,
     @User('email') ownerName: string,
-  ): Promise<FilesGraphQLModel> {
+  ): Promise<FilesGraphQLUploadModel> {
     const { mimetype, filename } = file;
 
     if (!checkMimeType(mimetype, 'image')) {
@@ -48,13 +49,12 @@ export class FilesResolver {
     };
   }
 
-  @Query(() => [FilesGraphQLModel])
+  @Query(() => FilesGraphQLListModel)
   @UseGuards(JwtAuthGuard, AdminGuard)
   @UsePipes(new ValidationPipe())
-  async pictureList(@Args() listArgs: ListArgs): Promise<FilesGraphQLModel[]> {
-    return (await this.filesService.findAll(listArgs)).map((i) => ({
-      ...i,
-      _id: i._id.toString(),
-    }));
+  async pictureList(
+    @Args() listArgs: ListArgsNEW,
+  ): Promise<FilesGraphQLListModel> {
+    return await this.filesService.findAll(listArgs);
   }
 }

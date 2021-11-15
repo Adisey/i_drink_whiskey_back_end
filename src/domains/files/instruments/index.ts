@@ -1,4 +1,5 @@
 import * as sharp from 'sharp';
+import { Logger } from '@nestjs/common';
 
 export const fileNameOnly = (fileName: string): string => {
   const arr = fileName.split('.');
@@ -12,7 +13,7 @@ export const asyncWebpConvert = async (file: string): Promise<string> => {
     await sharp(file).webp().toFile(output);
     return output;
   } catch (e) {
-    console.warn(e);
+    Logger.error(file, e, 'asyncWebpConvert');
     return '';
   }
 };
