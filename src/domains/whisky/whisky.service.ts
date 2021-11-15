@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from 'nestjs-typegoose';
 import { DocumentType, ModelType } from '@typegoose/typegoose/lib/types';
 
-import { ListArgs } from '../../global/dto/list.args';
+import { ListArgsOLD } from 'src/global/dto/listArgs';
 import { CreateWhiskyDto, WhiskyDBModel } from './models/whisky.model.DB';
 
 @Injectable()
@@ -16,7 +16,7 @@ export class WhiskyService {
     return await this.whiskyModel.create(data);
   }
 
-  async findAll(listArgs: ListArgs): Promise<DocumentType<WhiskyDBModel>[]> {
+  async findAll(listArgs: ListArgsOLD): Promise<DocumentType<WhiskyDBModel>[]> {
     // ToDo: 14.10.2021 - Add pagination
     return await this.whiskyModel.find().exec();
   }

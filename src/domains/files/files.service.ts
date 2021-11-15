@@ -7,7 +7,7 @@ import { createWriteStream, statSync } from 'fs';
 import { InjectModel } from 'nestjs-typegoose';
 import { DocumentType, ModelType } from '@typegoose/typegoose/lib/types';
 
-import { ListArgs, ListArgsNEW } from '../../global/dto/list.args';
+import { ListArgsOLD, ListArgs } from 'src/global/dto/listArgs';
 import { ConfigService } from '../../configs/app.config.service';
 import { getUploadConfig, IGUploadConfig } from '../../configs/upload.config';
 import { IMessageType } from '../../apolloError';
@@ -19,6 +19,7 @@ import {
   ISaveFileParams,
   FilesGraphQLListModel,
 } from './models';
+import { FileListArgs } from 'src/domains/files/models/files.model.GraphQL';
 
 @Injectable()
 export class FilesService {
@@ -106,8 +107,11 @@ export class FilesService {
     pageNumber,
     pageSize,
     find,
-  }: ListArgsNEW): Promise<FilesGraphQLListModel> {
+    sortBy,
+    sortOrder,
+  }: FileListArgs): Promise<FilesGraphQLListModel> {
     const findQuery = find ? { $text: { $search: '$' + find + '$' } } : {};
+    const sortField = `${sortOrder > 0 ? '' : '-'}${sortBy}`;
 
     const count = await this.filesModel
       .aggregate()
@@ -120,6 +124,7 @@ export class FilesService {
     const list = await this.filesModel
       .aggregate()
       .match(findQuery)
+      .sort(sortField)
       .skip(skip)
       .limit(pageSize)
       .exec();

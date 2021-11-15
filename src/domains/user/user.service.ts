@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from 'nestjs-typegoose';
 import { DocumentType, ModelType } from '@typegoose/typegoose/lib/types';
 
-import { ListArgs } from '../../global/dto/list.args';
+import { ListArgsOLD } from 'src/global/dto/listArgs';
 import { isRoleAdmin } from '../../configs/auth.config';
 import { IDbCreateUser, UserDBModel } from './models/user.model.DB';
 
@@ -39,7 +39,7 @@ export class UserService {
   async findAll({
     limit,
     skip,
-  }: ListArgs): Promise<DocumentType<UserDBModel>[]> {
+  }: ListArgsOLD): Promise<DocumentType<UserDBModel>[]> {
     // ToDo: 14.10.2021 - Add pagination
     // ToDo: 27.10.2021 - Add total for responds
     return this.userModel

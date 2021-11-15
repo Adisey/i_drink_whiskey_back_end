@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from 'nestjs-typegoose';
 import { DocumentType, ModelType } from '@typegoose/typegoose/lib/types';
 
-import { ListArgs } from '../../global/dto/list.args';
+import { ListArgsOLD } from 'src/global/dto/listArgs';
 import { CreateCountryDto, CountryDBModel } from './models/country.model.DB';
 
 @Injectable()
@@ -16,7 +16,9 @@ export class CountryService {
     return await this.countryModel.create(data);
   }
 
-  async findAll(listArgs: ListArgs): Promise<DocumentType<CountryDBModel>[]> {
+  async findAll(
+    listArgs: ListArgsOLD,
+  ): Promise<DocumentType<CountryDBModel>[]> {
     // ToDo: 14.10.2021 - Add pagination
     return await this.countryModel.find().exec();
   }

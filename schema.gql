@@ -59,7 +59,7 @@ type WhiskyGraphQLModel {
 
 type Query {
   countryList(skip: Int = 0, limit: Int = 25): [CountryGraphQLModel!]!
-  pictureList(pageNumber: Int = 1, pageSize: Int = 5, find: String = ""): FilesGraphQLListModel!
+  pictureList(pageNumber: Int = 1, pageSize: Int = 5, find: String = "", sortBy: String = "originFileName", sortOrder: Int = 1): FilesGraphQLListModel!
   userList(skip: Int = 0, limit: Int = 25): [UserGraphQLModel!]!
   whiskyList(skip: Int = 0, limit: Int = 25): [WhiskyGraphQLModel!]!
 }

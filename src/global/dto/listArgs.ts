@@ -1,8 +1,8 @@
 import { ArgsType, Field, Int } from '@nestjs/graphql';
-import { Max, Min } from 'class-validator';
+import { Max, Min, isISIN, IsIn, IsInt, IsString } from 'class-validator';
 
 @ArgsType()
-export class ListArgs {
+export class ListArgsOLD {
   @Field((type) => Int)
   @Min(0)
   skip = 0;
@@ -14,7 +14,7 @@ export class ListArgs {
 }
 
 @ArgsType()
-export class ListArgsNEW {
+export class ListArgs {
   @Field((type) => Int)
   @Min(1)
   pageNumber = 1;
@@ -26,4 +26,11 @@ export class ListArgsNEW {
 
   @Field((type) => String)
   find = '';
+
+  @Field((type) => String)
+  sortBy = 'name';
+
+  @Field((type) => Int)
+  @IsIn([-1, 1])
+  sortOrder = 1;
 }

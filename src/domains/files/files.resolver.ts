@@ -3,13 +3,16 @@ import { UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
 import { GraphQLUpload, Upload } from 'graphql-upload';
 import { emitGraphQLError, getMessage, IMessageType } from '../../apolloError';
 
-import { ListArgs, ListArgsNEW } from '../../global/dto/list.args';
+import { ListArgs } from 'src/global/dto/listArgs';
 import { AdminGuard, JwtAuthGuard } from '../auth/guards/';
 import { FilesGraphQLListModel, FilesGraphQLModel } from './models';
 import { FilesService } from './files.service';
 import { checkMimeType } from './instruments';
 import { User } from 'src/domains/auth/decorators/user.decorator';
-import { FilesGraphQLUploadModel } from 'src/domains/files/models/files.model.GraphQL';
+import {
+  FileListArgs,
+  FilesGraphQLUploadModel,
+} from 'src/domains/files/models/files.model.GraphQL';
 
 @Resolver(() => FilesGraphQLModel)
 export class FilesResolver {
@@ -53,7 +56,7 @@ export class FilesResolver {
   @UseGuards(JwtAuthGuard, AdminGuard)
   @UsePipes(new ValidationPipe())
   async pictureList(
-    @Args() listArgs: ListArgsNEW,
+    @Args() listArgs: FileListArgs,
   ): Promise<FilesGraphQLListModel> {
     return await this.filesService.findAll(listArgs);
   }

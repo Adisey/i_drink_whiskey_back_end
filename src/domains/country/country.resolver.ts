@@ -2,7 +2,7 @@ import { UsePipes, ValidationPipe } from '@nestjs/common';
 import { Args, Mutation, Query, Resolver, Subscription } from '@nestjs/graphql';
 import { PubSub } from 'graphql-subscriptions';
 
-import { ListArgs } from '../../global/dto/list.args';
+import { ListArgsOLD } from 'src/global/dto/listArgs';
 import { CountryService } from './country.service';
 import {
   NewCountryInput,
@@ -18,7 +18,7 @@ export class CountryResolver {
 
   @Query((returns) => [CountryGraphQLModel])
   async countryList(
-    @Args() listArgs: ListArgs,
+    @Args() listArgs: ListArgsOLD,
   ): Promise<CountryGraphQLModel[]> {
     const aa = await this.countryService.findAll(listArgs);
     console.log(+new Date(), '-()->', typeof aa, `-aa->`, aa);

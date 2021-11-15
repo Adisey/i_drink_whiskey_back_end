@@ -1,4 +1,6 @@
-import { Field, ObjectType } from '@nestjs/graphql';
+import { ArgsType, Field, Int, ObjectType } from '@nestjs/graphql';
+import { isISIN, IsEnum, IsIn, Equals, IsString, IsInt } from 'class-validator';
+import { ListArgs } from 'src/global/dto/listArgs';
 
 @ObjectType({ description: 'file' })
 export class FilesGraphQLModel {
@@ -37,4 +39,15 @@ export class FilesGraphQLListModel {
 
   @Field()
   totalCount: number;
+}
+
+@ArgsType()
+export class FileListArgs extends ListArgs {
+  // ToDo: 15.11.2021 - add check fields
+  @Field((type) => String)
+  sortBy = 'originFileName';
+
+  @Field((type) => Int)
+  @IsIn([-1, 1])
+  sortOrder = 1;
 }

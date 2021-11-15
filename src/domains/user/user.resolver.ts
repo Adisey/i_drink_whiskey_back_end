@@ -4,7 +4,7 @@ import { Args, Mutation, Query, Resolver, Subscription } from '@nestjs/graphql';
 import { PubSub } from 'graphql-subscriptions';
 
 import { ADMIN_ROLE, passwordHash, showRole } from '../../configs/auth.config';
-import { ListArgs } from '../../global/dto/list.args';
+import { ListArgsOLD } from 'src/global/dto/listArgs';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { AdminGuard } from '../auth/guards/admin.guard';
 import { UserService } from './user.service';
@@ -39,7 +39,7 @@ export class UserResolver {
 
   @Query(() => [UserGraphQLModel])
   @UseGuards(JwtAuthGuard)
-  async userList(@Args() listArgs: ListArgs): Promise<UserGraphQLModel[]> {
+  async userList(@Args() listArgs: ListArgsOLD): Promise<UserGraphQLModel[]> {
     return (await this.userService.findAll(listArgs)).map((u) => ({
       email: u.email,
       role: showRole(u.role),
