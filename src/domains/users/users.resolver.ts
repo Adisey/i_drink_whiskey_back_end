@@ -13,6 +13,9 @@ import {
   UserGraphQLModel,
 } from 'src/domains/users/models/users.model.GraphQL';
 import { IDbCreateUser } from 'src/domains/users/models/users.model.DB';
+import { getMessage } from 'src/apolloError';
+import { FilesGraphQLListModel } from 'src/domains/files/models';
+import { FilesGraphQLUploadModel } from 'src/domains/files/models/files.model.GraphQL';
 
 const pubSub = new PubSub();
 
@@ -40,7 +43,9 @@ export class UsersResolver {
     });
   }
 
-  @Query(() => [UserGraphQLModel])
+  @Query(() => [UserGraphQLModel], {
+    description: getMessage('USER_ONLY'),
+  })
   @UseGuards(JwtAuthGuard)
   async usersList(@Args() listArgs: ListArgsOLD): Promise<UserGraphQLModel[]> {
     return (await this.usersService.findAll(listArgs)).map((u) => ({
@@ -49,7 +54,9 @@ export class UsersResolver {
     }));
   }
 
-  @Mutation(() => UserGraphQLModel)
+  @Mutation(() => UserGraphQLModel, {
+    description: getMessage('USER_ADMIN_ONLY'),
+  })
   @UseGuards(JwtAuthGuard, AdminGuard)
   @UsePipes(new ValidationPipe())
   async addUser(
@@ -69,7 +76,9 @@ export class UsersResolver {
     return user;
   }
 
-  @Mutation(() => UserGraphQLModel)
+  @Mutation(() => UserGraphQLModel, {
+    description: getMessage('USER_ADMIN_ONLY'),
+  })
   @UseGuards(JwtAuthGuard, AdminGuard)
   async deleteUserByEmail(
     @Args('email') email: string,
@@ -81,7 +90,10 @@ export class UsersResolver {
     return user;
   }
 
-  @Subscription(() => UserGraphQLModel)
+  @Subscription(() => UserGraphQLModel, {
+    description: getMessage('USER_ONLY'),
+  })
+  @UseGuards(JwtAuthGuard)
   userAdded() {
     return pubSub.asyncIterator('userAdded');
   }

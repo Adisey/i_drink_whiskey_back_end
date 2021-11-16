@@ -17,7 +17,9 @@ import {
 export class FilesResolver {
   constructor(private readonly filesService: FilesService) {}
 
-  @Mutation(() => FilesGraphQLUploadModel)
+  @Mutation(() => FilesGraphQLUploadModel, {
+    description: getMessage('USER_ONLY'),
+  })
   @UseGuards(JwtAuthGuard)
   // @UsePipes(new ValidationPipe())
   async uploadPicture(
@@ -51,7 +53,9 @@ export class FilesResolver {
     };
   }
 
-  @Query(() => FilesGraphQLListModel)
+  @Query(() => FilesGraphQLListModel, {
+    description: getMessage('USER_ADMIN_ONLY'),
+  })
   @UseGuards(JwtAuthGuard, AdminGuard)
   @UsePipes(new ValidationPipe())
   async pictureList(

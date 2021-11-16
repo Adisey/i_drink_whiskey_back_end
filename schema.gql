@@ -59,7 +59,11 @@ type WhiskyGraphQLModel {
 
 type Query {
   countriesList(skip: Int = 0, limit: Int = 25): [CountryGraphQLModel!]!
+
+  """Only for users with admin rights!"""
   pictureList(pageNumber: Int = 1, pageSize: Int = 5, find: String = "", sortBy: String = "originFileName", sortOrder: Int = 1): FilesGraphQLListModel!
+
+  """Only for registered users!"""
   usersList(skip: Int = 0, limit: Int = 25): [UserGraphQLModel!]!
   whiskyList(skip: Int = 0, limit: Int = 25): [WhiskyGraphQLModel!]!
 }
@@ -67,8 +71,14 @@ type Query {
 type Mutation {
   login(data: Login!): AuthTokenGraphQLModel!
   addCountry(data: NewCountryInput!): CountryGraphQLModel!
+
+  """Only for registered users!"""
   uploadPicture(file: Upload!): FilesGraphQLUploadModel!
+
+  """Only for users with admin rights!"""
   addUser(data: AddUserInput!): UserGraphQLModel!
+
+  """Only for users with admin rights!"""
   deleteUserByEmail(email: String!): UserGraphQLModel!
   addWhisky(data: NewWhiskyInput!): WhiskyGraphQLModel!
 }
@@ -105,6 +115,8 @@ scalar DateTime
 
 type Subscription {
   countryAdded: CountryGraphQLModel!
+
+  """Only for registered users!"""
   userAdded: UserGraphQLModel!
   whiskyAdded: WhiskyGraphQLModel!
 }

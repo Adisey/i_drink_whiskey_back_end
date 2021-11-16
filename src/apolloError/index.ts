@@ -8,6 +8,8 @@ const messageList = {
   FILE_UPLOAD_OK: 'Upload Ok',
   RIGHTS_NOT_ENOUGH: 'You are not enough rights for this operation.',
   TOKEN_INVALID: 'Could not authenticate with token!',
+  USER_ADMIN_ONLY: 'Only for users with admin rights!',
+  USER_ONLY: 'Only for registered users!',
 };
 
 export type IMessageType = keyof typeof messageList;
