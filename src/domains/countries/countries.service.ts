@@ -3,10 +3,13 @@ import { InjectModel } from 'nestjs-typegoose';
 import { DocumentType, ModelType } from '@typegoose/typegoose/lib/types';
 
 import { ListArgsOLD } from 'src/global/dto/listArgs';
-import { CreateCountryDto, CountryDBModel } from './models/country.model.DB';
+import {
+  CreateCountryDto,
+  CountryDBModel,
+} from 'src/domains/countries/models/countries.model.DB';
 
 @Injectable()
-export class CountryService {
+export class CountriesService {
   constructor(
     @InjectModel(CountryDBModel)
     private readonly countryModel: ModelType<CountryDBModel>,

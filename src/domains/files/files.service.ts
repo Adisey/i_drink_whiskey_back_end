@@ -7,7 +7,6 @@ import { createWriteStream, statSync } from 'fs';
 import { InjectModel } from 'nestjs-typegoose';
 import { DocumentType, ModelType } from '@typegoose/typegoose/lib/types';
 
-import { ListArgsOLD, ListArgs } from 'src/global/dto/listArgs';
 import { ConfigService } from '../../configs/app.config.service';
 import { getUploadConfig, IGUploadConfig } from '../../configs/upload.config';
 import { IMessageType } from '../../apolloError';

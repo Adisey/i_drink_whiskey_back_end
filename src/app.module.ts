@@ -10,7 +10,7 @@ import { ShutdownModule } from './shutdown/shutdown.module';
 
 // Domains
 import { AuthModule } from './domains/auth/auth.module';
-import { CountryModule } from './domains/country/country.module';
+import { CountriesModule } from 'src/domains/countries/countries.module';
 import { FilesModule } from './domains/files/files.module';
 import { UserModule } from './domains/user/user.module';
 import { WhiskyModule } from './domains/whisky/whisky.module';
@@ -27,7 +27,7 @@ import { WhiskyModule } from './domains/whisky/whisky.module';
       context: ({ req }: any) => ({ req }),
     }),
     AuthModule,
-    CountryModule,
+    CountriesModule,
     FilesModule,
     ShutdownModule,
     UserModule,

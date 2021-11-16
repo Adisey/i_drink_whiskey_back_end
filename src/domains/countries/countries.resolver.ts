@@ -3,18 +3,18 @@ import { Args, Mutation, Query, Resolver, Subscription } from '@nestjs/graphql';
 import { PubSub } from 'graphql-subscriptions';
 
 import { ListArgsOLD } from 'src/global/dto/listArgs';
-import { CountryService } from './country.service';
+import { CountriesService } from 'src/domains/countries/countries.service';
 import {
   NewCountryInput,
   CountryGraphQLModel,
-} from './models/country.model.GraphQL';
-import { CreateCountryDto } from './models/country.model.DB';
+} from 'src/domains/countries/models/countries.model.GraphQL';
+import { CreateCountryDto } from 'src/domains/countries/models/countries.model.DB';
 
 const pubSub = new PubSub();
 
 @Resolver((of) => CountryGraphQLModel)
-export class CountryResolver {
-  constructor(private readonly countryService: CountryService) {}
+export class CountriesResolver {
+  constructor(private readonly countryService: CountriesService) {}
 
   @Query((returns) => [CountryGraphQLModel])
   async countryList(

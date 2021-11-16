@@ -1,5 +1,5 @@
 import { ArgsType, Field, Int, ObjectType } from '@nestjs/graphql';
-import { isISIN, IsEnum, IsIn, Equals, IsString, IsInt } from 'class-validator';
+import { IsIn } from 'class-validator';
 import { ListArgs } from 'src/global/dto/listArgs';
 
 @ObjectType({ description: 'file' })
