@@ -4,13 +4,13 @@ import { Args } from '@nestjs/graphql';
 import { compare } from 'bcryptjs';
 import { expAccessToken, nbfToken } from '../../configs/jwt.config';
 import { AuthTokenGraphQLModel, Login } from './models/auth.model.GraphQL';
-import { UserService } from '../user/user.service';
+import { UsersService } from 'src/domains/users/users.service';
 import { JwtPayload } from '../auth/models/auth.model';
 
 @Injectable()
 export class AuthService {
   constructor(
-    private readonly userService: UserService,
+    private readonly userService: UsersService,
     private readonly jwtService: JwtService,
   ) {}
 

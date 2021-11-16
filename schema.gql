@@ -2,7 +2,7 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-"""user"""
+"""User"""
 type UserGraphQLModel {
   email: String!
   role: String
@@ -58,9 +58,9 @@ type WhiskyGraphQLModel {
 }
 
 type Query {
-  countryList(skip: Int = 0, limit: Int = 25): [CountryGraphQLModel!]!
+  countriesList(skip: Int = 0, limit: Int = 25): [CountryGraphQLModel!]!
   pictureList(pageNumber: Int = 1, pageSize: Int = 5, find: String = "", sortBy: String = "originFileName", sortOrder: Int = 1): FilesGraphQLListModel!
-  userList(skip: Int = 0, limit: Int = 25): [UserGraphQLModel!]!
+  usersList(skip: Int = 0, limit: Int = 25): [UserGraphQLModel!]!
   whiskyList(skip: Int = 0, limit: Int = 25): [WhiskyGraphQLModel!]!
 }
 
@@ -68,7 +68,7 @@ type Mutation {
   login(data: Login!): AuthTokenGraphQLModel!
   addCountry(data: NewCountryInput!): CountryGraphQLModel!
   uploadPicture(file: Upload!): FilesGraphQLUploadModel!
-  addUser(data: NewUserInput!): UserGraphQLModel!
+  addUser(data: AddUserInput!): UserGraphQLModel!
   deleteUserByEmail(email: String!): UserGraphQLModel!
   addWhisky(data: NewWhiskyInput!): WhiskyGraphQLModel!
 }
@@ -86,7 +86,7 @@ input NewCountryInput {
 """The `Upload` scalar type represents a file upload."""
 scalar Upload
 
-input NewUserInput {
+input AddUserInput {
   email: String!
   password: String!
 }

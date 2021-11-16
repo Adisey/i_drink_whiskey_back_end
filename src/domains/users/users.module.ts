@@ -4,9 +4,9 @@ import { TypegooseModule } from 'nestjs-typegoose';
 
 import { ConfigService } from '../../configs/app.config.service';
 import { JwtStrategy } from '../auth/strategies/jwt.strategy';
-import { UserResolver } from './user.resolver';
-import { UserService } from './user.service';
-import { UserDBModel } from './models/user.model.DB';
+import { UsersResolver } from 'src/domains/users/users.resolver';
+import { UsersService } from 'src/domains/users/users.service';
+import { UserDBModel } from 'src/domains/users/models/users.model.DB';
 
 @Module({
   imports: [
@@ -14,12 +14,11 @@ import { UserDBModel } from './models/user.model.DB';
       {
         typegooseClass: UserDBModel,
         schemaOptions: {
-          collection: 'User',
+          collection: 'Users',
         },
       },
     ]),
   ],
-  // ToDo: 25.10.2021 - move JwtStrategy & ConfigService to UP
-  providers: [UserService, UserResolver, JwtStrategy, ConfigService],
+  providers: [UsersService, UsersResolver, JwtStrategy, ConfigService],
 })
-export class UserModule {}
+export class UsersModule {}

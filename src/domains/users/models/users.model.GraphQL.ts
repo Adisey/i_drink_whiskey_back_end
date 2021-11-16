@@ -2,7 +2,7 @@ import { Field, InputType, ObjectType } from '@nestjs/graphql';
 import { Length } from 'class-validator';
 
 @InputType()
-export class NewUserInput {
+export class AddUserInput {
   @Field()
   @Length(5, 30)
   email: string;
@@ -12,7 +12,7 @@ export class NewUserInput {
   password?: string;
 }
 
-@ObjectType({ description: 'user' })
+@ObjectType({ description: 'User' })
 export class UserGraphQLModel {
   @Field()
   email: string;

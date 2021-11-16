@@ -3,7 +3,6 @@ import { UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
 import { GraphQLUpload, Upload } from 'graphql-upload';
 import { emitGraphQLError, getMessage, IMessageType } from '../../apolloError';
 
-import { ListArgs } from 'src/global/dto/listArgs';
 import { AdminGuard, JwtAuthGuard } from '../auth/guards/';
 import { FilesGraphQLListModel, FilesGraphQLModel } from './models';
 import { FilesService } from './files.service';

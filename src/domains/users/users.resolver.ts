@@ -7,15 +7,18 @@ import { ADMIN_ROLE, passwordHash, showRole } from '../../configs/auth.config';
 import { ListArgsOLD } from 'src/global/dto/listArgs';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { AdminGuard } from '../auth/guards/admin.guard';
-import { UserService } from './user.service';
-import { NewUserInput, UserGraphQLModel } from './models/user.model.GraphQL';
-import { IDbCreateUser } from './models/user.model.DB';
+import { UsersService } from 'src/domains/users/users.service';
+import {
+  AddUserInput,
+  UserGraphQLModel,
+} from 'src/domains/users/models/users.model.GraphQL';
+import { IDbCreateUser } from 'src/domains/users/models/users.model.DB';
 
 const pubSub = new PubSub();
 
 @Resolver((of) => UserGraphQLModel)
-export class UserResolver {
-  constructor(private readonly userService: UserService) {
+export class UsersResolver {
+  constructor(private readonly usersService: UsersService) {
     async function checkDefaultAdmin(userService) {
       const admin = await userService.findUserByRole(ADMIN_ROLE);
       const user = 'admin',
@@ -33,14 +36,14 @@ export class UserResolver {
       }
     }
     setTimeout(() => {
-      checkDefaultAdmin(userService);
+      checkDefaultAdmin(usersService);
     });
   }
 
   @Query(() => [UserGraphQLModel])
   @UseGuards(JwtAuthGuard)
-  async userList(@Args() listArgs: ListArgsOLD): Promise<UserGraphQLModel[]> {
-    return (await this.userService.findAll(listArgs)).map((u) => ({
+  async usersList(@Args() listArgs: ListArgsOLD): Promise<UserGraphQLModel[]> {
+    return (await this.usersService.findAll(listArgs)).map((u) => ({
       email: u.email,
       role: showRole(u.role),
     }));
@@ -50,7 +53,7 @@ export class UserResolver {
   @UseGuards(JwtAuthGuard, AdminGuard)
   @UsePipes(new ValidationPipe())
   async addUser(
-    @Args('data') newUserData: NewUserInput,
+    @Args('data') newUserData: AddUserInput,
     isAdmin = false,
   ): Promise<UserGraphQLModel> {
     const newUser: IDbCreateUser = {
@@ -58,7 +61,7 @@ export class UserResolver {
       passwordHash: await passwordHash(newUserData.password),
       role: isAdmin ? ADMIN_ROLE : '1',
     };
-    const user = (await this.userService.create(
+    const user = (await this.usersService.create(
       newUser,
     )) as unknown as UserGraphQLModel;
     user.role = showRole(user.role);
@@ -71,7 +74,7 @@ export class UserResolver {
   async deleteUserByEmail(
     @Args('email') email: string,
   ): Promise<UserGraphQLModel> {
-    const user = (await this.userService.deleteByEmail(
+    const user = (await this.usersService.deleteByEmail(
       email,
     )) as unknown as UserGraphQLModel;
     user.role = showRole(user.role);

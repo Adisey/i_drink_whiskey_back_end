@@ -12,7 +12,7 @@ import { ShutdownModule } from './shutdown/shutdown.module';
 import { AuthModule } from './domains/auth/auth.module';
 import { CountriesModule } from 'src/domains/countries/countries.module';
 import { FilesModule } from './domains/files/files.module';
-import { UserModule } from './domains/user/user.module';
+import { UsersModule } from 'src/domains/users/users.module';
 import { WhiskyModule } from './domains/whisky/whisky.module';
 
 @Module({
@@ -30,7 +30,7 @@ import { WhiskyModule } from './domains/whisky/whisky.module';
     CountriesModule,
     FilesModule,
     ShutdownModule,
-    UserModule,
+    UsersModule,
     WhiskyModule,
   ],
 })

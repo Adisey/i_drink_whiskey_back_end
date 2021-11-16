@@ -5,8 +5,8 @@ import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 
 import { getJWTConfig } from '../../configs/jwt.config';
-import { UserService } from '../user/user.service';
-import { UserDBModel } from '../user/models/user.model.DB';
+import { UsersService } from 'src/domains/users/users.service';
+import { UserDBModel } from 'src/domains/users/models/users.model.DB';
 import { AuthResolver } from './auth.resolver';
 import { AuthService } from './auth.service';
 
@@ -16,7 +16,7 @@ import { AuthService } from './auth.service';
       {
         typegooseClass: UserDBModel,
         schemaOptions: {
-          collection: 'User',
+          collection: 'Users',
         },
       },
     ]),
@@ -25,6 +25,6 @@ import { AuthService } from './auth.service';
     }),
     PassportModule,
   ],
-  providers: [AuthService, AuthResolver, UserService],
+  providers: [AuthService, AuthResolver, UsersService],
 })
 export class AuthModule {}

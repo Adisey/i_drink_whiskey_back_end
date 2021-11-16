@@ -4,13 +4,13 @@ import { ExtractJwt, Strategy } from 'passport-jwt';
 import { AuthenticationError } from 'apollo-server-core';
 
 import { ConfigService } from '../../../configs/app.config.service';
-import { UserService } from '../../user/user.service';
+import { UsersService } from 'src/domains/users/users.service';
 import { IAuthValidUser, JwtPayload } from '../models/auth.model';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
   constructor(
-    private readonly userService: UserService,
+    private readonly userService: UsersService,
     private readonly configService: ConfigService,
   ) {
     super({
