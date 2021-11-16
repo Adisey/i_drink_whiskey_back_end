@@ -14,13 +14,13 @@ const pubSub = new PubSub();
 
 @Resolver((of) => CountryGraphQLModel)
 export class CountriesResolver {
-  constructor(private readonly countryService: CountriesService) {}
+  constructor(private readonly countriesService: CountriesService) {}
 
   @Query((returns) => [CountryGraphQLModel])
-  async countryList(
+  async countriesList(
     @Args() listArgs: ListArgsOLD,
   ): Promise<CountryGraphQLModel[]> {
-    const aa = await this.countryService.findAll(listArgs);
+    const aa = await this.countriesService.findAll(listArgs);
     console.log(+new Date(), '-()->', typeof aa, `-aa->`, aa);
     return aa as unknown as CountryGraphQLModel[];
   }
@@ -30,7 +30,7 @@ export class CountriesResolver {
   async addCountry(
     @Args('data') newCountryData: NewCountryInput,
   ): Promise<CountryGraphQLModel> {
-    const country = (await this.countryService.create(
+    const country = (await this.countriesService.create(
       newCountryData as CreateCountryDto,
     )) as unknown as CountryGraphQLModel;
     pubSub.publish('countryAdded', { countryAdded: country });
