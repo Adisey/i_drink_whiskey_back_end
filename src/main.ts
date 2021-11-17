@@ -29,9 +29,18 @@ async function main() {
   app.useGlobalGuards(new JwtAuthGuard(reflector));
   app.enableShutdownHooks();
 
-  const isDebugMode = isTrue(process.env.IS_DEBUG_MODE);
+  if (isTrue(process.env.IS_DEBUG_MODE)) {
+    const mongooseLogger = (collectionName, methodName, ...methodArgs) => {
+      Logger.log(
+        `${collectionName}.${methodName}(${methodArgs
+          .map((a) => JSON.stringify(a))
+          .join(', ')})`,
+        'Mongoose',
+      );
+    };
 
-  mongoose.set('debug', isDebugMode);
+    mongoose.set('debug', mongooseLogger);
+  }
 
   const backPort = process.env.BACK_PORT || '4000';
   await app.listen(backPort, () => {
