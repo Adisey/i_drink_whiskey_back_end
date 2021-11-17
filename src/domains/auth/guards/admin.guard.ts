@@ -16,11 +16,11 @@ export class AdminGuard implements CanActivate {
   canActivate(context: ExecutionContext): boolean {
     const ctx = GqlExecutionContext.create(context);
     const { req } = ctx.getContext<IContentRequest>();
-    if (req.user.role && isRoleAdmin(req.user.role)) {
+    if (req.user.roleId && isRoleAdmin(req.user.roleId)) {
       return true;
     }
     const message = getMessage('RIGHTS_NOT_ENOUGH');
-    Logger.error(message, 'AdminGuard ');
+    Logger.error(message, JSON.stringify(req.user), 'AdminGuard');
     throw new AuthenticationError(message);
   }
 }

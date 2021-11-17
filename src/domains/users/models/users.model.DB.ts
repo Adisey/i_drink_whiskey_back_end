@@ -4,7 +4,7 @@ import { index, prop } from '@typegoose/typegoose';
 export type IDbCreateUser = {
   email: string;
   passwordHash: string;
-  role?: string;
+  roleId?: string;
 };
 
 export interface UserDBModel extends Base {}
@@ -17,5 +17,5 @@ export class UserDBModel extends TimeStamps {
   passwordHash: string;
 
   @prop()
-  role?: string;
+  roleId?: string;
 }

@@ -3,7 +3,6 @@ import { InjectModel } from 'nestjs-typegoose';
 import { DocumentType, ModelType } from '@typegoose/typegoose/lib/types';
 
 import { ListArgsOLD } from 'src/common/dto/listArgs';
-import { isRoleAdmin } from '../../configs/auth.config';
 import {
   IDbCreateUser,
   UserDBModel,
@@ -28,10 +27,10 @@ export class UsersService {
     return await this.usersModel.findOne({ email }).exec();
   }
 
-  async isUserAdmin(email: string): Promise<boolean> {
-    const user = await this.findUserByEmail(email);
-    return isRoleAdmin(user.role);
-  }
+  // async isUserAdmin(email: string): Promise<boolean> {
+  //   const user = await this.findUserByEmail(email);
+  //   return isRoleAdmin(user.roleId);
+  // }
 
   async deleteByEmail(
     email: string,
@@ -50,7 +49,7 @@ export class UsersService {
       .exec();
   }
 
-  async updateById(id: string, dto: IDbCreateUser) {
-    return this.usersModel.findByIdAndUpdate(id, dto, { new: true }).exec();
-  }
+  // async updateById(id: string, dto: IDbCreateUser) {
+  //   return this.usersModel.findByIdAndUpdate(id, dto, { new: true }).exec();
+  // }
 }

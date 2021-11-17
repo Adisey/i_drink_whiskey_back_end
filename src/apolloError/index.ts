@@ -9,6 +9,7 @@ const messageList = {
   RIGHTS_NOT_ENOUGH: 'You are not enough rights for this operation.',
   TOKEN_INVALID: 'Could not authenticate with token!',
   USER_ADMIN_ONLY: 'Only for users with admin rights!',
+  USER_NOT_FOUND: 'Could not log-in with the provided credentials!',
   USER_ONLY: 'Only for registered users!',
 };
 

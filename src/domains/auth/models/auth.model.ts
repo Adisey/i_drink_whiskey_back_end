@@ -1,6 +1,6 @@
 export type IAuthValidUser = {
   email: string;
-  role?: string;
+  roleId?: string;
 };
 
 export type IContentRequest = {

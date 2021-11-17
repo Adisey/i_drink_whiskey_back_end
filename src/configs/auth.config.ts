@@ -1,11 +1,11 @@
 import { genSalt, hash } from 'bcryptjs';
 
-export const ADMIN_ROLE = '9';
+export const ADMIN_ROLE_ID = '9';
 
-export const isRoleAdmin = (role: string): boolean => role === ADMIN_ROLE;
+export const isRoleAdmin = (role: string): boolean => role === ADMIN_ROLE_ID;
 
-export const showRole = (role: string): string => {
-  return role === ADMIN_ROLE ? 'Admin' : 'User';
+export const showRole = (roleId: string): string => {
+  return roleId === ADMIN_ROLE_ID ? 'Admin' : 'User';
 };
 
 export const passwordHash = async (password: string): Promise<string> => {

@@ -3,7 +3,11 @@ import { Logger, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
 import { Args, Mutation, Query, Resolver, Subscription } from '@nestjs/graphql';
 import { PubSub } from 'graphql-subscriptions';
 
-import { ADMIN_ROLE, passwordHash, showRole } from '../../configs/auth.config';
+import {
+  ADMIN_ROLE_ID,
+  passwordHash,
+  showRole,
+} from '../../configs/auth.config';
 import { ListArgsOLD } from 'src/common/dto/listArgs';
 import { AdminGuard } from '../auth/guards/admin.guard';
 import { UsersService } from 'src/domains/users/users.service';
@@ -20,14 +24,14 @@ const pubSub = new PubSub();
 export class UsersResolver {
   constructor(private readonly usersService: UsersService) {
     async function checkDefaultAdmin(userService) {
-      const admin = await userService.findUserByRole(ADMIN_ROLE);
+      const admin = await userService.findUserByRole(ADMIN_ROLE_ID);
       const user = 'admin',
         passport = 'admin';
       if (!admin) {
         await userService.create({
           email: user,
           passwordHash: await passwordHash(passport),
-          role: ADMIN_ROLE,
+          role: ADMIN_ROLE_ID,
         });
         Logger.warn(
           `Add default admin - "${user}:${passport}"`,
@@ -46,7 +50,7 @@ export class UsersResolver {
   async usersList(@Args() listArgs: ListArgsOLD): Promise<UserGraphQLModel[]> {
     return (await this.usersService.findAll(listArgs)).map((u) => ({
       email: u.email,
-      role: showRole(u.role),
+      role: showRole(u.roleId),
     }));
   }
 
@@ -62,7 +66,7 @@ export class UsersResolver {
     const newUser: IDbCreateUser = {
       email: newUserData.email,
       passwordHash: await passwordHash(newUserData.password),
-      role: isAdmin ? ADMIN_ROLE : '1',
+      roleId: isAdmin ? ADMIN_ROLE_ID : '1',
     };
     const user = (await this.usersService.create(
       newUser,

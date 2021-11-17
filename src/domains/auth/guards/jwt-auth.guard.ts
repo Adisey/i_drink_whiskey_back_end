@@ -32,9 +32,17 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
     return super.canActivate(context);
   }
 
-  handleRequest(err: any, user: any, info: any) {
+  handleRequest(err: any, user: any, info: any, context: any) {
     if (err || !user) {
-      Logger.error(info, 'JwtAuthGuard');
+      Logger.error(
+        info,
+        JSON.stringify({
+          err,
+          user,
+        }),
+        'JwtAuthGuard',
+      );
+      console.error('context ->', context);
       throw err || new AuthenticationError(getMessage('TOKEN_INVALID'));
     }
     return user;
