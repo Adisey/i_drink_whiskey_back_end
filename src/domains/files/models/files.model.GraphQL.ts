@@ -1,6 +1,6 @@
 import { ArgsType, Field, Int, ObjectType } from '@nestjs/graphql';
 import { IsIn } from 'class-validator';
-import { ListArgs } from 'src/global/dto/listArgs';
+import { ListArgs } from 'src/common/dto/listArgs';
 
 @ObjectType({ description: 'file' })
 export class FilesGraphQLModel {

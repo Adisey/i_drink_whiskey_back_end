@@ -2,7 +2,7 @@ import { UsePipes, ValidationPipe } from '@nestjs/common';
 import { Args, Mutation, Query, Resolver, Subscription } from '@nestjs/graphql';
 import { PubSub } from 'graphql-subscriptions';
 
-import { ListArgsOLD } from 'src/global/dto/listArgs';
+import { ListArgsOLD } from 'src/common/dto/listArgs';
 import { CountriesService } from 'src/domains/countries/countries.service';
 import {
   NewCountryInput,

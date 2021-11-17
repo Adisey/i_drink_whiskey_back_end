@@ -3,11 +3,11 @@ import { UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
 import { GraphQLUpload, Upload } from 'graphql-upload';
 import { emitGraphQLError, getMessage, IMessageType } from '../../apolloError';
 
-import { AdminGuard, JwtAuthGuard } from '../auth/guards/';
+import { User } from '../auth/decorators/user.decorator';
+import { AdminGuard } from '../auth/guards/';
 import { FilesGraphQLListModel, FilesGraphQLModel } from './models';
 import { FilesService } from './files.service';
 import { checkMimeType } from './instruments';
-import { User } from 'src/domains/auth/decorators/user.decorator';
 import {
   FileListArgs,
   FilesGraphQLUploadModel,
@@ -20,7 +20,6 @@ export class FilesResolver {
   @Mutation(() => FilesGraphQLUploadModel, {
     description: getMessage('USER_ONLY'),
   })
-  @UseGuards(JwtAuthGuard)
   // @UsePipes(new ValidationPipe())
   async uploadPicture(
     @Args({ name: 'file', type: () => GraphQLUpload })
@@ -56,7 +55,7 @@ export class FilesResolver {
   @Query(() => FilesGraphQLListModel, {
     description: getMessage('USER_ADMIN_ONLY'),
   })
-  @UseGuards(JwtAuthGuard, AdminGuard)
+  @UseGuards(AdminGuard)
   @UsePipes(new ValidationPipe())
   async pictureList(
     @Args() listArgs: FileListArgs,

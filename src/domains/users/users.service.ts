@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from 'nestjs-typegoose';
 import { DocumentType, ModelType } from '@typegoose/typegoose/lib/types';
 
-import { ListArgsOLD } from 'src/global/dto/listArgs';
+import { ListArgsOLD } from 'src/common/dto/listArgs';
 import { isRoleAdmin } from '../../configs/auth.config';
 import {
   IDbCreateUser,

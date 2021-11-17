@@ -4,8 +4,7 @@ import { Args, Mutation, Query, Resolver, Subscription } from '@nestjs/graphql';
 import { PubSub } from 'graphql-subscriptions';
 
 import { ADMIN_ROLE, passwordHash, showRole } from '../../configs/auth.config';
-import { ListArgsOLD } from 'src/global/dto/listArgs';
-import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { ListArgsOLD } from 'src/common/dto/listArgs';
 import { AdminGuard } from '../auth/guards/admin.guard';
 import { UsersService } from 'src/domains/users/users.service';
 import {
@@ -14,8 +13,6 @@ import {
 } from 'src/domains/users/models/users.model.GraphQL';
 import { IDbCreateUser } from 'src/domains/users/models/users.model.DB';
 import { getMessage } from 'src/apolloError';
-import { FilesGraphQLListModel } from 'src/domains/files/models';
-import { FilesGraphQLUploadModel } from 'src/domains/files/models/files.model.GraphQL';
 
 const pubSub = new PubSub();
 
@@ -46,7 +43,6 @@ export class UsersResolver {
   @Query(() => [UserGraphQLModel], {
     description: getMessage('USER_ONLY'),
   })
-  @UseGuards(JwtAuthGuard)
   async usersList(@Args() listArgs: ListArgsOLD): Promise<UserGraphQLModel[]> {
     return (await this.usersService.findAll(listArgs)).map((u) => ({
       email: u.email,
@@ -57,7 +53,7 @@ export class UsersResolver {
   @Mutation(() => UserGraphQLModel, {
     description: getMessage('USER_ADMIN_ONLY'),
   })
-  @UseGuards(JwtAuthGuard, AdminGuard)
+  @UseGuards(AdminGuard)
   @UsePipes(new ValidationPipe())
   async addUser(
     @Args('data') newUserData: AddUserInput,
@@ -79,7 +75,7 @@ export class UsersResolver {
   @Mutation(() => UserGraphQLModel, {
     description: getMessage('USER_ADMIN_ONLY'),
   })
-  @UseGuards(JwtAuthGuard, AdminGuard)
+  @UseGuards(AdminGuard)
   async deleteUserByEmail(
     @Args('email') email: string,
   ): Promise<UserGraphQLModel> {
@@ -93,7 +89,6 @@ export class UsersResolver {
   @Subscription(() => UserGraphQLModel, {
     description: getMessage('USER_ONLY'),
   })
-  @UseGuards(JwtAuthGuard)
   userAdded() {
     return pubSub.asyncIterator('userAdded');
   }

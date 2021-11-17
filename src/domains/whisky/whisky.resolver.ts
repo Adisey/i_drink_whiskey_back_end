@@ -2,7 +2,7 @@ import { Args, Mutation, Query, Resolver, Subscription } from '@nestjs/graphql';
 import { PubSub } from 'graphql-subscriptions';
 import { UsePipes, ValidationPipe } from '@nestjs/common';
 
-import { ListArgsOLD } from 'src/global/dto/listArgs';
+import { ListArgsOLD } from 'src/common/dto/listArgs';
 import { WhiskyService } from './whisky.service';
 import {
   NewWhiskyInput,

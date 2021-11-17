@@ -2,6 +2,7 @@
 import { UsePipes, ValidationPipe } from '@nestjs/common';
 import { Args, Mutation, Resolver } from '@nestjs/graphql';
 
+import { Public } from './decorators/public.decorator';
 import { AuthService } from './auth.service';
 import {
   Login,
@@ -15,6 +16,7 @@ export class AuthResolver {
 
   @Mutation(() => AuthTokenGraphQLModel)
   @UsePipes(new ValidationPipe())
+  @Public()
   async login(@Args('data') dto: Login): Promise<AuthTokenGraphQLModel> {
     return this.authService.login(dto);
   }
