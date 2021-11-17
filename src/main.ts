@@ -14,14 +14,6 @@ async function main() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
   const configService = app.get(ConfigService);
 
-  function shutdown() {
-    Logger.warn(`--(App)- AFTER 5 sec->`, 'SHUTDOWN');
-    setTimeout(() => {
-      Logger.warn(`--(App)-CLOSE->`, 'SHUTDOWN');
-      app.close();
-    }, 5000);
-  }
-
   // app.useGlobalPipes(new ValidationPipe()); // ToDo: 17.11.2021 - Fix for uploadPicture
   app.useGlobalFilters(new MongoErrorFilter());
   app.use(graphqlUploadExpress({ maxFileSize: 1000000, maxFiles: 10 }));
@@ -48,6 +40,15 @@ async function main() {
     Logger.log('Server started', 'Server listen port:' + backPort, 'Server');
   });
   app.get(ShutdownService).subscribeToShutdown(() => app.close());
+
+  const shutdown = () => {
+    Logger.warn(`--(App)- AFTER 5 sec->`, 'SHUTDOWN');
+    setTimeout(() => {
+      Logger.warn(`--(App)-CLOSE->`, 'SHUTDOWN');
+      app.close();
+    }, 5000);
+  };
+
   app.get(ShutdownService).addClose(() => shutdown());
 }
 
