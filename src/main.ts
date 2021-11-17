@@ -7,6 +7,8 @@ import * as dotenv from 'dotenv';
 import { ShutdownService } from 'src/shutdown/shutdown.service';
 import { JwtAuthGuard } from 'src/domains/auth/guards';
 import { MongoErrorFilter } from 'src/common/services/mongo-error.filter';
+import * as mongoose from 'mongoose';
+import { isTrue } from 'src/common/services/isTrue';
 
 async function main() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
@@ -20,12 +22,16 @@ async function main() {
   }
 
   dotenv.config();
-
+  // app.useGlobalPipes(new ValidationPipe()); // ToDo: 17.11.2021 - Fix for uploadPicture
   app.useGlobalFilters(new MongoErrorFilter());
   app.use(graphqlUploadExpress({ maxFileSize: 1000000, maxFiles: 10 }));
   const reflector = app.get(Reflector);
   app.useGlobalGuards(new JwtAuthGuard(reflector));
   app.enableShutdownHooks();
+
+  const isDebugMode = isTrue(process.env.IS_DEBUG_MODE);
+
+  mongoose.set('debug', isDebugMode);
 
   const backPort = process.env.BACK_PORT || '4000';
   await app.listen(backPort, () => {

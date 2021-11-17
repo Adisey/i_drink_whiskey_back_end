@@ -22,4 +22,7 @@ export const APP_ENV: IAPP_ENV = {
   UPLOAD_DIR: {
     error: 'Not specified directory to upload files',
   },
+  IS_DEBUG_MODE: {
+    default: 'false',
+  },
 };
