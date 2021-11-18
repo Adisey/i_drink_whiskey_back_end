@@ -16,16 +16,12 @@ export class AuthService {
   ) {
     async function checkDefaultAdmin() {
       const admin = await userService.findUserByRole(ADMIN_ROLE_ID);
-      const user = 'admin',
-        passport = 'admin';
       if (!admin) {
-        await userService.create({
-          email: user,
-          passwordHash: await passwordHash(passport),
-          roleId: ADMIN_ROLE_ID,
-        });
+        const user = 'admin',
+          password = 'admin';
+        await userService.addUser({ email: user, password }, true);
         Logger.warn(
-          `Add default admin - "${user}:${passport}"`,
+          `Add default admin - "${user}:${password}"`,
           'Initialization DB',
         );
       }

@@ -1,12 +1,16 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectModel } from 'nestjs-typegoose';
 import { DocumentType, ModelType } from '@typegoose/typegoose/lib/types';
 
-import { showRole } from '../../configs/auth.config';
+import {
+  ADMIN_ROLE_ID,
+  passwordHash,
+  showRole,
+} from '../../configs/auth.config';
 import { ListArgsOLD } from '../../common/dto/listArgs';
-import { emitGraphQLError, getMessage, IMessageType } from '../../apolloError';
-import { IDbCreateUser, UserDBModel } from './models/users.model.DB';
-import { UserGraphQLModel } from './models/users.model.GraphQL';
+import { emitGraphQLError } from '../../apolloError';
+import { UserDBModel } from './models/users.model.DB';
+import { AddUserInput, UserGraphQLModel } from './models/users.model.GraphQL';
 
 @Injectable()
 export class UsersService {
@@ -15,8 +19,17 @@ export class UsersService {
     private readonly usersModel: ModelType<UserDBModel>,
   ) {}
 
-  async create(data: IDbCreateUser): Promise<DocumentType<UserDBModel>> {
-    return await this.usersModel.create(data);
+  async addUser(
+    user: AddUserInput,
+    isAdmin = false,
+  ): Promise<UserGraphQLModel> {
+    const newUser = await this.usersModel.create({
+      email: user.email,
+      passwordHash: await passwordHash(user.password),
+      roleId: isAdmin ? ADMIN_ROLE_ID : '1',
+    });
+
+    return { email: newUser.email, role: showRole(newUser.roleId) };
   }
 
   async findUserByRole(roleId: string): Promise<DocumentType<UserDBModel>> {
