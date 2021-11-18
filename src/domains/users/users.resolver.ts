@@ -8,15 +8,12 @@ import {
   passwordHash,
   showRole,
 } from '../../configs/auth.config';
-import { ListArgsOLD } from 'src/common/dto/listArgs';
+import { ListArgsOLD } from '../../common/dto/listArgs';
+import { getMessage } from '../../apolloError';
 import { AdminGuard } from '../auth/guards/admin.guard';
-import { UsersService } from 'src/domains/users/users.service';
-import {
-  AddUserInput,
-  UserGraphQLModel,
-} from 'src/domains/users/models/users.model.GraphQL';
-import { IDbCreateUser } from 'src/domains/users/models/users.model.DB';
-import { getMessage } from 'src/apolloError';
+import { UsersService } from './users.service';
+import { AddUserInput, UserGraphQLModel } from './models/users.model.GraphQL';
+import { IDbCreateUser } from './models/users.model.DB';
 
 const pubSub = new PubSub();
 

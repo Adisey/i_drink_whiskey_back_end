@@ -8,8 +8,8 @@ import { AuthenticationError } from 'apollo-server-core';
 import { GqlExecutionContext } from '@nestjs/graphql';
 
 import { isRoleAdmin } from '../../../configs/auth.config';
-import { IContentRequest } from 'src/domains/auth/models/auth.model';
-import { getMessage } from 'src/apolloError';
+import { getMessage } from '../../../apolloError';
+import { IContentRequest } from '../models/auth.model';
 
 @Injectable()
 export class AdminGuard implements CanActivate {
