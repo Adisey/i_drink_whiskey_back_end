@@ -2,14 +2,11 @@ import { Injectable, Logger } from '@nestjs/common';
 import { InjectModel } from 'nestjs-typegoose';
 import { DocumentType, ModelType } from '@typegoose/typegoose/lib/types';
 
-import { ListArgsOLD } from 'src/common/dto/listArgs';
-import {
-  IDbCreateUser,
-  UserDBModel,
-} from 'src/domains/users/models/users.model.DB';
-import { UserGraphQLModel } from 'src/domains/users/models/users.model.GraphQL';
-import { showRole } from 'src/configs/auth.config';
-import { emitGraphQLError, getMessage, IMessageType } from 'src/apolloError';
+import { showRole } from '../../configs/auth.config';
+import { ListArgsOLD } from '../../common/dto/listArgs';
+import { emitGraphQLError, getMessage, IMessageType } from '../../apolloError';
+import { IDbCreateUser, UserDBModel } from './models/users.model.DB';
+import { UserGraphQLModel } from './models/users.model.GraphQL';
 
 @Injectable()
 export class UsersService {
@@ -45,9 +42,7 @@ export class UsersService {
         role: showRole(deletedUser.roleId),
       };
     } catch (e) {
-      const errorType: IMessageType = 'USER_NOT_FOUND';
-      Logger.error(getMessage(errorType), email, 'deleteByEmail');
-      throw emitGraphQLError(errorType);
+      throw emitGraphQLError('USER_NOT_FOUND', 'deleteByEmail', email, e);
     }
   }
 

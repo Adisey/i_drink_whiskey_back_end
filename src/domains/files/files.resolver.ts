@@ -30,8 +30,7 @@ export class FilesResolver {
 
     if (!checkMimeType(mimetype, 'image')) {
       const errorType: IMessageType = 'FILE_PICTURE_TYPE_BAD';
-      console.warn(getMessage(errorType), filename);
-      throw emitGraphQLError(errorType);
+      throw emitGraphQLError(errorType, 'uploadPicture', filename);
     }
 
     const fileInfo = await this.filesService.savePicture({
@@ -40,8 +39,7 @@ export class FilesResolver {
     });
 
     if (!fileInfo.isUpload) {
-      console.warn(getMessage(fileInfo.errorType), filename);
-      throw emitGraphQLError(fileInfo.errorType);
+      throw emitGraphQLError(fileInfo.errorType, 'uploadPicture', filename);
     }
 
     return {

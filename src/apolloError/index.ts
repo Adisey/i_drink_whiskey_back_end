@@ -1,4 +1,5 @@
 import { ApolloError } from 'apollo-server-errors';
+import { Logger } from '@nestjs/common';
 
 const messageList = {
   FILE_CONVERT_WEBP_ERROR: 'Error covert file to webp',
@@ -20,6 +21,16 @@ export const getMessage = (errorType: IMessageType): string => {
   return messageList[errorType];
 };
 
-export const emitGraphQLError = (errorType: IMessageType) => {
-  return new ApolloError(getMessage(errorType), errorType as string);
+export const emitGraphQLError = (
+  errorType: IMessageType,
+  context: string,
+  ...descriptions: string[]
+) => {
+  const message = getMessage(errorType);
+  Logger.warn(message, context);
+  descriptions.forEach((description) =>
+    Logger.warn(`description: ${description}`, context),
+  );
+
+  return new ApolloError(message);
 };
