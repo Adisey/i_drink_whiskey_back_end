@@ -19,8 +19,8 @@ export class UsersService {
     return await this.usersModel.create(data);
   }
 
-  async findUserByRole(role: string): Promise<DocumentType<UserDBModel>> {
-    return await this.usersModel.findOne({ role }).exec();
+  async findUserByRole(roleId: string): Promise<DocumentType<UserDBModel>> {
+    return await this.usersModel.findOne({ roleId }).exec();
   }
 
   async findUserByEmail(email: string): Promise<DocumentType<UserDBModel>> {

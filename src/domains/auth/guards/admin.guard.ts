@@ -17,7 +17,6 @@ export class AdminGuard implements CanActivate {
     const ctx = GqlExecutionContext.create(context);
     const { req } = ctx.getContext<IContentRequest>();
     const { user } = req;
-    // ToDo: 18.11.2021 - need use usersService.isUserAdmin and remove reoleId for token
     if (user.roleId && isRoleAdmin(user.roleId)) {
       return true;
     }

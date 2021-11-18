@@ -1,5 +1,5 @@
 //Core
-import { Logger, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
+import { UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
 import { Args, Mutation, Query, Resolver, Subscription } from '@nestjs/graphql';
 import { PubSub } from 'graphql-subscriptions';
 
@@ -19,27 +19,7 @@ const pubSub = new PubSub();
 
 @Resolver((of) => UserGraphQLModel)
 export class UsersResolver {
-  constructor(private readonly usersService: UsersService) {
-    async function checkDefaultAdmin(userService) {
-      const admin = await userService.findUserByRole(ADMIN_ROLE_ID);
-      const user = 'admin',
-        passport = 'admin';
-      if (!admin) {
-        await userService.create({
-          email: user,
-          passwordHash: await passwordHash(passport),
-          role: ADMIN_ROLE_ID,
-        });
-        Logger.warn(
-          `Add default admin - "${user}:${passport}"`,
-          'Initialization DB',
-        );
-      }
-    }
-    setTimeout(() => {
-      checkDefaultAdmin(usersService);
-    });
-  }
+  constructor(private readonly usersService: UsersService) {}
 
   @Query(() => [UserGraphQLModel], {
     description: getMessage('USER_ONLY'),

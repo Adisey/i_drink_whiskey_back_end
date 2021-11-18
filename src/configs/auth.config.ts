@@ -2,7 +2,8 @@ import { genSalt, hash } from 'bcryptjs';
 
 export const ADMIN_ROLE_ID = '9';
 
-export const isRoleAdmin = (role: string): boolean => role === ADMIN_ROLE_ID;
+export const isRoleAdmin = (roleId: string): boolean =>
+  roleId === ADMIN_ROLE_ID;
 
 export const showRole = (roleId: string): string => {
   return roleId === ADMIN_ROLE_ID ? 'Admin' : 'User';
