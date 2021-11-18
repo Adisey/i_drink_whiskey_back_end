@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { InjectModel } from 'nestjs-typegoose';
 import { DocumentType, ModelType } from '@typegoose/typegoose/lib/types';
 
@@ -7,6 +7,9 @@ import {
   IDbCreateUser,
   UserDBModel,
 } from 'src/domains/users/models/users.model.DB';
+import { UserGraphQLModel } from 'src/domains/users/models/users.model.GraphQL';
+import { showRole } from 'src/configs/auth.config';
+import { emitGraphQLError, getMessage, IMessageType } from 'src/apolloError';
 
 @Injectable()
 export class UsersService {
@@ -32,10 +35,20 @@ export class UsersService {
   //   return isRoleAdmin(user.roleId);
   // }
 
-  async deleteByEmail(
-    email: string,
-  ): Promise<DocumentType<UserDBModel> | null> {
-    return await this.usersModel.findOneAndDelete({ email }).exec();
+  async deleteByEmail(email: string): Promise<UserGraphQLModel | null> {
+    try {
+      const deletedUser = await this.usersModel
+        .findOneAndDelete({ email })
+        .exec();
+      return {
+        email: deletedUser.email,
+        role: showRole(deletedUser.roleId),
+      };
+    } catch (e) {
+      const errorType: IMessageType = 'USER_NOT_FOUND';
+      Logger.error(getMessage(errorType), email, 'deleteByEmail');
+      throw emitGraphQLError(errorType);
+    }
   }
 
   async findAll({

@@ -60,11 +60,7 @@ export class UsersResolver {
   async deleteUserByEmail(
     @Args('email') email: string,
   ): Promise<UserGraphQLModel> {
-    const user = (await this.usersService.deleteByEmail(
-      email,
-    )) as unknown as UserGraphQLModel;
-    user.role = showRole(user.role);
-    return user;
+    return await this.usersService.deleteByEmail(email);
   }
 
   @Subscription(() => UserGraphQLModel, {

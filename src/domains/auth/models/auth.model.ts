@@ -1,15 +1,15 @@
-export type IAuthKokenUser = {
+export type IAuthContentUser = {
   email: string;
   roleId?: string;
 };
 
 export type IContentRequest = {
   req: {
-    user: IAuthKokenUser;
+    user: IAuthContentUser;
   };
 };
 
-export type IContentRequestUserFields = keyof IAuthKokenUser;
+export type IContentRequestUserFields = keyof IAuthContentUser;
 
 export interface JwtPayload {
   email: string;

@@ -6,7 +6,7 @@ import { AuthenticationError } from 'apollo-server-core';
 import { getMessage } from '../../../apolloError';
 import { ConfigService } from '../../../configs/app.config.service';
 import { UsersService } from 'src/domains/users/users.service';
-import { IAuthKokenUser, JwtPayload } from '../models/auth.model';
+import { IAuthContentUser, JwtPayload } from '../models/auth.model';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
@@ -21,10 +21,10 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
     });
   }
 
-  async validate(payload: JwtPayload): Promise<IAuthKokenUser | void> {
+  async validate(payload: JwtPayload): Promise<IAuthContentUser | void> {
     const foundUser = await this.userService.findUserByEmail(payload.email);
     if (!foundUser) {
-      const message = getMessage('USER_NOT_FOUND');
+      const message = getMessage('USER_BAD');
       Logger.error(message, payload.email, 'JwtStrategy');
       throw new AuthenticationError(message);
     }
