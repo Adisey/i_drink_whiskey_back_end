@@ -3,27 +3,29 @@ import { UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
 import { Args, Mutation, Query, Resolver, Subscription } from '@nestjs/graphql';
 import { PubSub } from 'graphql-subscriptions';
 
-import { showRole } from '../../configs/auth.config';
-import { ListArgsOLD } from '../../common/dto/listArgs';
 import { getMessage } from '../../apolloError';
 import { AdminGuard } from '../auth/guards/admin.guard';
 import { UsersService } from './users.service';
-import { AddUserInput, UserGraphQLModel } from './models/users.model.GraphQL';
+import {
+  AddUserInput,
+  UserGraphQLModel,
+  UsersGraphQLListModel,
+  UsersListArgs,
+} from './models/users.model.GraphQL';
 
 const pubSub = new PubSub();
 
-@Resolver((of) => UserGraphQLModel)
+@Resolver(() => UserGraphQLModel)
 export class UsersResolver {
   constructor(private readonly usersService: UsersService) {}
 
-  @Query(() => [UserGraphQLModel], {
+  @Query(() => UsersGraphQLListModel, {
     description: getMessage('USER_ONLY'),
   })
-  async usersList(@Args() listArgs: ListArgsOLD): Promise<UserGraphQLModel[]> {
-    return (await this.usersService.findAll(listArgs)).map((u) => ({
-      email: u.email,
-      role: showRole(u.roleId),
-    }));
+  async usersList(
+    @Args() listArgs: UsersListArgs,
+  ): Promise<UsersGraphQLListModel> {
+    return await this.usersService.usersList(listArgs);
   }
 
   @Mutation(() => UserGraphQLModel, {

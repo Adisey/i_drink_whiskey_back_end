@@ -5,7 +5,7 @@ import { emitGraphQLError, getMessage, IMessageType } from '../../apolloError';
 
 import { User } from '../auth/decorators/user.decorator';
 import { AdminGuard } from '../auth/guards/';
-import { FilesGraphQLListModel, FilesGraphQLModel } from './models';
+import { FilesGraphQLListModel, FileGraphQLModel } from './models';
 import { FilesService } from './files.service';
 import { checkMimeType } from './instruments';
 import {
@@ -13,7 +13,7 @@ import {
   FilesGraphQLUploadModel,
 } from 'src/domains/files/models/files.model.GraphQL';
 
-@Resolver(() => FilesGraphQLModel)
+@Resolver(() => FileGraphQLModel)
 export class FilesResolver {
   constructor(private readonly filesService: FilesService) {}
 

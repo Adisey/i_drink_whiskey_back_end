@@ -7,10 +7,14 @@ import {
   passwordHash,
   showRole,
 } from '../../configs/auth.config';
-import { ListArgsOLD } from '../../common/dto/listArgs';
 import { emitGraphQLError } from '../../apolloError';
 import { UserDBModel } from './models/users.model.DB';
-import { AddUserInput, UserGraphQLModel } from './models/users.model.GraphQL';
+import {
+  AddUserInput,
+  UserGraphQLModel,
+  UsersGraphQLListModel,
+  UsersListArgs,
+} from './models/users.model.GraphQL';
 
 @Injectable()
 export class UsersService {
@@ -59,15 +63,36 @@ export class UsersService {
     }
   }
 
-  async findAll({
-    limit,
-    skip,
-  }: ListArgsOLD): Promise<DocumentType<UserDBModel>[]> {
-    // ToDo: 14.10.2021 - Add pagination
-    // ToDo: 27.10.2021 - Add total for responds
-    return this.usersModel
-      .aggregate([{ $limit: skip + limit }, { $skip: skip }])
+  async usersList({
+    pageNumber,
+    pageSize,
+    find,
+    sortBy,
+    sortOrder,
+  }: UsersListArgs): Promise<UsersGraphQLListModel> {
+    const findQuery = find ? { $text: { $search: '$' + find + '$' } } : {};
+    const sortField = `${sortOrder > 0 ? '' : '-'}${sortBy}`;
+
+    const count = await this.usersModel
+      .aggregate()
+      .match(findQuery)
+      .count('count')
       .exec();
+
+    const skip = pageNumber ? (pageNumber - 1) * pageSize : pageNumber;
+
+    const list = await this.usersModel
+      .aggregate()
+      .match(findQuery)
+      .sort(sortField)
+      .skip(skip)
+      .limit(pageSize)
+      .exec();
+
+    return {
+      list,
+      totalCount: count[0]?.count || 0,
+    };
   }
 
   // async updateById(id: string, dto: IDbCreateUser) {

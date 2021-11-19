@@ -1,13 +1,13 @@
-import { ArgsType, Field, Int } from '@nestjs/graphql';
-import { Max, Min, isISIN, IsIn, IsInt, IsString } from 'class-validator';
+import { ArgsType, Field, Int, ObjectType } from '@nestjs/graphql';
+import { Max, Min, IsIn } from 'class-validator';
 
 @ArgsType()
 export class ListArgsOLD {
-  @Field((type) => Int)
+  @Field(() => Int)
   @Min(0)
   skip = 0;
 
-  @Field((type) => Int)
+  @Field(() => Int)
   @Min(1)
   @Max(50)
   limit = 25;
@@ -15,22 +15,28 @@ export class ListArgsOLD {
 
 @ArgsType()
 export class ListArgs {
-  @Field((type) => Int)
+  @Field(() => Int)
   @Min(1)
   pageNumber = 1;
 
-  @Field((type) => Int)
+  @Field(() => Int)
   @Min(1)
   @Max(50)
   pageSize = 5;
 
-  @Field((type) => String)
+  @Field(() => String)
   find = '';
 
-  @Field((type) => String)
+  @Field(() => String)
   sortBy = 'name';
 
-  @Field((type) => Int)
+  @Field(() => Int)
   @IsIn([-1, 1])
   sortOrder = 1;
+}
+
+@ObjectType({ description: 'List' })
+export class GraphQLListModel {
+  @Field()
+  totalCount: number;
 }

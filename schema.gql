@@ -2,6 +2,12 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+"""Users list"""
+type UsersGraphQLListModel {
+  totalCount: Float!
+  list: [UserGraphQLModel!]!
+}
+
 """User"""
 type UserGraphQLModel {
   email: String!
@@ -21,7 +27,7 @@ type CountryGraphQLModel {
 }
 
 """file"""
-type FilesGraphQLModel {
+type FileGraphQLModel {
   _id: String
   originFileName: String
   originFilePath: String
@@ -45,8 +51,8 @@ type FilesGraphQLUploadModel {
 
 """File list"""
 type FilesGraphQLListModel {
-  list: [FilesGraphQLModel!]!
   totalCount: Float!
+  list: [FileGraphQLModel!]!
 }
 
 """whisky"""
@@ -64,7 +70,7 @@ type Query {
   pictureList(pageNumber: Int = 1, pageSize: Int = 5, find: String = "", sortBy: String = "originFileName", sortOrder: Int = 1): FilesGraphQLListModel!
 
   """Only for registered users!"""
-  usersList(skip: Int = 0, limit: Int = 25): [UserGraphQLModel!]!
+  usersList(pageNumber: Int = 1, pageSize: Int = 5, find: String = "", sortBy: String = "email", sortOrder: Int = 1): UsersGraphQLListModel!
   whiskyList(skip: Int = 0, limit: Int = 25): [WhiskyGraphQLModel!]!
 }
 

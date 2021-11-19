@@ -1,7 +1,4 @@
-export {
-  FilesGraphQLModel,
-  FilesGraphQLListModel,
-} from './files.model.GraphQL';
+export { FileGraphQLModel, FilesGraphQLListModel } from './files.model.GraphQL';
 export {
   FilesDBModel,
   FileDBInfo,
