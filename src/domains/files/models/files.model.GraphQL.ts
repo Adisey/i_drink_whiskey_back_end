@@ -25,6 +25,8 @@ export class FileGraphQLModel {
   ownerName?: string;
 }
 
+type FileGraphQLField = keyof FileGraphQLModel;
+
 @ObjectType({ description: 'Upload file' })
 export class FilesGraphQLUploadModel extends FileGraphQLModel {
   @Field({ nullable: true })
@@ -37,9 +39,11 @@ export class FilesGraphQLListModel extends GraphQLListModel {
   list: FileGraphQLModel[];
 }
 
+// type IFilesSortBy = 'originFileName' | 'originFileSize' | 'ownerName';
+
 @ArgsType()
 export class FileListArgs extends ListArgs {
   // ToDo: 15.11.2021 - add check fields
   @Field(() => String)
-  sortBy = 'originFileName';
+  sortBy: FileGraphQLField = 'originFileName';
 }

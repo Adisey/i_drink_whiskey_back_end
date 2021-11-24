@@ -11,7 +11,12 @@ type UsersGraphQLListModel {
 """User"""
 type UserGraphQLModel {
   email: String!
+
+  """Only for Admin"""
   role: String
+
+  """Only for Admin"""
+  xxx: String
 }
 
 """auth"""

@@ -24,7 +24,7 @@ export class UserGraphQLModel {
   @Field()
   email: string;
 
-  @Field({ nullable: true })
+  @Field({ nullable: true, description: 'Only for Admin' })
   role?: string;
 }
 

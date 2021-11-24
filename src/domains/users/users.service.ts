@@ -89,8 +89,12 @@ export class UsersService {
       .limit(pageSize)
       .exec();
 
+    const outLlist: UserGraphQLModel[] = list.map((u: UserDBModel) => {
+      return { email: u.email, role: showRole(u.roleId) };
+    });
+
     return {
-      list,
+      list: outLlist,
       totalCount: count[0]?.count || 0,
     };
   }
