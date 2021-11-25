@@ -69,6 +69,21 @@ type FilesGraphQLListModel {
   totalCount: Float!
 }
 
+"""region"""
+type RegionGraphQLModel {
+  _id: String
+  name: String!
+  description: String
+  countryId: String
+  country: String
+}
+
+"""Regions list"""
+type RegionsGraphQLListModel {
+  list: [RegionGraphQLModel!]!
+  totalCount: Float!
+}
+
 """whisky"""
 type WhiskyGraphQLModel {
   _id: String
@@ -82,6 +97,7 @@ type Query {
 
   """Only for users with admin rights!"""
   pictureList(pageNumber: Int = 1, pageSize: Int = 5, find: String = "", sortBy: String = "originFileName", sortOrder: Int = 1): FilesGraphQLListModel!
+  regionsList(pageNumber: Int = 1, pageSize: Int = 5, find: String = "", sortBy: String = "name", sortOrder: Int = 1): RegionsGraphQLListModel!
 
   """Only for registered users!"""
   usersList(pageNumber: Int = 1, pageSize: Int = 5, find: String = "", sortBy: String = "email", sortOrder: Int = 1): UsersGraphQLListModel!
@@ -96,6 +112,9 @@ type Mutation {
 
   """Only for registered users!"""
   uploadPicture(file: Upload!): FilesGraphQLUploadModel!
+
+  """Only for users with admin rights!"""
+  addRegion(data: NewRegionInput!): RegionGraphQLModel!
 
   """Only for users with admin rights!"""
   addUser(data: AddUserInput!): UserGraphQLModel!
@@ -118,6 +137,13 @@ input NewCountryInput {
 """The `Upload` scalar type represents a file upload."""
 scalar Upload
 
+input NewRegionInput {
+  name: String!
+  description: String
+  countryId: String
+  country: String
+}
+
 input AddUserInput {
   email: String!
   password: String!
@@ -137,6 +163,7 @@ scalar DateTime
 
 type Subscription {
   countryAdded: CountryGraphQLModel!
+  regionAdded: RegionGraphQLModel!
 
   """Only for registered users!"""
   userAdded: UserGraphQLModel!

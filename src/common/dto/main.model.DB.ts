@@ -3,7 +3,7 @@ import { prop } from '@typegoose/typegoose';
 
 export type CreateMainDto = {
   name: string;
-  description: string;
+  description?: string;
 };
 
 export interface MainDBModel extends Base {}

@@ -1,9 +1,10 @@
-import { UsePipes, ValidationPipe } from '@nestjs/common';
+import { UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
 import { Args, Mutation, Query, Resolver, Subscription } from '@nestjs/graphql';
 import { PubSub } from 'graphql-subscriptions';
 
 import { getMessage } from '../../apolloError';
 import { ListArgs } from '../../common/dto/listArgs';
+import { AdminGuard } from '../auth/guards';
 import { CountriesService } from './countries.service';
 import {
   NewCountryInput,
@@ -22,19 +23,18 @@ export class CountriesResolver {
   async countriesList(
     @Args() listArgs: ListArgs,
   ): Promise<CountriesGraphQLListModel> {
-    const aa = await this.countriesService.countriesList(listArgs);
-    console.log(+new Date(), '-(RESOLVER)->', `-aa->`, aa);
-    return aa;
+    return await this.countriesService.countriesList(listArgs);
   }
 
   @Mutation(() => CountryGraphQLModel, {
     description: getMessage('USER_ADMIN_ONLY'),
   })
+  @UseGuards(AdminGuard)
   @UsePipes(new ValidationPipe())
   async addCountry(
     @Args('data') newCountryData: NewCountryInput,
   ): Promise<CountryGraphQLModel> {
-    const country = (await this.countriesService.create(
+    const country = (await this.countriesService.addCountry(
       newCountryData as CreateCountryDto,
     )) as unknown as CountryGraphQLModel;
     pubSub.publish('countryAdded', { countryAdded: country });

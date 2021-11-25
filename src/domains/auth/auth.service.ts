@@ -3,7 +3,7 @@ import { JwtService } from '@nestjs/jwt';
 import { Args } from '@nestjs/graphql';
 import { compare } from 'bcryptjs';
 import { expAccessToken, nbfToken } from '../../configs/jwt.config';
-import { ADMIN_ROLE_ID, passwordHash } from '../../configs/auth.config';
+import { ADMIN_ROLE_ID } from '../../configs/auth.config';
 import { UsersService } from '../users/users.service';
 import { AuthTokenGraphQLModel, Login } from './models/auth.model.GraphQL';
 import { JwtPayload } from './models/auth.model';

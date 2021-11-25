@@ -10,8 +10,9 @@ import { ShutdownModule } from './shutdown/shutdown.module';
 
 // Domains
 import { AuthModule } from './domains/auth/auth.module';
-import { CountriesModule } from 'src/domains/countries/countries.module';
+import { CountriesModule } from './domains/countries/countries.module';
 import { FilesModule } from './domains/files/files.module';
+import { RegionsModule } from './domains/regions/regions.module';
 import { UsersModule } from 'src/domains/users/users.module';
 import { WhiskyModule } from './domains/whisky/whisky.module';
 
@@ -29,6 +30,7 @@ import { WhiskyModule } from './domains/whisky/whisky.module';
     AuthModule,
     CountriesModule,
     FilesModule,
+    RegionsModule,
     ShutdownModule,
     UsersModule,
     WhiskyModule,

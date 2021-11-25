@@ -18,7 +18,7 @@ import {
   ISaveFileParams,
   FilesGraphQLListModel,
 } from './models';
-import { FileListArgs } from 'src/domains/files/models/files.model.GraphQL';
+import { FileListArgs } from './models/files.model.GraphQL';
 
 @Injectable()
 export class FilesService {

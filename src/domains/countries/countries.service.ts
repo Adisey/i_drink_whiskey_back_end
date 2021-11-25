@@ -14,8 +14,22 @@ export class CountriesService {
     private readonly countryModel: ModelType<CountryDBModel>,
   ) {}
 
-  async create(data: CreateCountryDto): Promise<DocumentType<CountryDBModel>> {
+  async addCountry(
+    data: CreateCountryDto,
+  ): Promise<DocumentType<CountryDBModel>> {
     return await this.countryModel.create(data);
+  }
+
+  async findCountryByName(name: string): Promise<DocumentType<CountryDBModel>> {
+    return await this.countryModel.findOne({ name }).exec();
+  }
+
+  async findCountryById(id: string): Promise<CountryDBModel> {
+    return await this.countryModel.findById(id).exec();
+  }
+
+  async findCountryNameById(id: string): Promise<string> {
+    return (await this.countryModel.findById(id).exec()).name;
   }
 
   async countriesList(listArgs: ListArgs): Promise<CountriesGraphQLListModel> {
@@ -23,8 +37,6 @@ export class CountriesService {
       this.countryModel,
       listArgs,
     );
-
-    console.log(+new Date(), '-(SERVICE)->', `-mainList->`, mainList);
 
     return {
       list: mainList.list.map((c: CountryDBModel) => ({
