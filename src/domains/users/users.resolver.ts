@@ -4,7 +4,7 @@ import { Args, Mutation, Query, Resolver, Subscription } from '@nestjs/graphql';
 import { PubSub } from 'graphql-subscriptions';
 
 import { getMessage } from '../../apolloError';
-import { AdminGuard, FieldGuard } from '../auth/guards';
+import { AdminGuard } from '../auth/guards';
 import { UsersService } from './users.service';
 import {
   AddUserInput,

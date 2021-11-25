@@ -2,30 +2,34 @@ import { UsePipes, ValidationPipe } from '@nestjs/common';
 import { Args, Mutation, Query, Resolver, Subscription } from '@nestjs/graphql';
 import { PubSub } from 'graphql-subscriptions';
 
-import { ListArgsOLD } from 'src/common/dto/listArgs';
-import { CountriesService } from 'src/domains/countries/countries.service';
+import { getMessage } from '../../apolloError';
+import { ListArgs } from '../../common/dto/listArgs';
+import { CountriesService } from './countries.service';
 import {
   NewCountryInput,
   CountryGraphQLModel,
-} from 'src/domains/countries/models/countries.model.GraphQL';
-import { CreateCountryDto } from 'src/domains/countries/models/countries.model.DB';
+  CountriesGraphQLListModel,
+} from './models/countries.model.GraphQL';
+import { CreateCountryDto } from './models/countries.model.DB';
 
 const pubSub = new PubSub();
 
-@Resolver((of) => CountryGraphQLModel)
+@Resolver(() => CountryGraphQLModel)
 export class CountriesResolver {
   constructor(private readonly countriesService: CountriesService) {}
 
-  @Query((returns) => [CountryGraphQLModel])
+  @Query(() => CountriesGraphQLListModel)
   async countriesList(
-    @Args() listArgs: ListArgsOLD,
-  ): Promise<CountryGraphQLModel[]> {
-    const aa = await this.countriesService.findAll(listArgs);
-    console.log(+new Date(), '-()->', typeof aa, `-aa->`, aa);
-    return aa as unknown as CountryGraphQLModel[];
+    @Args() listArgs: ListArgs,
+  ): Promise<CountriesGraphQLListModel> {
+    const aa = await this.countriesService.countriesList(listArgs);
+    console.log(+new Date(), '-(RESOLVER)->', `-aa->`, aa);
+    return aa;
   }
 
-  @Mutation((returns) => CountryGraphQLModel)
+  @Mutation(() => CountryGraphQLModel, {
+    description: getMessage('USER_ADMIN_ONLY'),
+  })
   @UsePipes(new ValidationPipe())
   async addCountry(
     @Args('data') newCountryData: NewCountryInput,

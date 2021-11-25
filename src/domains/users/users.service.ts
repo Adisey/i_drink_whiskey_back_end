@@ -15,6 +15,7 @@ import {
   UsersGraphQLListModel,
   UsersListArgs,
 } from './models/users.model.GraphQL';
+import { makeList } from 'src/common/services/makeList';
 
 @Injectable()
 export class UsersService {
@@ -63,39 +64,15 @@ export class UsersService {
     }
   }
 
-  async usersList({
-    pageNumber,
-    pageSize,
-    find,
-    sortBy,
-    sortOrder,
-  }: UsersListArgs): Promise<UsersGraphQLListModel> {
-    const findQuery = find ? { $text: { $search: '$' + find + '$' } } : {};
-    const sortField = `${sortOrder > 0 ? '' : '-'}${sortBy}`;
-
-    const count = await this.usersModel
-      .aggregate()
-      .match(findQuery)
-      .count('count')
-      .exec();
-
-    const skip = pageNumber ? (pageNumber - 1) * pageSize : pageNumber;
-
-    const list = await this.usersModel
-      .aggregate()
-      .match(findQuery)
-      .sort(sortField)
-      .skip(skip)
-      .limit(pageSize)
-      .exec();
-
-    const outLlist: UserGraphQLModel[] = list.map((u: UserDBModel) => {
-      return { email: u.email, role: showRole(u.roleId) };
-    });
+  async usersList(listArgs: UsersListArgs): Promise<UsersGraphQLListModel> {
+    const mainList = await makeList<UserDBModel>(this.usersModel, listArgs);
 
     return {
-      list: outLlist,
-      totalCount: count[0]?.count || 0,
+      list: mainList.list.map((u: UserDBModel) => ({
+        email: u.email,
+        role: showRole(u.roleId),
+      })),
+      totalCount: mainList.totalCount,
     };
   }
 

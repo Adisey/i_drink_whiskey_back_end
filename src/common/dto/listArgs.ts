@@ -1,5 +1,6 @@
 import { ArgsType, Field, Int, ObjectType } from '@nestjs/graphql';
 import { Max, Min, IsIn } from 'class-validator';
+import { MainGraphQLModel } from './main.model.GraphQL';
 
 @ArgsType()
 export class ListArgsOLD {
@@ -37,6 +38,9 @@ export class ListArgs {
 
 @ObjectType({ description: 'List' })
 export class GraphQLListModel {
+  @Field(() => [MainGraphQLModel])
+  list: any[];
+
   @Field()
   totalCount: number;
 }

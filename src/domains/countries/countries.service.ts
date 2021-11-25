@@ -2,11 +2,10 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from 'nestjs-typegoose';
 import { DocumentType, ModelType } from '@typegoose/typegoose/lib/types';
 
-import { ListArgsOLD } from 'src/common/dto/listArgs';
-import {
-  CreateCountryDto,
-  CountryDBModel,
-} from 'src/domains/countries/models/countries.model.DB';
+import { ListArgs } from '../../common/dto/listArgs';
+import { makeList } from '../../common/services/makeList';
+import { CreateCountryDto, CountryDBModel } from './models/countries.model.DB';
+import { CountriesGraphQLListModel } from './models/countries.model.GraphQL';
 
 @Injectable()
 export class CountriesService {
@@ -19,10 +18,21 @@ export class CountriesService {
     return await this.countryModel.create(data);
   }
 
-  async findAll(
-    listArgs: ListArgsOLD,
-  ): Promise<DocumentType<CountryDBModel>[]> {
-    // ToDo: 14.10.2021 - Add pagination
-    return await this.countryModel.find().exec();
+  async countriesList(listArgs: ListArgs): Promise<CountriesGraphQLListModel> {
+    const mainList = await makeList<CountryDBModel>(
+      this.countryModel,
+      listArgs,
+    );
+
+    console.log(+new Date(), '-(SERVICE)->', `-mainList->`, mainList);
+
+    return {
+      list: mainList.list.map((c: CountryDBModel) => ({
+        _id: c._id.toString(),
+        name: c.name,
+        description: c.description,
+      })),
+      totalCount: mainList.totalCount,
+    };
   }
 }

@@ -1,26 +1,18 @@
 import { Field, InputType, ObjectType } from '@nestjs/graphql';
-import { IsOptional, Length, MaxLength } from 'class-validator';
+import {
+  MainGraphQLModel,
+  NewMainInput,
+} from '../../../common/dto/main.model.GraphQL';
+import { GraphQLListModel } from '../../../common/dto/listArgs';
 
 @InputType()
-export class NewCountryInput {
-  @Field()
-  @MaxLength(30)
-  name: string;
-
-  @Field({ nullable: true })
-  @IsOptional()
-  @Length(30, 255)
-  description?: string;
-}
+export class NewCountryInput extends NewMainInput {}
 
 @ObjectType({ description: 'country' })
-export class CountryGraphQLModel {
-  @Field({ nullable: true })
-  _id: string;
+export class CountryGraphQLModel extends MainGraphQLModel {}
 
-  @Field()
-  name: string;
-
-  @Field({ nullable: true })
-  description?: string;
+@ObjectType({ description: 'Countries list' })
+export class CountriesGraphQLListModel extends GraphQLListModel {
+  @Field(() => [CountryGraphQLModel])
+  list: CountryGraphQLModel[];
 }

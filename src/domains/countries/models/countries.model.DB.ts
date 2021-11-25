@@ -1,16 +1,5 @@
-import { Base, TimeStamps } from '@typegoose/typegoose/lib/defaultClasses';
-import { prop } from '@typegoose/typegoose';
+import { CreateMainDto, MainDBModel } from 'src/common/dto/main.model.DB';
 
-export type CreateCountryDto = {
-  name: string;
-  description: string;
-};
+export type CreateCountryDto = CreateMainDto;
 
-export interface CountryDBModel extends Base {}
-export class CountryDBModel extends TimeStamps {
-  @prop()
-  name: string;
-
-  @prop()
-  description: string;
-}
+export class CountryDBModel extends MainDBModel {}
