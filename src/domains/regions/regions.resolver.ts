@@ -31,9 +31,9 @@ export class RegionsResolver {
   @UseGuards(AdminGuard)
   @UsePipes(new ValidationPipe())
   async addRegion(
-    @Args('data') newCountryData: NewRegionInput,
+    @Args('data') data: NewRegionInput,
   ): Promise<RegionGraphQLModel> {
-    const region = await this.regionsService.addRegion(newCountryData);
+    const region = await this.regionsService.addRegion(data);
     pubSub.publish('regionAdded', { countryAdded: region });
     return region;
   }

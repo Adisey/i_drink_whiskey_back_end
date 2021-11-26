@@ -4,8 +4,11 @@ import { DocumentType, ModelType } from '@typegoose/typegoose/lib/types';
 
 import { ListArgs } from '../../common/dto/listArgs';
 import { makeList } from '../../common/services/makeList';
-import { CreateCountryDto, CountryDBModel } from './models/countries.model.DB';
-import { CountriesGraphQLListModel } from './models/countries.model.GraphQL';
+import { CountryDBModel } from './models/countries.model.DB';
+import {
+  CountriesGraphQLListModel,
+  NewCountryInput,
+} from './models/countries.model.GraphQL';
 
 @Injectable()
 export class CountriesService {
@@ -15,7 +18,7 @@ export class CountriesService {
   ) {}
 
   async addCountry(
-    data: CreateCountryDto,
+    data: NewCountryInput,
   ): Promise<DocumentType<CountryDBModel>> {
     return await this.countryModel.create(data);
   }

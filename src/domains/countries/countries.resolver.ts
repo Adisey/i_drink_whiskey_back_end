@@ -11,7 +11,6 @@ import {
   CountryGraphQLModel,
   CountriesGraphQLListModel,
 } from './models/countries.model.GraphQL';
-import { CreateCountryDto } from './models/countries.model.DB';
 
 const pubSub = new PubSub();
 
@@ -32,10 +31,10 @@ export class CountriesResolver {
   @UseGuards(AdminGuard)
   @UsePipes(new ValidationPipe())
   async addCountry(
-    @Args('data') newCountryData: NewCountryInput,
+    @Args('data') data: NewCountryInput,
   ): Promise<CountryGraphQLModel> {
     const country = (await this.countriesService.addCountry(
-      newCountryData as CreateCountryDto,
+      data,
     )) as unknown as CountryGraphQLModel;
     pubSub.publish('countryAdded', { countryAdded: country });
     return country;
