@@ -9,6 +9,7 @@ import {
   CountriesGraphQLListModel,
   NewCountryInput,
 } from './models/countries.model.GraphQL';
+import { emitGraphQLError } from 'src/apolloError';
 
 @Injectable()
 export class CountriesService {
@@ -16,12 +17,6 @@ export class CountriesService {
     @InjectModel(CountryDBModel)
     private readonly countryModel: ModelType<CountryDBModel>,
   ) {}
-
-  async addCountry(
-    data: NewCountryInput,
-  ): Promise<DocumentType<CountryDBModel>> {
-    return await this.countryModel.create(data);
-  }
 
   async findCountryByName(name: string): Promise<DocumentType<CountryDBModel>> {
     return await this.countryModel.findOne({ name }).exec();
@@ -33,6 +28,17 @@ export class CountriesService {
 
   async findCountryNameById(id: string): Promise<string> {
     return (await this.countryModel.findById(id).exec()).name;
+  }
+
+  async addCountry(
+    data: NewCountryInput,
+  ): Promise<DocumentType<CountryDBModel>> {
+    const foundCountry = this.findCountryByName(data.name);
+
+    if (foundCountry) {
+      throw emitGraphQLError('NAME_DUPLICATE', 'addRegion', data.name);
+    }
+    return await this.countryModel.create(data);
   }
 
   async countriesList(listArgs: ListArgs): Promise<CountriesGraphQLListModel> {

@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from 'nestjs-typegoose';
-import { ModelType } from '@typegoose/typegoose/lib/types';
+import { DocumentType, ModelType } from '@typegoose/typegoose/lib/types';
 
 import { ListArgs } from '../../common/dto/listArgs';
 import { makeList } from '../../common/services/makeList';
@@ -12,6 +12,7 @@ import {
   RegionGraphQLModel,
   RegionsGraphQLListModel,
 } from './models/regions.model.GraphQL';
+import { emitGraphQLError } from 'src/apolloError';
 
 @Injectable()
 export class RegionsService {
@@ -22,8 +23,18 @@ export class RegionsService {
     private readonly countriesService: CountriesService,
   ) {}
 
+  async findRegionByName(name: string): Promise<DocumentType<RegionDBModel>> {
+    return await this.regionsModel.findOne({ name }).exec();
+  }
+
   async addRegion(data: NewRegionInput): Promise<RegionGraphQLModel> {
-    const { country, countryId } = data;
+    const { country, countryId, name } = data;
+
+    const foundRegion = this.findRegionByName(name);
+
+    if (foundRegion) {
+      throw emitGraphQLError('NAME_DUPLICATE', 'addRegion', name);
+    }
 
     let fondCountryName = '',
       fondCountryId = '';
@@ -37,6 +48,7 @@ export class RegionsService {
         fondCountryId = foundCountry._id.toString();
       }
     }
+
     if (!fondCountryName && country) {
       const foundCountry = await this.countriesService.findCountryByName(
         country,
@@ -47,7 +59,7 @@ export class RegionsService {
       }
     }
 
-    if (!fondCountryName) {
+    if (!fondCountryName && country) {
       const newCountry = await this.countriesService.addCountry({
         name: country,
       });
@@ -56,11 +68,11 @@ export class RegionsService {
         fondCountryId = newCountry._id.toString();
       }
     }
-
     const region = await this.regionsModel.create({
       ...data,
       countryId: fondCountryId,
     });
+
     return {
       _id: region._id.toString(),
       name: region.name,

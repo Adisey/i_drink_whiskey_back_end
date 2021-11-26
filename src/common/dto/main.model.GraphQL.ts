@@ -1,10 +1,12 @@
 import { Field, InputType, ObjectType } from '@nestjs/graphql';
-import { IsOptional, Length, MaxLength } from 'class-validator';
+import { IsOptional, Length, MaxLength, IsNotEmpty } from 'class-validator';
+import { getMessage } from 'src/apolloError';
 
 @InputType()
 export class NewMainInput {
   @Field()
   @MaxLength(30)
+  @IsNotEmpty({ message: getMessage('NAME_EMPTY') })
   name: string;
 
   @Field({ nullable: true })

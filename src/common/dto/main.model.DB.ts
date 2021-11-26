@@ -3,7 +3,7 @@ import { prop } from '@typegoose/typegoose';
 
 export interface MainDBModel extends Base {}
 export class MainDBModel extends TimeStamps {
-  @prop()
+  @prop({ unique: true, required: true })
   name: string;
 
   @prop()

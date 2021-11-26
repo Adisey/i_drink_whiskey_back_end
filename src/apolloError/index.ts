@@ -7,6 +7,8 @@ const messageList = {
   FILE_SAVE_DB_INFO_ERROR: 'Error save file info to DB',
   FILE_SAVE_ERROR: 'File save error',
   FILE_UPLOAD_OK: 'Upload Ok',
+  NAME_DUPLICATE: 'Name should not be duplicate!',
+  NAME_EMPTY: 'Name should not be empty!',
   RIGHTS_NOT_ENOUGH: 'You are not enough rights for this operation.',
   TOKEN_INVALID: 'Could not authenticate with token!',
   USER_ADMIN_ONLY: 'Only for users with admin rights!',
