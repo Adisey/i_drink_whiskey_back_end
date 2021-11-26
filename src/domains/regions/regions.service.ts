@@ -27,6 +27,10 @@ export class RegionsService {
     return await this.regionsModel.findOne({ name }).exec();
   }
 
+  async findRegionById(id: string): Promise<DocumentType<RegionDBModel>> {
+    return await this.regionsModel.findById(id).exec();
+  }
+
   async addRegion(data: NewRegionInput): Promise<RegionGraphQLModel> {
     const { country, countryId, name } = data;
 
