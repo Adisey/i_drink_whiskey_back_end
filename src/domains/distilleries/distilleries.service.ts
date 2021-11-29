@@ -60,7 +60,7 @@ export class DistilleriesService {
 
     return {
       list: mainList.list.map((c: DistilleryDBModel) => ({
-        _id: c._id.toString(),
+        id: c.id,
         name: c.name,
         description: c.description,
       })),

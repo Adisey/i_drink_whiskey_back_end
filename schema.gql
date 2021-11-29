@@ -3,7 +3,7 @@
 # ------------------------------------------------------
 
 type MainGraphQLModel {
-  _id: String
+  id: String
   name: String!
   description: String
 }
@@ -29,7 +29,7 @@ type AuthTokenGraphQLModel {
 
 """country"""
 type CountryGraphQLModel {
-  _id: String
+  id: String
   name: String!
   description: String
 }
@@ -42,7 +42,7 @@ type CountriesGraphQLListModel {
 
 """region"""
 type RegionGraphQLModel {
-  _id: String
+  id: String
   name: String!
   description: String
   countryId: String
@@ -57,7 +57,7 @@ type RegionsGraphQLListModel {
 
 """distillery"""
 type DistilleryGraphQLModel {
-  _id: String
+  id: String
   name: String!
   description: String
   countryId: String

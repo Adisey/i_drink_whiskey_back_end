@@ -7,9 +7,11 @@ import { makeList } from '../../common/services/makeList';
 import { CountryDBModel } from './models/countries.model.DB';
 import {
   CountriesGraphQLListModel,
+  CountryGraphQLModel,
   NewCountryInput,
 } from './models/countries.model.GraphQL';
 import { emitGraphQLError } from 'src/apolloError';
+import { db2GQL } from 'src/common/services';
 
 @Injectable()
 export class CountriesService {
@@ -30,15 +32,28 @@ export class CountriesService {
     return (await this.countryModel.findById(id).exec()).name;
   }
 
-  async addCountry(
+  async createCountry(
     data: NewCountryInput,
   ): Promise<DocumentType<CountryDBModel>> {
-    const foundCountry = this.findCountryByName(data.name);
+    return await this.countryModel.create(data);
+  }
+
+  async addCountry(data: NewCountryInput): Promise<CountryGraphQLModel> {
+    const foundCountry = await this.findCountryByName(data.name);
 
     if (foundCountry) {
       throw emitGraphQLError('NAME_DUPLICATE', 'addRegion', data.name);
     }
-    return await this.countryModel.create(data);
+
+    const newCompany = await this.createCountry(data);
+
+    return db2GQL(newCompany);
+  }
+
+  async addAsChild(data: CountryDBModel): Promise<CountryDBModel> {
+    // if (!data.id)
+
+    return data;
   }
 
   async countriesList(listArgs: ListArgs): Promise<CountriesGraphQLListModel> {
@@ -49,7 +64,7 @@ export class CountriesService {
 
     return {
       list: mainList.list.map((c: CountryDBModel) => ({
-        _id: c._id.toString(),
+        id: c.id,
         name: c.name,
         description: c.description,
       })),

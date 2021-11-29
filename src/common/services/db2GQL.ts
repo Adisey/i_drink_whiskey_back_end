@@ -5,11 +5,11 @@ type db = Base & {
 };
 
 type GQL = {
-  _id: string;
+  id: string;
   [field: string]: any;
 };
 
 export const db2GQL = (record: db): GQL => ({
   ...record._doc,
-  _id: record._id.toString(),
+  id: record.id,
 });

@@ -69,7 +69,7 @@ export class RegionsService {
       });
       if (newCountry) {
         fondCountryName = newCountry.name;
-        fondCountryId = newCountry._id.toString();
+        fondCountryId = newCountry.id;
       }
     }
     const region = await this.regionsModel.create({
@@ -78,7 +78,7 @@ export class RegionsService {
     });
 
     return {
-      _id: region._id.toString(),
+      id: region.id,
       name: region.name,
       description: region.description,
       countryId: region.countryId,
@@ -96,7 +96,7 @@ export class RegionsService {
     const outList: Promise<Array<RegionGraphQLModel>> = Promise.all(
       mainList.list.map(async (c: RegionDBModel) => {
         return {
-          _id: c._id.toString(),
+          id: c.id,
           name: c.name,
           description: c.description,
           countryId: c.countryId,

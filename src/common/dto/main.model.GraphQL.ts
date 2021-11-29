@@ -18,7 +18,7 @@ export class NewMainInput {
 @ObjectType()
 export class MainGraphQLModel {
   @Field({ nullable: true })
-  _id: string;
+  id: string;
 
   @Field()
   name?: string;
