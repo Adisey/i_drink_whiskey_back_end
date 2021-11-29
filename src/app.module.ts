@@ -11,6 +11,7 @@ import { ShutdownModule } from './shutdown/shutdown.module';
 // Domains
 import { AuthModule } from './domains/auth/auth.module';
 import { CountriesModule } from './domains/countries/countries.module';
+import { DistilleriesModule } from './domains/distilleries/distilleries.module';
 import { FilesModule } from './domains/files/files.module';
 import { RegionsModule } from './domains/regions/regions.module';
 import { UsersModule } from 'src/domains/users/users.module';
@@ -29,6 +30,7 @@ import { WhiskyModule } from './domains/whisky/whisky.module';
     }),
     AuthModule,
     CountriesModule,
+    DistilleriesModule,
     FilesModule,
     RegionsModule,
     ShutdownModule,

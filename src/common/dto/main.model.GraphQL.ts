@@ -21,7 +21,7 @@ export class MainGraphQLModel {
   _id: string;
 
   @Field()
-  name: string;
+  name?: string;
 
   @Field({ nullable: true })
   description?: string;

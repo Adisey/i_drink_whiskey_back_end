@@ -40,6 +40,38 @@ type CountriesGraphQLListModel {
   totalCount: Float!
 }
 
+"""region"""
+type RegionGraphQLModel {
+  _id: String
+  name: String!
+  description: String
+  countryId: String
+  country: String
+}
+
+"""Regions list"""
+type RegionsGraphQLListModel {
+  list: [RegionGraphQLModel!]!
+  totalCount: Float!
+}
+
+"""distillery"""
+type DistilleryGraphQLModel {
+  _id: String
+  name: String!
+  description: String
+  countryId: String
+  country: String
+  regionId: String
+  region: String
+}
+
+"""Distilleries list"""
+type DistilleriesGraphQLListModel {
+  list: [DistilleryGraphQLModel!]!
+  totalCount: Float!
+}
+
 """file"""
 type FileGraphQLModel {
   _id: String
@@ -69,21 +101,6 @@ type FilesGraphQLListModel {
   totalCount: Float!
 }
 
-"""region"""
-type RegionGraphQLModel {
-  _id: String
-  name: String!
-  description: String
-  countryId: String
-  country: String
-}
-
-"""Regions list"""
-type RegionsGraphQLListModel {
-  list: [RegionGraphQLModel!]!
-  totalCount: Float!
-}
-
 """whisky"""
 type WhiskyGraphQLModel {
   _id: String
@@ -94,6 +111,7 @@ type WhiskyGraphQLModel {
 
 type Query {
   countriesList(pageNumber: Int = 1, pageSize: Int = 5, find: String = "", sortBy: String = "name", sortOrder: Int = 1): CountriesGraphQLListModel!
+  distilleriesList(pageNumber: Int = 1, pageSize: Int = 5, find: String = "", sortBy: String = "name", sortOrder: Int = 1): DistilleriesGraphQLListModel!
 
   """Only for users with admin rights!"""
   pictureList(pageNumber: Int = 1, pageSize: Int = 5, find: String = "", sortBy: String = "originFileName", sortOrder: Int = 1): FilesGraphQLListModel!
@@ -109,6 +127,9 @@ type Mutation {
 
   """Only for users with admin rights!"""
   addCountry(data: NewCountryInput!): CountryGraphQLModel!
+
+  """Only for users with admin rights!"""
+  addDistillery(data: NewDistilleryInput!): DistilleryGraphQLModel!
 
   """Only for registered users!"""
   uploadPicture(file: Upload!): FilesGraphQLUploadModel!
@@ -132,6 +153,15 @@ input Login {
 input NewCountryInput {
   name: String!
   description: String
+}
+
+input NewDistilleryInput {
+  name: String!
+  description: String
+  countryId: String
+  country: String
+  regionId: String
+  region: String
 }
 
 """The `Upload` scalar type represents a file upload."""
@@ -163,6 +193,7 @@ scalar DateTime
 
 type Subscription {
   countryAdded: CountryGraphQLModel!
+  distilleryAdded: DistilleryGraphQLModel!
   regionAdded: RegionGraphQLModel!
 
   """Only for registered users!"""
