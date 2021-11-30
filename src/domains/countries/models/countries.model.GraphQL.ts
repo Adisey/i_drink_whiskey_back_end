@@ -16,3 +16,11 @@ export class CountriesGraphQLListModel extends GraphQLListModel {
   @Field(() => [CountryGraphQLModel])
   list: CountryGraphQLModel[];
 }
+
+export class ICountryAsChild {
+  @Field({ nullable: true })
+  countryId?: string;
+
+  @Field({ nullable: true })
+  country?: string;
+}

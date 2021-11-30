@@ -9,7 +9,7 @@ export class NewWhiskyInput {
 
   @Field({ nullable: true })
   @IsOptional()
-  @Length(30, 255)
+  @Length(1, 255)
   description?: string;
 
   @Field({ nullable: true })

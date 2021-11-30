@@ -32,57 +32,25 @@ export class RegionsService {
   }
 
   async addRegion(data: NewRegionInput): Promise<RegionGraphQLModel> {
-    const { country, countryId, name } = data;
-
-    const foundRegion = this.findRegionByName(name);
+    const { name } = data;
+    const foundRegion = await this.findRegionByName(name);
 
     if (foundRegion) {
       throw emitGraphQLError('NAME_DUPLICATE', 'addRegion', name);
     }
 
-    let fondCountryName = '',
-      fondCountryId = '';
+    const foundCountry = await this.countriesService.addAsChild(data);
 
-    if (countryId) {
-      const foundCountry = await this.countriesService.findCountryById(
-        countryId,
-      );
-      if (foundCountry) {
-        fondCountryName = foundCountry.name;
-        fondCountryId = foundCountry._id.toString();
-      }
-    }
-
-    if (!fondCountryName && country) {
-      const foundCountry = await this.countriesService.findCountryByName(
-        country,
-      );
-      if (foundCountry) {
-        fondCountryName = foundCountry.name;
-        fondCountryId = foundCountry._id.toString();
-      }
-    }
-
-    if (!fondCountryName && country) {
-      const newCountry = await this.countriesService.addCountry({
-        name: country,
-      });
-      if (newCountry) {
-        fondCountryName = newCountry.name;
-        fondCountryId = newCountry.id;
-      }
-    }
     const region = await this.regionsModel.create({
       ...data,
-      countryId: fondCountryId,
+      countryId: foundCountry.countryId,
     });
 
     return {
       id: region.id,
       name: region.name,
       description: region.description,
-      countryId: region.countryId,
-      country: fondCountryName,
+      ...foundCountry,
     };
   }
 

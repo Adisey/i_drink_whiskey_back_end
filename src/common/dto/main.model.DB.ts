@@ -7,5 +7,5 @@ export class MainDBModel extends TimeStamps {
   name: string;
 
   @prop()
-  description: string;
+  description?: string;
 }

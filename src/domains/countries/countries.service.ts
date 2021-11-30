@@ -1,17 +1,19 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from 'nestjs-typegoose';
 import { DocumentType, ModelType } from '@typegoose/typegoose/lib/types';
+import { mongoose } from '@typegoose/typegoose';
 
+import { emitGraphQLError } from '../../apolloError';
+import { db2GQL } from '../../common/services';
 import { ListArgs } from '../../common/dto/listArgs';
 import { makeList } from '../../common/services/makeList';
 import { CountryDBModel } from './models/countries.model.DB';
 import {
   CountriesGraphQLListModel,
   CountryGraphQLModel,
+  ICountryAsChild,
   NewCountryInput,
 } from './models/countries.model.GraphQL';
-import { emitGraphQLError } from 'src/apolloError';
-import { db2GQL } from 'src/common/services';
 
 @Injectable()
 export class CountriesService {
@@ -25,16 +27,16 @@ export class CountriesService {
   }
 
   async findCountryById(id: string): Promise<CountryDBModel> {
-    return await this.countryModel.findById(id).exec();
+    if (mongoose.Types.ObjectId.isValid(id)) {
+      return await this.countryModel.findById(id).exec();
+    }
   }
 
   async findCountryNameById(id: string): Promise<string> {
-    return (await this.countryModel.findById(id).exec()).name;
+    return (await this.findCountryById(id)).name;
   }
 
-  async createCountry(
-    data: NewCountryInput,
-  ): Promise<DocumentType<CountryDBModel>> {
+  async createCountry(data: NewCountryInput): Promise<CountryDBModel> {
     return await this.countryModel.create(data);
   }
 
@@ -50,10 +52,34 @@ export class CountriesService {
     return db2GQL(newCompany);
   }
 
-  async addAsChild(data: CountryDBModel): Promise<CountryDBModel> {
-    // if (!data.id)
+  asChild(data: CountryDBModel): ICountryAsChild {
+    return { countryId: data.id, country: data.name };
+  }
 
-    return data;
+  async addAsChild(data: ICountryAsChild): Promise<ICountryAsChild> {
+    console.log(+new Date(), `--(addAsCild)-  ->`, data);
+    if (!data.countryId && !data.country) {
+      return data;
+    }
+
+    if (data.countryId) {
+      const found = await this.findCountryById(data.countryId);
+      if (found) {
+        return this.asChild(found);
+      }
+    }
+    if (data.country) {
+      const found = await this.findCountryByName(data.country);
+      if (found) {
+        return this.asChild(found);
+      } else {
+        const created = await this.createCountry({ name: data.country });
+        if (created) {
+          return this.asChild(created);
+        }
+      }
+    }
+    return {};
   }
 
   async countriesList(listArgs: ListArgs): Promise<CountriesGraphQLListModel> {
