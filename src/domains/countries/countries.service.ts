@@ -47,18 +47,7 @@ export class CountriesService {
       throw emitGraphQLError('NAME_DUPLICATE', 'addRegion', data.name);
     }
 
-    const newCompany = await this.create(data);
-
-    console.log(
-      +new Date(),
-      '-()->',
-      typeof newCompany,
-      `-newCompany->`,
-      newCompany,
-    );
-
-    return newCompany;
-    // return db2GQL(newCompany);
+    return await this.create(data);
   }
 
   asChild(data: CountryDBModel): ICountryAsChild {

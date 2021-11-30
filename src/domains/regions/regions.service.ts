@@ -1,19 +1,20 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from 'nestjs-typegoose';
 import { DocumentType, ModelType } from '@typegoose/typegoose/lib/types';
+import { mongoose } from '@typegoose/typegoose';
 
 import { ListArgs } from '../../common/dto/listArgs';
 import { makeList } from '../../common/services/makeList';
+import { emitGraphQLError } from '../../apolloError';
 import { CountriesService } from '../countries/countries.service';
 import { CountryDBModel } from '../countries/models/countries.model.DB';
 import { RegionDBModel } from './models/regions.model.DB';
 import {
+  IRegionAsChild,
   NewRegionInput,
   RegionGraphQLModel,
   RegionsGraphQLListModel,
 } from './models/regions.model.GraphQL';
-import { emitGraphQLError } from 'src/apolloError';
-import { mongoose } from '@typegoose/typegoose';
 
 @Injectable()
 export class RegionsService {
@@ -58,6 +59,36 @@ export class RegionsService {
       description: region.description,
       ...foundCountry,
     };
+  }
+
+  asChild(data: RegionDBModel): IRegionAsChild {
+    return { regionId: data.id, region: data.name };
+  }
+
+  async addAsChild(data: IRegionAsChild): Promise<IRegionAsChild> {
+    let region: IRegionAsChild = {};
+
+    const country = await this.countriesService.addAsChild(data);
+
+    if (data.regionId) {
+      const found = await this.findById(data.regionId);
+      if (found) {
+        region = { ...region, ...this.asChild(found) };
+      }
+    }
+    if (!region.region && data.region) {
+      const found = await this.findByName(data.region);
+      if (found) {
+        region = { ...region, ...this.asChild(found) };
+      } else {
+        const created = await this.create({ name: data.region, ...country });
+        if (created) {
+          region = { ...region, ...this.asChild(found) };
+        }
+      }
+    }
+
+    return { ...region, ...country };
   }
 
   async list(listArgs: ListArgs): Promise<RegionsGraphQLListModel> {
