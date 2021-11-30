@@ -10,9 +10,11 @@ import {
   NewDistilleryInput,
   DistilleriesGraphQLListModel,
   DistilleryGraphQLModel,
+  IDistilleryAsChild,
 } from './models/distilleries.model.GraphQL';
 import { RegionDBModel } from 'src/domains/regions/models/regions.model.DB';
 import { RegionsService } from 'src/domains/regions/regions.service';
+import { IRegionAsChild } from 'src/domains/regions/models/regions.model.GraphQL';
 
 @Injectable()
 export class DistilleriesService {
@@ -59,6 +61,39 @@ export class DistilleriesService {
       description: distillery.description,
       ...foundRegion,
     };
+  }
+
+  asChild(data: DistilleryDBModel): IDistilleryAsChild {
+    return { distilleryId: data?.id, distillery: data?.name };
+  }
+
+  async addAsChild(data: IDistilleryAsChild): Promise<IDistilleryAsChild> {
+    let distillery: IDistilleryAsChild = {};
+
+    const region = await this.regionsService.addAsChild(data);
+
+    if (data.distilleryId) {
+      const found = await this.findById(data.distilleryId);
+      if (found) {
+        distillery = { ...distillery, ...this.asChild(found) };
+      }
+    }
+    if (!distillery.distilleryId && data.distillery) {
+      const found = await this.findByName(data.distillery);
+      if (found) {
+        distillery = { ...distillery, ...this.asChild(found) };
+      } else {
+        const created = await this.create({
+          name: data.distilleryId,
+          ...region,
+        });
+        if (created) {
+          distillery = { ...distillery, ...this.asChild(created) };
+        }
+      }
+    }
+
+    return { ...distillery, ...region };
   }
 
   async list(listArgs: ListArgs): Promise<DistilleriesGraphQLListModel> {
