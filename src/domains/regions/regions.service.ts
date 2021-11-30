@@ -62,7 +62,7 @@ export class RegionsService {
   }
 
   asChild(data: RegionDBModel): IRegionAsChild {
-    return { regionId: data.id, region: data.name };
+    return { regionId: data?.id, region: data?.name };
   }
 
   async addAsChild(data: IRegionAsChild): Promise<IRegionAsChild> {
@@ -83,7 +83,7 @@ export class RegionsService {
       } else {
         const created = await this.create({ name: data.region, ...country });
         if (created) {
-          region = { ...region, ...this.asChild(found) };
+          region = { ...region, ...this.asChild(created) };
         }
       }
     }

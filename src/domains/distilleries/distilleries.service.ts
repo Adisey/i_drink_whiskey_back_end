@@ -11,12 +11,16 @@ import {
   DistilleriesGraphQLListModel,
   DistilleryGraphQLModel,
 } from './models/distilleries.model.GraphQL';
+import { RegionDBModel } from 'src/domains/regions/models/regions.model.DB';
+import { RegionsService } from 'src/domains/regions/regions.service';
 
 @Injectable()
 export class DistilleriesService {
   constructor(
     @InjectModel(DistilleryDBModel)
+    @InjectModel(RegionDBModel)
     private readonly distilleryModel: ModelType<DistilleryDBModel>,
+    private readonly regionsService: RegionsService,
   ) {}
 
   async findByName(name: string): Promise<DocumentType<DistilleryDBModel>> {
@@ -42,21 +46,18 @@ export class DistilleriesService {
       throw emitGraphQLError('NAME_DUPLICATE', 'addDistillery', data.name);
     }
 
-    const distillery = await this.create(data);
+    const foundRegion = await this.regionsService.addAsChild(data);
 
-    console.log(+new Date(), '-()->', distillery.id, distillery.name);
-    console.log(
-      +new Date(),
-      '-()->',
-      typeof distillery,
-      `-newDistillery->`,
-      distillery,
-    );
+    const distillery = await this.create({
+      ...data,
+      regionId: foundRegion?.regionId,
+    });
 
     return {
       id: distillery.id,
       name: distillery.name,
       description: distillery.description,
+      ...foundRegion,
     };
   }
 

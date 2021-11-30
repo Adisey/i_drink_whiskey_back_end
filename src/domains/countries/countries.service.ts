@@ -4,7 +4,6 @@ import { DocumentType, ModelType } from '@typegoose/typegoose/lib/types';
 import { mongoose } from '@typegoose/typegoose';
 
 import { emitGraphQLError } from '../../apolloError';
-import { db2GQL } from '../../common/services';
 import { ListArgs } from '../../common/dto/listArgs';
 import { makeList } from '../../common/services/makeList';
 import { CountryDBModel } from './models/countries.model.DB';
@@ -51,7 +50,7 @@ export class CountriesService {
   }
 
   asChild(data: CountryDBModel): ICountryAsChild {
-    return { countryId: data.id, country: data.name };
+    return { countryId: data?.id, country: data?.name };
   }
 
   async addAsChild(data: ICountryAsChild): Promise<ICountryAsChild> {
