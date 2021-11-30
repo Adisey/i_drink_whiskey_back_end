@@ -22,7 +22,7 @@ export class RegionsResolver {
   async regionsList(
     @Args() listArgs: ListArgs,
   ): Promise<RegionsGraphQLListModel> {
-    return await this.regionsService.regionList(listArgs);
+    return await this.regionsService.list(listArgs);
   }
 
   @Mutation(() => RegionGraphQLModel, {
@@ -33,7 +33,7 @@ export class RegionsResolver {
   async addRegion(
     @Args('data') data: NewRegionInput,
   ): Promise<RegionGraphQLModel> {
-    const region = await this.regionsService.addRegion(data);
+    const region = await this.regionsService.add(data);
     pubSub.publish('regionAdded', { countryAdded: region });
     return region;
   }

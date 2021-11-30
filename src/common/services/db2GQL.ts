@@ -9,6 +9,8 @@ type GQL = {
   [field: string]: any;
 };
 
+// ToDo: 30.11.2021 - delete this
+
 export const db2GQL = (record: db): GQL => ({
   ...record._doc,
   id: record.id,

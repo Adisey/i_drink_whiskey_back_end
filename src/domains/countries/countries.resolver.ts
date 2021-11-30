@@ -22,7 +22,7 @@ export class CountriesResolver {
   async countriesList(
     @Args() listArgs: ListArgs,
   ): Promise<CountriesGraphQLListModel> {
-    return await this.countriesService.countriesList(listArgs);
+    return await this.countriesService.list(listArgs);
   }
 
   @Mutation(() => CountryGraphQLModel, {
@@ -33,7 +33,7 @@ export class CountriesResolver {
   async addCountry(
     @Args('data') data: NewCountryInput,
   ): Promise<CountryGraphQLModel> {
-    const country = (await this.countriesService.addCountry(
+    const country = (await this.countriesService.add(
       data,
     )) as unknown as CountryGraphQLModel;
     pubSub.publish('countryAdded', { countryAdded: country });

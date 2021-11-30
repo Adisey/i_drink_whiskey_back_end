@@ -22,34 +22,43 @@ export class CountriesService {
     private readonly countryModel: ModelType<CountryDBModel>,
   ) {}
 
-  async findCountryByName(name: string): Promise<DocumentType<CountryDBModel>> {
+  async findByName(name: string): Promise<DocumentType<CountryDBModel>> {
     return await this.countryModel.findOne({ name }).exec();
   }
 
-  async findCountryById(id: string): Promise<CountryDBModel> {
+  async findById(id: string): Promise<CountryDBModel> {
     if (mongoose.Types.ObjectId.isValid(id)) {
       return await this.countryModel.findById(id).exec();
     }
   }
 
-  async findCountryNameById(id: string): Promise<string> {
-    return (await this.findCountryById(id)).name;
+  async findNameById(id: string): Promise<string> {
+    return (await this.findById(id)).name;
   }
 
-  async createCountry(data: NewCountryInput): Promise<CountryDBModel> {
+  async create(data: NewCountryInput): Promise<CountryDBModel> {
     return await this.countryModel.create(data);
   }
 
-  async addCountry(data: NewCountryInput): Promise<CountryGraphQLModel> {
-    const foundCountry = await this.findCountryByName(data.name);
+  async add(data: NewCountryInput): Promise<CountryGraphQLModel> {
+    const foundCountry = await this.findByName(data.name);
 
     if (foundCountry) {
       throw emitGraphQLError('NAME_DUPLICATE', 'addRegion', data.name);
     }
 
-    const newCompany = await this.createCountry(data);
+    const newCompany = await this.create(data);
 
-    return db2GQL(newCompany);
+    console.log(
+      +new Date(),
+      '-()->',
+      typeof newCompany,
+      `-newCompany->`,
+      newCompany,
+    );
+
+    return newCompany;
+    // return db2GQL(newCompany);
   }
 
   asChild(data: CountryDBModel): ICountryAsChild {
@@ -57,23 +66,22 @@ export class CountriesService {
   }
 
   async addAsChild(data: ICountryAsChild): Promise<ICountryAsChild> {
-    console.log(+new Date(), `--(addAsCild)-  ->`, data);
     if (!data.countryId && !data.country) {
       return data;
     }
 
     if (data.countryId) {
-      const found = await this.findCountryById(data.countryId);
+      const found = await this.findById(data.countryId);
       if (found) {
         return this.asChild(found);
       }
     }
     if (data.country) {
-      const found = await this.findCountryByName(data.country);
+      const found = await this.findByName(data.country);
       if (found) {
         return this.asChild(found);
       } else {
-        const created = await this.createCountry({ name: data.country });
+        const created = await this.create({ name: data.country });
         if (created) {
           return this.asChild(created);
         }
@@ -82,7 +90,7 @@ export class CountriesService {
     return {};
   }
 
-  async countriesList(listArgs: ListArgs): Promise<CountriesGraphQLListModel> {
+  async list(listArgs: ListArgs): Promise<CountriesGraphQLListModel> {
     const mainList = await makeList<CountryDBModel>(
       this.countryModel,
       listArgs,

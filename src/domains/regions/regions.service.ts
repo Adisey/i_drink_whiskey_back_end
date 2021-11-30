@@ -13,6 +13,7 @@ import {
   RegionsGraphQLListModel,
 } from './models/regions.model.GraphQL';
 import { emitGraphQLError } from 'src/apolloError';
+import { mongoose } from '@typegoose/typegoose';
 
 @Injectable()
 export class RegionsService {
@@ -23,25 +24,30 @@ export class RegionsService {
     private readonly countriesService: CountriesService,
   ) {}
 
-  async findRegionByName(name: string): Promise<DocumentType<RegionDBModel>> {
+  async findByName(name: string): Promise<DocumentType<RegionDBModel>> {
     return await this.regionsModel.findOne({ name }).exec();
   }
 
-  async findRegionById(id: string): Promise<DocumentType<RegionDBModel>> {
-    return await this.regionsModel.findById(id).exec();
+  async findById(id: string): Promise<DocumentType<RegionDBModel>> {
+    if (mongoose.Types.ObjectId.isValid(id)) {
+      return await this.regionsModel.findById(id).exec();
+    }
   }
 
-  async addRegion(data: NewRegionInput): Promise<RegionGraphQLModel> {
-    const { name } = data;
-    const foundRegion = await this.findRegionByName(name);
+  async create(data: NewRegionInput): Promise<RegionDBModel> {
+    return await this.regionsModel.create(data);
+  }
+
+  async add(data: NewRegionInput): Promise<RegionGraphQLModel> {
+    const foundRegion = await this.findByName(data.name);
 
     if (foundRegion) {
-      throw emitGraphQLError('NAME_DUPLICATE', 'addRegion', name);
+      throw emitGraphQLError('NAME_DUPLICATE', 'addRegion', data.name);
     }
 
     const foundCountry = await this.countriesService.addAsChild(data);
 
-    const region = await this.regionsModel.create({
+    const region = await this.create({
       ...data,
       countryId: foundCountry.countryId,
     });
@@ -54,11 +60,11 @@ export class RegionsService {
     };
   }
 
-  async regionList(listArgs: ListArgs): Promise<RegionsGraphQLListModel> {
+  async list(listArgs: ListArgs): Promise<RegionsGraphQLListModel> {
     const mainList = await makeList<RegionDBModel>(this.regionsModel, listArgs);
 
     const findName = async (id: string): Promise<string> => {
-      return await this.countriesService.findCountryNameById(id);
+      return await this.countriesService.findNameById(id);
     };
 
     const outList: Promise<Array<RegionGraphQLModel>> = Promise.all(
