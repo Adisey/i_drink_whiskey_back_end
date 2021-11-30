@@ -22,7 +22,7 @@ export class DistilleriesResolver {
   async distilleriesList(
     @Args() listArgs: ListArgs,
   ): Promise<DistilleriesGraphQLListModel> {
-    return await this.distilleriesService.countriesList(listArgs);
+    return await this.distilleriesService.list(listArgs);
   }
 
   @Mutation(() => DistilleryGraphQLModel, {
@@ -33,7 +33,7 @@ export class DistilleriesResolver {
   async addDistillery(
     @Args('data') data: NewDistilleryInput,
   ): Promise<DistilleryGraphQLModel> {
-    const distillery = await this.distilleriesService.addDistillery(data);
+    const distillery = await this.distilleriesService.add(data);
     pubSub.publish('distilleryAdded', { distilleryAdded: distillery });
     return distillery;
   }
