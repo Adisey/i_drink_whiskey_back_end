@@ -8,11 +8,10 @@ import {
   NewWhiskyInput,
   WhiskyGraphQLModel,
 } from './models/whisky.model.GraphQL';
-import { CreateWhiskyDto } from './models/whisky.model.DB';
 
 const pubSub = new PubSub();
 
-@Resolver((of) => WhiskyGraphQLModel)
+@Resolver(() => WhiskyGraphQLModel)
 export class WhiskyResolver {
   constructor(private readonly whiskyService: WhiskyService) {}
 
@@ -39,9 +38,7 @@ export class WhiskyResolver {
   async addWhisky(
     @Args('data') newWhiskyData: NewWhiskyInput,
   ): Promise<WhiskyGraphQLModel> {
-    const whisky = (await this.whiskyService.create(
-      newWhiskyData as CreateWhiskyDto,
-    )) as unknown as WhiskyGraphQLModel;
+    const whisky = await this.whiskyService.add(newWhiskyData);
     pubSub.publish('whiskyAdded', { whiskyAdded: whisky });
     return whisky;
   }

@@ -12,9 +12,8 @@ import {
   DistilleryGraphQLModel,
   IDistilleryAsChild,
 } from './models/distilleries.model.GraphQL';
-import { RegionDBModel } from 'src/domains/regions/models/regions.model.DB';
-import { RegionsService } from 'src/domains/regions/regions.service';
-import { IRegionAsChild } from 'src/domains/regions/models/regions.model.GraphQL';
+import { RegionDBModel } from '../regions/models/regions.model.DB';
+import { RegionsService } from '../regions/regions.service';
 
 @Injectable()
 export class DistilleriesService {

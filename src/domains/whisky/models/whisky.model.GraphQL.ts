@@ -1,17 +1,12 @@
 import { Field, InputType, ObjectType } from '@nestjs/graphql';
-import { IsOptional, Length, MaxLength } from 'class-validator';
+import { IsOptional } from 'class-validator';
+import {
+  DistilleryGraphQLModel,
+  NewDistilleryInput,
+} from '../../distilleries/models/distilleries.model.GraphQL';
 
 @InputType()
-export class NewWhiskyInput {
-  @Field()
-  @MaxLength(30)
-  title: string;
-
-  @Field({ nullable: true })
-  @IsOptional()
-  @Length(1, 255)
-  description?: string;
-
+export class NewWhiskyInput extends NewDistilleryInput {
   @Field({ nullable: true })
   @IsOptional()
   age: number;
@@ -19,19 +14,22 @@ export class NewWhiskyInput {
   @Field({ nullable: true })
   @IsOptional()
   creationDate?: Date;
+
+  @Field({ nullable: true })
+  distilleryId?: string;
+
+  @Field({ nullable: true })
+  distillery?: string;
 }
 
 @ObjectType({ description: 'whisky' })
-export class WhiskyGraphQLModel {
+export class WhiskyGraphQLModel extends DistilleryGraphQLModel {
   @Field({ nullable: true })
-  _id: string;
-
-  @Field()
-  title: string;
+  age?: number;
 
   @Field({ nullable: true })
-  description?: string;
+  creationDate?: Date;
 
   @Field({ nullable: true })
-  age: number;
+  distilleryId?: string;
 }
