@@ -4,6 +4,7 @@ import {
   DistilleryGraphQLModel,
   NewDistilleryInput,
 } from '../../distilleries/models/distilleries.model.GraphQL';
+import { GraphQLListModel } from 'src/common/dto/listArgs';
 
 @InputType()
 export class NewWhiskyInput extends NewDistilleryInput {
@@ -32,4 +33,10 @@ export class WhiskyGraphQLModel extends DistilleryGraphQLModel {
 
   @Field({ nullable: true })
   distilleryId?: string;
+}
+
+@ObjectType({ description: 'Whiskies list' })
+export class WhiskiesGraphQLListModel extends GraphQLListModel {
+  @Field(() => [WhiskyGraphQLModel])
+  list: WhiskyGraphQLModel[];
 }

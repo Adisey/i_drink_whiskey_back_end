@@ -2,13 +2,15 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from 'nestjs-typegoose';
 import { DocumentType, ModelType } from '@typegoose/typegoose/lib/types';
 
-import { ListArgsOLD } from 'src/common/dto/listArgs';
+import { ListArgs } from 'src/common/dto/listArgs';
+import { makeList } from 'src/common/services';
+import { emitGraphQLError } from 'src/apolloError';
 import { WhiskyDBModel } from './models/whisky.model.DB';
 import {
   NewWhiskyInput,
+  WhiskiesGraphQLListModel,
   WhiskyGraphQLModel,
 } from './models/whisky.model.GraphQL';
-import { emitGraphQLError } from 'src/apolloError';
 
 @Injectable()
 export class WhiskyService {
@@ -42,11 +44,20 @@ export class WhiskyService {
       id: whisky.id,
       name: whisky.name,
       description: whisky.description,
+      // ToDo: 01.12.2021 - add other fields
     };
   }
 
-  async findAll(listArgs: ListArgsOLD): Promise<DocumentType<WhiskyDBModel>[]> {
-    // ToDo: 14.10.2021 - Add pagination
-    return await this.whiskyModel.find().exec();
+  async list(listArgs: ListArgs): Promise<WhiskiesGraphQLListModel> {
+    const mainList = await makeList<WhiskyDBModel>(this.whiskyModel, listArgs);
+
+    return {
+      list: mainList.list.map((whisky: WhiskyDBModel) => ({
+        id: whisky.id,
+        name: whisky.name,
+        description: whisky.description,
+      })),
+      totalCount: mainList.totalCount,
+    };
   }
 }

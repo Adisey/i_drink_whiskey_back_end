@@ -2,10 +2,11 @@ import { Args, Mutation, Query, Resolver, Subscription } from '@nestjs/graphql';
 import { PubSub } from 'graphql-subscriptions';
 import { UsePipes, ValidationPipe } from '@nestjs/common';
 
-import { ListArgsOLD } from 'src/common/dto/listArgs';
+import { ListArgs } from 'src/common/dto/listArgs';
 import { WhiskyService } from './whisky.service';
 import {
   NewWhiskyInput,
+  WhiskiesGraphQLListModel,
   WhiskyGraphQLModel,
 } from './models/whisky.model.GraphQL';
 
@@ -24,13 +25,11 @@ export class WhiskyResolver {
   //   return recipe;
   // }
   //
-  @Query((returns) => [WhiskyGraphQLModel])
+  @Query((returns) => WhiskiesGraphQLListModel)
   async whiskyList(
-    @Args() listArgs: ListArgsOLD,
-  ): Promise<WhiskyGraphQLModel[]> {
-    const aa = await this.whiskyService.findAll(listArgs);
-    console.log(+new Date(), '-()->', typeof aa, `-aa->`, aa);
-    return aa as unknown as WhiskyGraphQLModel[];
+    @Args() listArgs: ListArgs,
+  ): Promise<WhiskiesGraphQLListModel> {
+    return await this.whiskyService.list(listArgs);
   }
 
   @Mutation((returns) => WhiskyGraphQLModel)

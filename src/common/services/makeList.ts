@@ -23,7 +23,7 @@ export const makeList = async <M>(
     .exec();
 
   return {
-    list,
+    list: list.map((i) => ({ ...i, id: i._id.toString() })),
     totalCount: count[0]?.count || 0,
   };
 };

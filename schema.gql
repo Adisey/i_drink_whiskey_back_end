@@ -120,6 +120,12 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 """
 scalar DateTime
 
+"""Whiskies list"""
+type WhiskiesGraphQLListModel {
+  list: [WhiskyGraphQLModel!]!
+  totalCount: Float!
+}
+
 type Query {
   countriesList(pageNumber: Int = 1, pageSize: Int = 5, find: String = "", sortBy: String = "name", sortOrder: Int = 1): CountriesGraphQLListModel!
   distilleriesList(pageNumber: Int = 1, pageSize: Int = 5, find: String = "", sortBy: String = "name", sortOrder: Int = 1): DistilleriesGraphQLListModel!
@@ -130,7 +136,7 @@ type Query {
 
   """Only for registered users!"""
   usersList(pageNumber: Int = 1, pageSize: Int = 5, find: String = "", sortBy: String = "email", sortOrder: Int = 1): UsersGraphQLListModel!
-  whiskyList(skip: Int = 0, limit: Int = 25): [WhiskyGraphQLModel!]!
+  whiskyList(pageNumber: Int = 1, pageSize: Int = 5, find: String = "", sortBy: String = "name", sortOrder: Int = 1): WhiskiesGraphQLListModel!
 }
 
 type Mutation {
