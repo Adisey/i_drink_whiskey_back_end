@@ -113,8 +113,12 @@ export class RegionsService {
     return { ...foundCountry, ...region };
   }
 
-  async listAll(): Promise<RegionGraphQLModel[]> {
+  async listAll(): Promise<RegionDBModel[]> {
     return await this.regionsModel.find().exec();
+  }
+
+  async listByCountry(countryId: string): Promise<RegionDBModel[]> {
+    return await this.regionsModel.find({ countryId }).exec();
   }
 
   async list(listArgs: ListArgs): Promise<RegionsGraphQLListModel> {

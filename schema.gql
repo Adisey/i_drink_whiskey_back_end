@@ -121,6 +121,38 @@ type WhiskiesGraphQLListModel {
   totalCount: Float!
 }
 
+"""Pages tree list"""
+type PagesTreeGraphQLModel {
+  countries: [PageTreeCountryGraphQLModel!]!
+}
+
+type PageTreeCountryGraphQLModel {
+  id: String
+  name: String!
+  description: String
+  regions: [PageTreeRegionGraphQLModel!]!
+}
+
+type PageTreeRegionGraphQLModel {
+  id: String
+  name: String!
+  description: String
+  distilleries: [PageTreeDistilleryGraphQLModel!]!
+}
+
+type PageTreeDistilleryGraphQLModel {
+  id: String
+  name: String!
+  description: String
+  whiskies: [PageWhiskyGraphQLModel!]!
+}
+
+type PageWhiskyGraphQLModel {
+  id: String
+  name: String!
+  description: String
+}
+
 type PageGraphQLModel {
   id: String
   name: String!
@@ -134,6 +166,7 @@ type Query {
   """Only for users with admin rights!"""
   pictureList(pageNumber: Int = 1, pageSize: Int = 5, find: String = "", sortBy: String = "originFileName", sortOrder: Int = 1): FilesGraphQLListModel!
   pagesList: [PageGraphQLModel!]!
+  pagesListTree: PagesTreeGraphQLModel!
   whiskyList(pageNumber: Int = 1, pageSize: Int = 5, find: String = "", sortBy: String = "name", sortOrder: Int = 1): WhiskiesGraphQLListModel!
   regionsList(pageNumber: Int = 1, pageSize: Int = 5, find: String = "", sortBy: String = "name", sortOrder: Int = 1): RegionsGraphQLListModel!
 

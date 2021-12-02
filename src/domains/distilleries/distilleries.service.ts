@@ -118,6 +118,10 @@ export class DistilleriesService {
     return await this.distilleryModel.find().exec();
   }
 
+  async listByRegion(regionId: string): Promise<DistilleryDBModel[]> {
+    return await this.distilleryModel.find({ regionId }).exec();
+  }
+
   async list(listArgs: ListArgs): Promise<DistilleriesGraphQLListModel> {
     const mainList = await makeList<DistilleryDBModel>(
       this.distilleryModel,
