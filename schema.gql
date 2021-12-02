@@ -121,17 +121,24 @@ type WhiskiesGraphQLListModel {
   totalCount: Float!
 }
 
+type PageGraphQLModel {
+  id: String
+  name: String!
+  description: String
+}
+
 type Query {
   countriesList(pageNumber: Int = 1, pageSize: Int = 5, find: String = "", sortBy: String = "name", sortOrder: Int = 1): CountriesGraphQLListModel!
   distilleriesList(pageNumber: Int = 1, pageSize: Int = 5, find: String = "", sortBy: String = "name", sortOrder: Int = 1): DistilleriesGraphQLListModel!
 
   """Only for users with admin rights!"""
   pictureList(pageNumber: Int = 1, pageSize: Int = 5, find: String = "", sortBy: String = "originFileName", sortOrder: Int = 1): FilesGraphQLListModel!
+  pagesList: [PageGraphQLModel!]!
+  whiskyList(pageNumber: Int = 1, pageSize: Int = 5, find: String = "", sortBy: String = "name", sortOrder: Int = 1): WhiskiesGraphQLListModel!
   regionsList(pageNumber: Int = 1, pageSize: Int = 5, find: String = "", sortBy: String = "name", sortOrder: Int = 1): RegionsGraphQLListModel!
 
   """Only for registered users!"""
   usersList(pageNumber: Int = 1, pageSize: Int = 5, find: String = "", sortBy: String = "email", sortOrder: Int = 1): UsersGraphQLListModel!
-  whiskyList(pageNumber: Int = 1, pageSize: Int = 5, find: String = "", sortBy: String = "name", sortOrder: Int = 1): WhiskiesGraphQLListModel!
 }
 
 type Mutation {
@@ -145,6 +152,7 @@ type Mutation {
 
   """Only for registered users!"""
   uploadPicture(file: Upload!): FilesGraphQLUploadModel!
+  addWhisky(data: NewWhiskyInput!): WhiskyGraphQLModel!
 
   """Only for users with admin rights!"""
   addRegion(data: NewRegionInput!): RegionGraphQLModel!
@@ -154,7 +162,6 @@ type Mutation {
 
   """Only for users with admin rights!"""
   deleteUserByEmail(email: String!): UserGraphQLModel!
-  addWhisky(data: NewWhiskyInput!): WhiskyGraphQLModel!
 }
 
 input Login {
@@ -179,18 +186,6 @@ input NewDistilleryInput {
 """The `Upload` scalar type represents a file upload."""
 scalar Upload
 
-input NewRegionInput {
-  name: String!
-  description: String
-  countryId: String
-  country: String
-}
-
-input AddUserInput {
-  email: String!
-  password: String!
-}
-
 input NewWhiskyInput {
   name: String!
   description: String
@@ -209,12 +204,24 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 """
 scalar DateTime
 
+input NewRegionInput {
+  name: String!
+  description: String
+  countryId: String
+  country: String
+}
+
+input AddUserInput {
+  email: String!
+  password: String!
+}
+
 type Subscription {
   countryAdded: CountryGraphQLModel!
   distilleryAdded: DistilleryGraphQLModel!
+  whiskyAdded: WhiskyGraphQLModel!
   regionAdded: RegionGraphQLModel!
 
   """Only for registered users!"""
   userAdded: UserGraphQLModel!
-  whiskyAdded: WhiskyGraphQLModel!
 }

@@ -85,6 +85,10 @@ export class WhiskyService {
     return await this.getItem(newWhisky.id);
   }
 
+  async listAll(): Promise<WhiskyGraphQLModel[]> {
+    return await this.whiskyModel.find().exec();
+  }
+
   async list(listArgs: ListArgs): Promise<WhiskiesGraphQLListModel> {
     const mainList = await makeList<WhiskyDBModel>(this.whiskyModel, listArgs);
 

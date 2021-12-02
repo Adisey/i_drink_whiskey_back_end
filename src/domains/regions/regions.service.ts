@@ -15,7 +15,6 @@ import {
   RegionGraphQLModel,
   RegionsGraphQLListModel,
 } from './models/regions.model.GraphQL';
-import { DistilleryDBModel } from 'src/domains/distilleries/models/distilleries.model.DB';
 
 @Injectable()
 export class RegionsService {
@@ -112,6 +111,10 @@ export class RegionsService {
     }
 
     return { ...foundCountry, ...region };
+  }
+
+  async listAll(): Promise<RegionGraphQLModel[]> {
+    return await this.regionsModel.find().exec();
   }
 
   async list(listArgs: ListArgs): Promise<RegionsGraphQLListModel> {

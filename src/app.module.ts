@@ -13,8 +13,9 @@ import { AuthModule } from './domains/auth/auth.module';
 import { CountriesModule } from './domains/countries/countries.module';
 import { DistilleriesModule } from './domains/distilleries/distilleries.module';
 import { FilesModule } from './domains/files/files.module';
+import { PagesModule } from './domains/pages/pages.module';
 import { RegionsModule } from './domains/regions/regions.module';
-import { UsersModule } from 'src/domains/users/users.module';
+import { UsersModule } from './domains/users/users.module';
 import { WhiskyModule } from './domains/whisky/whisky.module';
 
 @Module({
@@ -32,6 +33,7 @@ import { WhiskyModule } from './domains/whisky/whisky.module';
     CountriesModule,
     DistilleriesModule,
     FilesModule,
+    PagesModule,
     RegionsModule,
     ShutdownModule,
     UsersModule,

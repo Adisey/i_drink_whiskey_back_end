@@ -13,6 +13,7 @@ import {
   ICountryAsChild,
   NewCountryInput,
 } from './models/countries.model.GraphQL';
+import { RegionGraphQLModel } from 'src/domains/regions/models/regions.model.GraphQL';
 
 @Injectable()
 export class CountriesService {
@@ -84,6 +85,14 @@ export class CountriesService {
       }
     }
     return {};
+  }
+
+  async listAll(): Promise<RegionGraphQLModel[]> {
+    return await this.countryModel.find().exec();
+  }
+
+  aa() {
+    return [];
   }
 
   async list(listArgs: ListArgs): Promise<CountriesGraphQLListModel> {

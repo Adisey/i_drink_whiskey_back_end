@@ -114,6 +114,10 @@ export class DistilleriesService {
     return { ...foundRegion, ...distillery };
   }
 
+  async listAll(): Promise<DistilleryGraphQLModel[]> {
+    return await this.distilleryModel.find().exec();
+  }
+
   async list(listArgs: ListArgs): Promise<DistilleriesGraphQLListModel> {
     const mainList = await makeList<DistilleryDBModel>(
       this.distilleryModel,
