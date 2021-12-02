@@ -31,9 +31,8 @@ export class RegionsGraphQLListModel extends GraphQLListModel {
 }
 
 export class IRegionAsChild extends ICountryAsChild {
-  @Field({ nullable: true })
+  name?: never;
+  description?: never;
   regionId?: string;
-
-  @Field({ nullable: true })
   region?: string;
 }

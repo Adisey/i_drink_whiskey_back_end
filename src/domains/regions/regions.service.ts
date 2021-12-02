@@ -15,6 +15,7 @@ import {
   RegionGraphQLModel,
   RegionsGraphQLListModel,
 } from './models/regions.model.GraphQL';
+import { DistilleryDBModel } from 'src/domains/distilleries/models/distilleries.model.DB';
 
 @Injectable()
 export class RegionsService {
@@ -35,6 +36,22 @@ export class RegionsService {
     }
   }
 
+  async getItem(itemId: string): Promise<RegionGraphQLModel> {
+    const found = await this.findById(itemId);
+    const { id, name, description, countryId } = found;
+    const parent = countryId
+      ? await this.countriesService.getItem(countryId)
+      : { name: undefined };
+    return {
+      ...parent,
+      countryId,
+      country: parent?.name,
+      id,
+      name,
+      description,
+    };
+  }
+
   async create(data: NewRegionInput): Promise<RegionDBModel> {
     return await this.regionsModel.create(data);
   }
@@ -46,19 +63,19 @@ export class RegionsService {
       throw emitGraphQLError('NAME_DUPLICATE', 'addRegion', data.name);
     }
 
-    const foundCountry = await this.countriesService.addAsChild(data);
+    const { countryId, country } = data;
 
-    const region = await this.create({
+    const foundCountry = await this.countriesService.addAsChild({
+      countryId,
+      country,
+    });
+
+    const newRegion = await this.create({
       ...data,
       countryId: foundCountry.countryId,
     });
 
-    return {
-      id: region.id,
-      name: region.name,
-      description: region.description,
-      ...foundCountry,
-    };
+    return await this.getItem(newRegion.id);
   }
 
   asChild(data: RegionDBModel): IRegionAsChild {
@@ -67,8 +84,11 @@ export class RegionsService {
 
   async addAsChild(data: IRegionAsChild): Promise<IRegionAsChild> {
     let region: IRegionAsChild = {};
-
-    const country = await this.countriesService.addAsChild(data);
+    const { countryId, country } = data;
+    const foundCountry = await this.countriesService.addAsChild({
+      countryId,
+      country,
+    });
 
     if (data.regionId) {
       const found = await this.findById(data.regionId);
@@ -81,14 +101,17 @@ export class RegionsService {
       if (found) {
         region = { ...region, ...this.asChild(found) };
       } else {
-        const created = await this.create({ name: data.region, ...country });
+        const created = await this.create({
+          name: data.region,
+          ...foundCountry,
+        });
         if (created) {
           region = { ...region, ...this.asChild(created) };
         }
       }
     }
 
-    return { ...region, ...country };
+    return { ...foundCountry, ...region };
   }
 
   async list(listArgs: ListArgs): Promise<RegionsGraphQLListModel> {

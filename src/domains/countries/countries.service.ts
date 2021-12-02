@@ -35,6 +35,12 @@ export class CountriesService {
     return (await this.findById(id)).name;
   }
 
+  async getItem(itemId: string): Promise<CountryGraphQLModel> {
+    const found = await this.findById(itemId);
+    const { id, name, description } = found;
+    return { id, name, description };
+  }
+
   async create(data: NewCountryInput): Promise<CountryDBModel> {
     return await this.countryModel.create(data);
   }
@@ -46,7 +52,9 @@ export class CountriesService {
       throw emitGraphQLError('NAME_DUPLICATE', 'addRegion', data.name);
     }
 
-    return await this.create(data);
+    const newCountry = await this.create(data);
+
+    return await this.getItem(newCountry.id);
   }
 
   asChild(data: CountryDBModel): ICountryAsChild {

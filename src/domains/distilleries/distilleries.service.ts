@@ -14,6 +14,7 @@ import {
 } from './models/distilleries.model.GraphQL';
 import { RegionDBModel } from '../regions/models/regions.model.DB';
 import { RegionsService } from '../regions/regions.service';
+import { mongoose } from '@typegoose/typegoose';
 
 @Injectable()
 export class DistilleriesService {
@@ -29,11 +30,22 @@ export class DistilleriesService {
   }
 
   async findById(id: string): Promise<DistilleryDBModel> {
-    return await this.distilleryModel.findById(id).exec();
+    if (mongoose.Types.ObjectId.isValid(id)) {
+      return await this.distilleryModel.findById(id).exec();
+    }
   }
 
   async findNameById(id: string): Promise<string> {
     return (await this.findById(id)).name;
+  }
+
+  async getItem(itemId: string): Promise<DistilleryGraphQLModel> {
+    const found = await this.findById(itemId);
+    const { id, name, description, regionId } = found;
+    const parent = regionId
+      ? await this.regionsService.getItem(regionId)
+      : { name: undefined };
+    return { ...parent, regionId, region: parent?.name, id, name, description };
   }
 
   async create(data: NewDistilleryInput): Promise<DistilleryDBModel> {
@@ -47,19 +59,20 @@ export class DistilleriesService {
       throw emitGraphQLError('NAME_DUPLICATE', 'addDistillery', data.name);
     }
 
-    const foundRegion = await this.regionsService.addAsChild(data);
+    const { regionId, region, countryId, country } = data;
+    const foundRegion = await this.regionsService.addAsChild({
+      regionId,
+      region,
+      countryId,
+      country,
+    });
 
-    const distillery = await this.create({
+    const newDistillery = await this.create({
       ...data,
       regionId: foundRegion?.regionId,
     });
 
-    return {
-      id: distillery.id,
-      name: distillery.name,
-      description: distillery.description,
-      ...foundRegion,
-    };
+    return await this.getItem(newDistillery.id);
   }
 
   asChild(data: DistilleryDBModel): IDistilleryAsChild {
@@ -69,7 +82,13 @@ export class DistilleriesService {
   async addAsChild(data: IDistilleryAsChild): Promise<IDistilleryAsChild> {
     let distillery: IDistilleryAsChild = {};
 
-    const region = await this.regionsService.addAsChild(data);
+    const { regionId, region, countryId, country } = data;
+    const foundRegion = await this.regionsService.addAsChild({
+      regionId,
+      region,
+      countryId,
+      country,
+    });
 
     if (data.distilleryId) {
       const found = await this.findById(data.distilleryId);
@@ -83,8 +102,8 @@ export class DistilleriesService {
         distillery = { ...distillery, ...this.asChild(found) };
       } else {
         const created = await this.create({
-          name: data.distilleryId,
-          ...region,
+          ...foundRegion,
+          name: data.distillery,
         });
         if (created) {
           distillery = { ...distillery, ...this.asChild(created) };
@@ -92,7 +111,7 @@ export class DistilleriesService {
       }
     }
 
-    return { ...distillery, ...region };
+    return { ...foundRegion, ...distillery };
   }
 
   async list(listArgs: ListArgs): Promise<DistilleriesGraphQLListModel> {

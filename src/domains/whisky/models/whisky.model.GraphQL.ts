@@ -29,10 +29,10 @@ export class WhiskyGraphQLModel extends DistilleryGraphQLModel {
   age?: number;
 
   @Field({ nullable: true })
-  creationDate?: Date;
+  distilleryId?: string;
 
   @Field({ nullable: true })
-  distilleryId?: string;
+  distillery?: string;
 }
 
 @ObjectType({ description: 'Whiskies list' })

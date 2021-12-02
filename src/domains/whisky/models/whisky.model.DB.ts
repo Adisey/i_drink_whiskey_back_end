@@ -6,10 +6,6 @@ export class WhiskyDBModel extends MainDBModel {
   @prop()
   age: number;
 
-  //
-  // @Field({ nullable: true })
-  // creationDate?: Date;
-
   @prop()
   distilleryId: string;
 }

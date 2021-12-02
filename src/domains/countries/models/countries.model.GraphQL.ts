@@ -18,9 +18,8 @@ export class CountriesGraphQLListModel extends GraphQLListModel {
 }
 
 export class ICountryAsChild {
-  @Field({ nullable: true })
+  name?: never;
+  description?: never;
   countryId?: string;
-
-  @Field({ nullable: true })
   country?: string;
 }

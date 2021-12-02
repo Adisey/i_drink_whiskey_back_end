@@ -31,9 +31,8 @@ export class DistilleriesGraphQLListModel extends GraphQLListModel {
 }
 
 export class IDistilleryAsChild extends IRegionAsChild {
-  @Field({ nullable: true })
+  name?: never;
+  description?: never;
   distilleryId?: string;
-
-  @Field({ nullable: true })
   distillery?: string;
 }
