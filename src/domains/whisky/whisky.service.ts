@@ -1,19 +1,23 @@
+//Core
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from 'nestjs-typegoose';
 import { DocumentType, ModelType } from '@typegoose/typegoose/lib/types';
+import { mongoose } from '@typegoose/typegoose';
 
-import { ListArgs } from 'src/common/dto/listArgs';
-import { makeList } from 'src/common/services';
-import { emitGraphQLError } from 'src/apolloError';
+//Main
+import { ListArgs } from '../../common/dto/listArgs';
+import { makeList } from '../../common/services';
+import { emitGraphQLError } from '../../apolloError';
+//Domains
+import { DistilleryDBModel } from '../distilleries/models/distilleries.model.DB';
+import { DistilleriesService } from '../distilleries/distilleries.service';
+//Local
 import { WhiskyDBModel } from './models/whisky.model.DB';
 import {
   NewWhiskyInput,
   WhiskiesGraphQLListModel,
   WhiskyGraphQLModel,
 } from './models/whisky.model.GraphQL';
-import { DistilleryDBModel } from 'src/domains/distilleries/models/distilleries.model.DB';
-import { DistilleriesService } from 'src/domains/distilleries/distilleries.service';
-import { mongoose } from '@typegoose/typegoose';
 
 @Injectable()
 export class WhiskyService {

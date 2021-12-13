@@ -1,8 +1,13 @@
+//Core
 import { Args, Mutation, Query, Resolver, Subscription } from '@nestjs/graphql';
+import { NotFoundException, UsePipes, ValidationPipe } from '@nestjs/common';
 import { PubSub } from 'graphql-subscriptions';
-import { UsePipes, ValidationPipe } from '@nestjs/common';
 
-import { ListArgs } from 'src/common/dto/listArgs';
+//Main
+import { ListArgs } from '../../common/dto/listArgs';
+//Domains
+import { Public } from '../auth/decorators/public.decorator';
+//Local
 import { WhiskyService } from './whisky.service';
 import {
   NewWhiskyInput,
@@ -16,23 +21,25 @@ const pubSub = new PubSub();
 export class WhiskyResolver {
   constructor(private readonly whiskyService: WhiskyService) {}
 
-  // @Query((returns) => Recipe)
-  // async recipe(@Args('id') id: string): Promise<Recipe> {
-  //   const recipe = await this.recipesService.findOneById(id);
-  //   if (!recipe) {
-  //     throw new NotFoundException(id);
-  //   }
-  //   return recipe;
-  // }
-  //
-  @Query((returns) => WhiskiesGraphQLListModel)
+  @Query(() => WhiskyGraphQLModel)
+  @Public()
+  async getWhisky(@Args('id') id: string): Promise<WhiskyGraphQLModel> {
+    const recipe = await this.whiskyService.getItem(id);
+    if (!recipe) {
+      throw new NotFoundException(id);
+    }
+    return recipe;
+  }
+
+  @Query(() => WhiskiesGraphQLListModel)
+  @Public()
   async whiskyList(
     @Args() listArgs: ListArgs,
   ): Promise<WhiskiesGraphQLListModel> {
     return await this.whiskyService.list(listArgs);
   }
 
-  @Mutation((returns) => WhiskyGraphQLModel)
+  @Mutation(() => WhiskyGraphQLModel)
   @UsePipes(new ValidationPipe())
   async addWhisky(
     @Args('data') newWhiskyData: NewWhiskyInput,

@@ -167,6 +167,7 @@ type Query {
   pictureList(pageNumber: Int = 1, pageSize: Int = 5, find: String = "", sortBy: String = "originFileName", sortOrder: Int = 1): FilesGraphQLListModel!
   pagesList: [PageGraphQLModel!]!
   pagesListTree: PagesTreeGraphQLModel!
+  getWhisky(id: String!): WhiskyGraphQLModel!
   whiskyList(pageNumber: Int = 1, pageSize: Int = 5, find: String = "", sortBy: String = "name", sortOrder: Int = 1): WhiskiesGraphQLListModel!
   regionsList(pageNumber: Int = 1, pageSize: Int = 5, find: String = "", sortBy: String = "name", sortOrder: Int = 1): RegionsGraphQLListModel!
 
