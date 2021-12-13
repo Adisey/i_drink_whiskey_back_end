@@ -1,18 +1,27 @@
 // Core
 import { Module } from '@nestjs/common';
 import { TypegooseModule } from 'nestjs-typegoose';
-
+//Domains
 import { RegionsService } from '../regions/regions.service';
+import { RegionDBModel } from '../regions/models/regions.model.DB';
+import { CountryDBModel } from '../countries/models/countries.model.DB';
+import { CountriesService } from '../countries/countries.service';
+import { WhiskyService } from '../whisky/whisky.service';
+import { WhiskyDBModel } from '../whisky/models/whisky.model.DB';
+//Local
 import { DistilleryDBModel } from './models/distilleries.model.DB';
 import { DistilleriesService } from './distilleries.service';
 import { DistilleriesResolver } from './distilleries.resolver';
-import { RegionDBModel } from 'src/domains/regions/models/regions.model.DB';
-import { CountryDBModel } from 'src/domains/countries/models/countries.model.DB';
-import { CountriesService } from 'src/domains/countries/countries.service';
 
 @Module({
   imports: [
     TypegooseModule.forFeature([
+      {
+        typegooseClass: CountryDBModel,
+        schemaOptions: {
+          collection: 'Countries',
+        },
+      },
       {
         typegooseClass: DistilleryDBModel,
         schemaOptions: {
@@ -26,9 +35,9 @@ import { CountriesService } from 'src/domains/countries/countries.service';
         },
       },
       {
-        typegooseClass: CountryDBModel,
+        typegooseClass: WhiskyDBModel,
         schemaOptions: {
-          collection: 'Countries',
+          collection: 'Whisky',
         },
       },
     ]),
@@ -38,6 +47,7 @@ import { CountriesService } from 'src/domains/countries/countries.service';
     DistilleriesResolver,
     RegionsService,
     CountriesService,
+    WhiskyService,
   ],
 })
 export class DistilleriesModule {}

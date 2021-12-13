@@ -55,7 +55,7 @@ type RegionsGraphQLListModel {
   totalCount: Float!
 }
 
-"""distillery"""
+"""Distillery"""
 type DistilleryGraphQLModel {
   id: String
   name: String!
@@ -64,6 +64,18 @@ type DistilleryGraphQLModel {
   country: String
   regionId: String
   region: String
+}
+
+"""Distillery & Children"""
+type DistilleryChildrenGraphQLModel {
+  id: String
+  name: String!
+  description: String
+  countryId: String
+  country: String
+  regionId: String
+  region: String
+  children: [MainGraphQLModel!]!
 }
 
 """Distilleries list"""
@@ -101,7 +113,7 @@ type FilesGraphQLListModel {
   totalCount: Float!
 }
 
-"""whisky"""
+"""Whisky"""
 type WhiskyGraphQLModel {
   id: String
   name: String!
@@ -161,6 +173,7 @@ type PageGraphQLModel {
 
 type Query {
   countriesList(pageNumber: Int = 1, pageSize: Int = 5, find: String = "", sortBy: String = "name", sortOrder: Int = 1): CountriesGraphQLListModel!
+  getDistillery(id: String!): DistilleryChildrenGraphQLModel!
   distilleriesList(pageNumber: Int = 1, pageSize: Int = 5, find: String = "", sortBy: String = "name", sortOrder: Int = 1): DistilleriesGraphQLListModel!
 
   """Only for users with admin rights!"""

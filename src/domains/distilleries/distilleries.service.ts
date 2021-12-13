@@ -1,10 +1,16 @@
+//Core
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from 'nestjs-typegoose';
 import { DocumentType, ModelType } from '@typegoose/typegoose/lib/types';
-
+import { mongoose } from '@typegoose/typegoose';
+//Main
 import { ListArgs } from '../../common/dto/listArgs';
 import { makeList } from '../../common/services/makeList';
 import { emitGraphQLError } from '../../apolloError';
+//Domains
+import { RegionDBModel } from '../regions/models/regions.model.DB';
+import { RegionsService } from '../regions/regions.service';
+//Local
 import { DistilleryDBModel } from './models/distilleries.model.DB';
 import {
   NewDistilleryInput,
@@ -12,9 +18,6 @@ import {
   DistilleryGraphQLModel,
   IDistilleryAsChild,
 } from './models/distilleries.model.GraphQL';
-import { RegionDBModel } from '../regions/models/regions.model.DB';
-import { RegionsService } from '../regions/regions.service';
-import { mongoose } from '@typegoose/typegoose';
 
 @Injectable()
 export class DistilleriesService {
@@ -47,6 +50,12 @@ export class DistilleriesService {
       : { name: undefined };
     return { ...parent, regionId, region: parent?.name, id, name, description };
   }
+
+  // async getChildren(itemId: string): Promise<DistilleryGraphQLModel[]> {
+  //   const whiskies = await this.whiskyService.listByDistillery(itemId);
+  //   console.log(+new Date(), '-()->', typeof whiskies, `-whiskies->`, whiskies);
+  //   return whiskies;
+  // }
 
   async create(data: NewDistilleryInput): Promise<DistilleryDBModel> {
     return await this.distilleryModel.create(data);

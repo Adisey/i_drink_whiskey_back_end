@@ -1,10 +1,13 @@
+//Core
 import { Field, InputType, ObjectType } from '@nestjs/graphql';
 import { IsOptional } from 'class-validator';
+//Main
+import { GraphQLListModel } from '../../../common/dto/listArgs';
+//Domains
 import {
   DistilleryGraphQLModel,
   NewDistilleryInput,
 } from '../../distilleries/models/distilleries.model.GraphQL';
-import { GraphQLListModel } from 'src/common/dto/listArgs';
 
 @InputType()
 export class NewWhiskyInput extends NewDistilleryInput {
@@ -23,7 +26,7 @@ export class NewWhiskyInput extends NewDistilleryInput {
   distillery?: string;
 }
 
-@ObjectType({ description: 'whisky' })
+@ObjectType({ description: 'Whisky' })
 export class WhiskyGraphQLModel extends DistilleryGraphQLModel {
   @Field({ nullable: true })
   age?: number;
