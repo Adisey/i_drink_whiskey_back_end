@@ -46,7 +46,7 @@ export class FilesResolver {
       ...fileInfo,
       message: getMessage(fileInfo.errorType),
       ownerName,
-      _id: fileInfo._id.toString(),
+      id: fileInfo._id.toString(),
     };
   }
 
@@ -58,6 +58,6 @@ export class FilesResolver {
   async pictureList(
     @Args() listArgs: FileListArgs,
   ): Promise<FilesGraphQLListModel> {
-    return await this.filesService.findAll(listArgs);
+    return await this.filesService.list(listArgs);
   }
 }

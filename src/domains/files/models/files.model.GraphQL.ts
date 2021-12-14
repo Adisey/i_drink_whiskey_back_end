@@ -4,7 +4,7 @@ import { GraphQLListModel, ListArgs } from 'src/common/dto/listArgs';
 @ObjectType({ description: 'file' })
 export class FileGraphQLModel {
   @Field({ nullable: true })
-  _id: string;
+  id: string;
 
   @Field({ nullable: true })
   originFileName: string;

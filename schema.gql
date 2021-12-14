@@ -104,7 +104,7 @@ type DistilleriesGraphQLListModel {
 
 """file"""
 type FileGraphQLModel {
-  _id: String
+  id: String
   originFileName: String
   originFilePath: String
   webpFilePath: String
@@ -115,7 +115,7 @@ type FileGraphQLModel {
 
 """Upload file"""
 type FilesGraphQLUploadModel {
-  _id: String
+  id: String
   originFileName: String
   originFilePath: String
   webpFilePath: String

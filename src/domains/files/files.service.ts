@@ -19,6 +19,8 @@ import {
   FilesGraphQLListModel,
 } from './models';
 import { FileListArgs } from './models/files.model.GraphQL';
+import { makeList } from 'src/common/services';
+import { CountryDBModel } from 'src/domains/countries/models/countries.model.DB';
 
 @Injectable()
 export class FilesService {
@@ -102,35 +104,16 @@ export class FilesService {
     return file;
   }
 
-  async findAll({
-    pageNumber,
-    pageSize,
-    find,
-    sortBy,
-    sortOrder,
-  }: FileListArgs): Promise<FilesGraphQLListModel> {
-    const findQuery = find ? { $text: { $search: '$' + find + '$' } } : {};
-    const sortField = `${sortOrder > 0 ? '' : '-'}${sortBy}`;
-
-    const count = await this.filesModel
-      .aggregate()
-      .match(findQuery)
-      .count('count')
-      .exec();
-
-    const skip = pageNumber ? (pageNumber - 1) * pageSize : pageNumber;
-
-    const list = await this.filesModel
-      .aggregate()
-      .match(findQuery)
-      .sort(sortField)
-      .skip(skip)
-      .limit(pageSize)
-      .exec();
+  async list(listArgs: FileListArgs): Promise<FilesGraphQLListModel> {
+    const mainList = await makeList<FilesDBModel>(this.filesModel, listArgs);
 
     return {
-      list,
-      totalCount: count[0]?.count || 0,
+      list: mainList.list.map((i: FilesDBModel) => ({
+        id: i.id,
+        originFileName: i.originFileName,
+        ...i,
+      })),
+      totalCount: mainList.totalCount,
     };
   }
 }
