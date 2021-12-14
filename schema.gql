@@ -34,6 +34,14 @@ type CountryGraphQLModel {
   description: String
 }
 
+"""Countries & Children"""
+type CountryChildrenGraphQLModel {
+  id: String
+  name: String!
+  description: String
+  children: [MainGraphQLModel!]!
+}
+
 """Countries list"""
 type CountriesGraphQLListModel {
   list: [CountryGraphQLModel!]!
@@ -49,7 +57,7 @@ type RegionGraphQLModel {
   country: String
 }
 
-"""Distillery & Children"""
+"""Regions & Children"""
 type RegionChildrenGraphQLModel {
   id: String
   name: String!
@@ -182,6 +190,7 @@ type PageGraphQLModel {
 }
 
 type Query {
+  getCountry(id: String!): CountryChildrenGraphQLModel!
   countriesList(pageNumber: Int = 1, pageSize: Int = 5, find: String = "", sortBy: String = "name", sortOrder: Int = 1): CountriesGraphQLListModel!
   getDistillery(id: String!): DistilleryChildrenGraphQLModel!
   distilleriesList(pageNumber: Int = 1, pageSize: Int = 5, find: String = "", sortBy: String = "name", sortOrder: Int = 1): DistilleriesGraphQLListModel!

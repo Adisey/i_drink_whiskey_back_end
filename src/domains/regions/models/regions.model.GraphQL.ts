@@ -27,7 +27,7 @@ export class RegionGraphQLModel extends MainGraphQLModel {
   country?: string;
 }
 
-@ObjectType({ description: 'Distillery & Children' })
+@ObjectType({ description: 'Regions & Children' })
 export class RegionChildrenGraphQLModel extends RegionGraphQLModel {
   @Field(() => [MainGraphQLModel])
   children: MainGraphQLModel[];

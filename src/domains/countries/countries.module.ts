@@ -1,10 +1,13 @@
 // Core
 import { Module } from '@nestjs/common';
 import { TypegooseModule } from 'nestjs-typegoose';
-
-import { CountriesResolver } from 'src/domains/countries/countries.resolver';
-import { CountriesService } from 'src/domains/countries/countries.service';
-import { CountryDBModel } from 'src/domains/countries/models/countries.model.DB';
+//Domains
+import { RegionsService } from '../regions/regions.service';
+import { RegionDBModel } from '../regions/models/regions.model.DB';
+//Local
+import { CountriesResolver } from './countries.resolver';
+import { CountriesService } from './countries.service';
+import { CountryDBModel } from './models/countries.model.DB';
 
 @Module({
   imports: [
@@ -15,8 +18,14 @@ import { CountryDBModel } from 'src/domains/countries/models/countries.model.DB'
           collection: 'Countries',
         },
       },
+      {
+        typegooseClass: RegionDBModel,
+        schemaOptions: {
+          collection: 'Regions',
+        },
+      },
     ]),
   ],
-  providers: [CountriesService, CountriesResolver],
+  providers: [CountriesService, CountriesResolver, RegionsService],
 })
 export class CountriesModule {}
