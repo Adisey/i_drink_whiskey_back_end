@@ -1,3 +1,4 @@
+//Core
 import { Injectable } from '@nestjs/common';
 import { format } from 'date-fns';
 import { path } from 'app-root-path';
@@ -6,11 +7,13 @@ import { Upload } from 'graphql-upload';
 import { createWriteStream, statSync } from 'fs';
 import { InjectModel } from 'nestjs-typegoose';
 import { DocumentType, ModelType } from '@typegoose/typegoose/lib/types';
-
-import { ConfigService } from '../../configs/app.config.service';
-import { getUploadConfig, IGUploadConfig } from '../../configs/upload.config';
+//Main
 import { IMessageType } from '../../apolloError';
 import { asyncWebpConvert } from './instruments';
+import { ConfigService } from '../../configs/app.config.service';
+import { getUploadConfig, IGUploadConfig } from '../../configs/upload.config';
+import { makeList } from '../../common/services/makeList';
+//Local
 import {
   FilesDBModel,
   FileDBInfo,
@@ -19,8 +22,6 @@ import {
   FilesGraphQLListModel,
 } from './models';
 import { FileListArgs } from './models/files.model.GraphQL';
-import { makeList } from 'src/common/services';
-import { CountryDBModel } from 'src/domains/countries/models/countries.model.DB';
 
 @Injectable()
 export class FilesService {
@@ -47,6 +48,7 @@ export class FilesService {
     const absoluteFolder = `${currentPath}/${uploadFolder}`;
     await ensureDir(absoluteFolder);
     const uploadFile = `${absoluteFolder}/${filename}`;
+    // ToDo: 14.12.2021 - add catch
     let isUpload = await new Promise(async (resolve, reject) =>
       createReadStream()
         .pipe(createWriteStream(uploadFile))

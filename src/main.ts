@@ -16,7 +16,7 @@ async function main() {
 
   // app.useGlobalPipes(new ValidationPipe()); // ToDo: 17.11.2021 - Fix for uploadPicture
   app.useGlobalFilters(new MongoErrorFilter());
-  app.use(graphqlUploadExpress({ maxFileSize: 1000000, maxFiles: 10 }));
+  app.use(graphqlUploadExpress({ maxFileSize: 100000000, maxFiles: 10 }));
   const reflector = app.get(Reflector);
   app.useGlobalGuards(new JwtAuthGuard(reflector));
   app.enableShutdownHooks();

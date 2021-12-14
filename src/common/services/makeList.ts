@@ -10,13 +10,6 @@ export const makeList = async <M>(
   const sortField = `${sortOrder > 0 ? '' : '-'}${sortBy}`;
   const count = await model.aggregate().match(findQuery).count('count').exec();
   const skip = pageNumber ? (pageNumber - 1) * pageSize : pageNumber;
-  console.log(
-    +new Date(),
-    '-()->',
-    typeof sortField,
-    `-sortField->`,
-    sortField,
-  );
   const list = await model
     .aggregate()
     .match(findQuery)
