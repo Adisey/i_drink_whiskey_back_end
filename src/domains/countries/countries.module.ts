@@ -1,29 +1,19 @@
 // Core
 import { Module } from '@nestjs/common';
 import { TypegooseModule } from 'nestjs-typegoose';
+//Main
+import { getDbModule } from '../dbModule';
 //Domains
 import { RegionsService } from '../regions/regions.service';
-import { RegionDBModel } from '../regions/models/regions.model.DB';
 //Local
 import { CountriesResolver } from './countries.resolver';
 import { CountriesService } from './countries.service';
-import { CountryDBModel } from './models/countries.model.DB';
 
 @Module({
   imports: [
     TypegooseModule.forFeature([
-      {
-        typegooseClass: CountryDBModel,
-        schemaOptions: {
-          collection: 'Countries',
-        },
-      },
-      {
-        typegooseClass: RegionDBModel,
-        schemaOptions: {
-          collection: 'Regions',
-        },
-      },
+      getDbModule('Countries'),
+      getDbModule('Regions'),
     ]),
   ],
   providers: [CountriesService, CountriesResolver, RegionsService],
