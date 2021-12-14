@@ -51,12 +51,6 @@ export class DistilleriesService {
     return { ...parent, regionId, region: parent?.name, id, name, description };
   }
 
-  // async getChildren(itemId: string): Promise<DistilleryGraphQLModel[]> {
-  //   const whiskies = await this.whiskyService.listByDistillery(itemId);
-  //   console.log(+new Date(), '-()->', typeof whiskies, `-whiskies->`, whiskies);
-  //   return whiskies;
-  // }
-
   async create(data: NewDistilleryInput): Promise<DistilleryDBModel> {
     return await this.distilleryModel.create(data);
   }

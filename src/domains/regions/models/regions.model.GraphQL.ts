@@ -1,9 +1,12 @@
+//Core
+//Main
 import { Field, InputType, ObjectType } from '@nestjs/graphql';
 import {
   MainGraphQLModel,
   NewMainInput,
 } from '../../../common/dto/main.model.GraphQL';
 import { GraphQLListModel } from '../../../common/dto/listArgs';
+//Domains
 import { ICountryAsChild } from '../../countries/models/countries.model.GraphQL';
 
 @InputType()
@@ -22,6 +25,12 @@ export class RegionGraphQLModel extends MainGraphQLModel {
 
   @Field({ nullable: true })
   country?: string;
+}
+
+@ObjectType({ description: 'Distillery & Children' })
+export class RegionChildrenGraphQLModel extends RegionGraphQLModel {
+  @Field(() => [MainGraphQLModel])
+  children: MainGraphQLModel[];
 }
 
 @ObjectType({ description: 'Regions list' })

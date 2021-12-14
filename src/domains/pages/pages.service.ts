@@ -1,7 +1,16 @@
+//Core
 import { Injectable } from '@nestjs/common';
-
+//Main
+//Domains
 import { CountriesService } from '../countries/countries.service';
+import { CountryGraphQLModel } from '../countries/models/countries.model.GraphQL';
 import { DistilleriesService } from '../distilleries/distilleries.service';
+import { DistilleryDBModel } from '../distilleries/models/distilleries.model.DB';
+import { RegionDBModel } from '../regions/models/regions.model.DB';
+import { RegionsService } from '../regions/regions.service';
+import { WhiskyDBModel } from '../whisky/models/whisky.model.DB';
+import { WhiskyService } from '../whisky/whisky.service';
+//Local
 import {
   PageGraphQLModel,
   PagesTreeGraphQLModel,
@@ -10,13 +19,6 @@ import {
   PageTreeRegionGraphQLModel,
   PageWhiskyGraphQLModel,
 } from './models/pages.model.GraphQL';
-import { RegionsService } from '../regions/regions.service';
-import { WhiskyService } from '../whisky/whisky.service';
-import { RegionGraphQLModel } from 'src/domains/regions/models/regions.model.GraphQL';
-import { CountryGraphQLModel } from 'src/domains/countries/models/countries.model.GraphQL';
-import { RegionDBModel } from 'src/domains/regions/models/regions.model.DB';
-import { DistilleryDBModel } from 'src/domains/distilleries/models/distilleries.model.DB';
-import { WhiskyDBModel } from 'src/domains/whisky/models/whisky.model.DB';
 
 @Injectable()
 export class PagesService {
