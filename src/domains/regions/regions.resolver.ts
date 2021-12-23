@@ -48,6 +48,7 @@ export class RegionsResolver {
   }
 
   @Query(() => RegionsGraphQLListModel)
+  @Public()
   async regionsList(
     @Args() listArgs: ListArgs,
   ): Promise<RegionsGraphQLListModel> {

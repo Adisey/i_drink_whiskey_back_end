@@ -51,6 +51,7 @@ export class DistilleriesResolver {
   }
 
   @Query(() => DistilleriesGraphQLListModel)
+  @Public()
   async distilleriesList(
     @Args() listArgs: ListArgs,
   ): Promise<DistilleriesGraphQLListModel> {

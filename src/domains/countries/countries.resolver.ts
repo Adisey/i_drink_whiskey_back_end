@@ -51,6 +51,7 @@ export class CountriesResolver {
   }
 
   @Query(() => CountriesGraphQLListModel)
+  @Public()
   async countriesList(
     @Args() listArgs: ListArgs,
   ): Promise<CountriesGraphQLListModel> {
