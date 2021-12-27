@@ -2,261 +2,17 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-input AddUserInput {
-  email: String!
-  password: String!
-}
-
-"""auth"""
-type AuthTokenGraphQLModel {
-  access_token: String
-}
-
-"""Countries list"""
-type CountriesGraphQLListModel {
-  list: [CountryGraphQLModel!]!
-  totalCount: Float!
-}
-
-"""Countries & Children"""
-type CountryChildrenGraphQLModel {
-  children: [MainGraphQLModel!]!
-  description: String
-  id: String!
-  name: String
-}
-
-"""country"""
-type CountryGraphQLModel {
-  description: String
-  id: String!
-  name: String
-}
-
-"""
-A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
-"""
-scalar DateTime
-
-"""Distilleries list"""
-type DistilleriesGraphQLListModel {
-  list: [DistilleryGraphQLModel!]!
-  totalCount: Float!
-}
-
-"""Distillery & Children"""
-type DistilleryChildrenGraphQLModel {
-  children: [MainGraphQLModel!]!
-  country: String
-  countryId: String
-  description: String
-  id: String!
-  name: String
-  region: String
-  regionId: String
-}
-
-"""Distillery"""
-type DistilleryGraphQLModel {
-  country: String
-  countryId: String
-  description: String
-  id: String!
-  name: String
-  region: String
-  regionId: String
-}
-
-"""file"""
-type FileGraphQLModel {
-  id: String
-  mimetype: String
-  originFileName: String
-  originFilePath: String
-  originFileSize: Float
-  ownerName: String
-  webpFilePath: String
-}
-
-"""File list"""
-type FilesGraphQLListModel {
-  list: [FileGraphQLModel!]!
-  totalCount: Float!
-}
-
-"""Upload file"""
-type FilesGraphQLUploadModel {
-  id: String
-  message: String
-  mimetype: String
-  originFileName: String
-  originFilePath: String
-  originFileSize: Float
-  ownerName: String
-  webpFilePath: String
-}
-
-input Login {
-  email: String!
-  password: String!
-}
-
 type MainGraphQLModel {
-  description: String
   id: String!
   name: String
-}
-
-type Mutation {
-  """Only for users with admin rights!"""
-  addCountry(data: NewCountryInput!): CountryGraphQLModel!
-
-  """Only for users with admin rights!"""
-  addDistillery(data: NewDistilleryInput!): DistilleryGraphQLModel!
-
-  """Only for users with admin rights!"""
-  addRegion(data: NewRegionInput!): RegionGraphQLModel!
-
-  """Only for users with admin rights!"""
-  addUser(data: AddUserInput!): UserGraphQLModel!
-  addWhisky(data: NewWhiskyInput!): WhiskyGraphQLModel!
-
-  """Only for users with admin rights!"""
-  deleteUserByEmail(email: String!): UserGraphQLModel!
-  login(data: Login!): AuthTokenGraphQLModel!
-
-  """Only for registered users!"""
-  uploadPicture(file: Upload!): FilesGraphQLUploadModel!
-}
-
-input NewCountryInput {
   description: String
-  name: String!
 }
 
-input NewDistilleryInput {
-  country: String
-  countryId: String
-  description: String
-  name: String!
-  region: String
-  regionId: String
-}
-
-input NewRegionInput {
-  country: String
-  countryId: String
-  description: String
-  name: String!
-}
-
-input NewWhiskyInput {
-  age: Float
-  country: String
-  countryId: String
-  creationDate: DateTime
-  description: String
-  distillery: String
-  distilleryId: String
-  name: String!
-  region: String
-  regionId: String
-}
-
-type PageGraphQLModel {
-  description: String
-  id: String!
-  name: String
-}
-
-type PageTreeCountryGraphQLModel {
-  description: String
-  id: String!
-  name: String
-  regions: [PageTreeRegionGraphQLModel!]!
-}
-
-type PageTreeDistilleryGraphQLModel {
-  description: String
-  id: String!
-  name: String
-  whiskies: [PageWhiskyGraphQLModel!]!
-}
-
-type PageTreeRegionGraphQLModel {
-  description: String
-  distilleries: [PageTreeDistilleryGraphQLModel!]!
-  id: String!
-  name: String
-}
-
-type PageWhiskyGraphQLModel {
-  description: String
-  id: String!
-  name: String
-}
-
-"""Pages tree list"""
-type PagesTreeGraphQLModel {
-  countries: [PageTreeCountryGraphQLModel!]!
-}
-
-type Query {
-  countriesList(find: String = "", pageNumber: Int = 1, pageSize: Int = 5, sortBy: String = "name", sortOrder: Int = 1): CountriesGraphQLListModel!
-  distilleriesList(find: String = "", pageNumber: Int = 1, pageSize: Int = 5, sortBy: String = "name", sortOrder: Int = 1): DistilleriesGraphQLListModel!
-  getCountry(id: String!): CountryChildrenGraphQLModel!
-  getDistillery(id: String!): DistilleryChildrenGraphQLModel!
-  getRegion(id: String!): RegionChildrenGraphQLModel!
-  getWhisky(id: String!): WhiskyGraphQLModel!
-  pagesList: [PageGraphQLModel!]!
-  pagesListTree: PagesTreeGraphQLModel!
-
-  """Only for users with admin rights!"""
-  pictureList(find: String = "", pageNumber: Int = 1, pageSize: Int = 5, sortBy: String = "originFileName", sortOrder: Int = 1): FilesGraphQLListModel!
-  regionsList(find: String = "", pageNumber: Int = 1, pageSize: Int = 5, sortBy: String = "name", sortOrder: Int = 1): RegionsGraphQLListModel!
-
-  """Only for registered users!"""
-  usersList(find: String = "", pageNumber: Int = 1, pageSize: Int = 5, sortBy: String = "email", sortOrder: Int = 1): UsersGraphQLListModel!
-  whiskyList(find: String = "", pageNumber: Int = 1, pageSize: Int = 5, sortBy: String = "name", sortOrder: Int = 1): WhiskiesGraphQLListModel!
-}
-
-"""Regions & Children"""
-type RegionChildrenGraphQLModel {
-  children: [MainGraphQLModel!]!
-  country: String
-  countryId: String
-  description: String
-  id: String!
-  name: String
-}
-
-"""region"""
-type RegionGraphQLModel {
-  country: String
-  countryId: String
-  description: String
-  id: String!
-  name: String
-}
-
-"""Regions list"""
-type RegionsGraphQLListModel {
-  list: [RegionGraphQLModel!]!
+"""Users list"""
+type UsersGraphQLListModel {
+  list: [UserGraphQLModel!]!
   totalCount: Float!
 }
-
-type Subscription {
-  countryAdded: CountryGraphQLModel!
-  distilleryAdded: DistilleryGraphQLModel!
-  regionAdded: RegionGraphQLModel!
-
-  """Only for registered users!"""
-  userAdded: UserGraphQLModel!
-  whiskyAdded: WhiskyGraphQLModel!
-}
-
-"""The `Upload` scalar type represents a file upload."""
-scalar Upload
 
 """User"""
 type UserGraphQLModel {
@@ -266,10 +22,127 @@ type UserGraphQLModel {
   role: String
 }
 
-"""Users list"""
-type UsersGraphQLListModel {
-  list: [UserGraphQLModel!]!
+"""auth"""
+type AuthTokenGraphQLModel {
+  access_token: String
+}
+
+"""country"""
+type CountryGraphQLModel {
+  id: String!
+  name: String
+  description: String
+}
+
+"""Countries & Children"""
+type CountryChildrenGraphQLModel {
+  id: String!
+  name: String
+  description: String
+  children: [MainGraphQLModel!]!
+}
+
+"""Countries list"""
+type CountriesGraphQLListModel {
+  list: [CountryGraphQLModel!]!
   totalCount: Float!
+}
+
+"""region"""
+type RegionGraphQLModel {
+  id: String!
+  name: String
+  description: String
+  countryId: String
+  country: String
+}
+
+"""Regions & Children"""
+type RegionChildrenGraphQLModel {
+  id: String!
+  name: String
+  description: String
+  countryId: String
+  country: String
+  children: [MainGraphQLModel!]!
+}
+
+"""Regions list"""
+type RegionsGraphQLListModel {
+  list: [RegionGraphQLModel!]!
+  totalCount: Float!
+}
+
+"""Distillery"""
+type DistilleryGraphQLModel {
+  id: String!
+  name: String
+  description: String
+  countryId: String
+  country: String
+  regionId: String
+  region: String
+}
+
+"""Distillery & Children"""
+type DistilleryChildrenGraphQLModel {
+  id: String!
+  name: String
+  description: String
+  countryId: String
+  country: String
+  regionId: String
+  region: String
+  children: [MainGraphQLModel!]!
+}
+
+"""Distilleries list"""
+type DistilleriesGraphQLListModel {
+  list: [DistilleryGraphQLModel!]!
+  totalCount: Float!
+}
+
+"""file"""
+type FileGraphQLModel {
+  id: String
+  originFileName: String
+  originFilePath: String
+  webpFilePath: String
+  originFileSize: Float
+  mimetype: String
+  ownerName: String
+}
+
+"""Upload file"""
+type FilesGraphQLUploadModel {
+  id: String
+  originFileName: String
+  originFilePath: String
+  webpFilePath: String
+  originFileSize: Float
+  mimetype: String
+  ownerName: String
+  message: String
+}
+
+"""File list"""
+type FilesGraphQLListModel {
+  list: [FileGraphQLModel!]!
+  totalCount: Float!
+}
+
+"""Whisky"""
+type WhiskyGraphQLModel {
+  id: String!
+  name: String
+  description: String
+  countryId: String
+  country: String
+  regionId: String
+  region: String
+  age: Float
+  distilleryId: String
+  distillery: String
 }
 
 """Whiskies list"""
@@ -278,16 +151,144 @@ type WhiskiesGraphQLListModel {
   totalCount: Float!
 }
 
-"""Whisky"""
-type WhiskyGraphQLModel {
-  age: Float
-  country: String
-  countryId: String
-  description: String
-  distillery: String
-  distilleryId: String
+"""Pages tree list"""
+type PagesTreeGraphQLModel {
+  countries: [PageTreeCountryGraphQLModel!]!
+}
+
+type PageTreeCountryGraphQLModel {
   id: String!
   name: String
-  region: String
+  description: String
+  regions: [PageTreeRegionGraphQLModel!]!
+}
+
+type PageTreeRegionGraphQLModel {
+  id: String!
+  name: String
+  description: String
+  distilleries: [PageTreeDistilleryGraphQLModel!]!
+}
+
+type PageTreeDistilleryGraphQLModel {
+  id: String!
+  name: String
+  description: String
+  whiskies: [PageWhiskyGraphQLModel!]!
+}
+
+type PageWhiskyGraphQLModel {
+  id: String!
+  name: String
+  description: String
+}
+
+type PageGraphQLModel {
+  id: String!
+  name: String
+  description: String
+}
+
+type Query {
+  getCountry(id: String!): CountryChildrenGraphQLModel!
+  countriesList(pageNumber: Int = 1, pageSize: Int = 5, find: String = "", sortBy: String = "name", sortOrder: Int = 1): CountriesGraphQLListModel!
+  getDistillery(id: String!): DistilleryChildrenGraphQLModel!
+  distilleriesList(pageNumber: Int = 1, pageSize: Int = 5, find: String = "", sortBy: String = "name", sortOrder: Int = 1): DistilleriesGraphQLListModel!
+
+  """Only for users with admin rights!"""
+  pictureList(pageNumber: Int = 1, pageSize: Int = 5, find: String = "", sortBy: String = "originFileName", sortOrder: Int = 1): FilesGraphQLListModel!
+  pagesList: [PageGraphQLModel!]!
+  pagesListTree: PagesTreeGraphQLModel!
+  getWhisky(id: String!): WhiskyGraphQLModel!
+  whiskyList(pageNumber: Int = 1, pageSize: Int = 5, find: String = "", sortBy: String = "name", sortOrder: Int = 1): WhiskiesGraphQLListModel!
+  getRegion(id: String!): RegionChildrenGraphQLModel!
+  regionsList(pageNumber: Int = 1, pageSize: Int = 5, find: String = "", sortBy: String = "name", sortOrder: Int = 1): RegionsGraphQLListModel!
+
+  """Only for registered users!"""
+  usersList(pageNumber: Int = 1, pageSize: Int = 5, find: String = "", sortBy: String = "email", sortOrder: Int = 1): UsersGraphQLListModel!
+}
+
+type Mutation {
+  login(data: Login!): AuthTokenGraphQLModel!
+
+  """Only for users with admin rights!"""
+  addCountry(data: NewCountryInput!): CountryGraphQLModel!
+
+  """Only for users with admin rights!"""
+  addDistillery(data: NewDistilleryInput!): DistilleryGraphQLModel!
+
+  """Only for registered users!"""
+  uploadPicture(file: Upload!): FilesGraphQLUploadModel!
+  addWhisky(data: NewWhiskyInput!): WhiskyGraphQLModel!
+
+  """Only for users with admin rights!"""
+  addRegion(data: NewRegionInput!): RegionGraphQLModel!
+
+  """Only for users with admin rights!"""
+  addUser(data: AddUserInput!): UserGraphQLModel!
+
+  """Only for users with admin rights!"""
+  deleteUserByEmail(email: String!): UserGraphQLModel!
+}
+
+input Login {
+  email: String!
+  password: String!
+}
+
+input NewCountryInput {
+  name: String!
+  description: String
+}
+
+input NewDistilleryInput {
+  name: String!
+  description: String
+  countryId: String
+  country: String
   regionId: String
+  region: String
+}
+
+"""The `Upload` scalar type represents a file upload."""
+scalar Upload
+
+input NewWhiskyInput {
+  name: String!
+  description: String
+  countryId: String
+  country: String
+  regionId: String
+  region: String
+  age: Float
+  creationDate: DateTime
+  distilleryId: String
+  distillery: String
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+input NewRegionInput {
+  name: String!
+  description: String
+  countryId: String
+  country: String
+}
+
+input AddUserInput {
+  email: String!
+  password: String!
+}
+
+type Subscription {
+  countryAdded: CountryGraphQLModel!
+  distilleryAdded: DistilleryGraphQLModel!
+  whiskyAdded: WhiskyGraphQLModel!
+  regionAdded: RegionGraphQLModel!
+
+  """Only for registered users!"""
+  userAdded: UserGraphQLModel!
 }
