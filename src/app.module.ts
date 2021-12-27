@@ -27,6 +27,7 @@ import { WhiskyModule } from './domains/whisky/whisky.module';
     GraphQLModule.forRoot({
       installSubscriptionHandlers: true,
       autoSchemaFile: 'schema.gql',
+      sortSchema: true,
       context: ({ req }: any) => ({ req }),
     }),
     AuthModule,
