@@ -12,12 +12,22 @@ import {
   UsersGraphQLListModel,
   UsersListArgs,
 } from './models/users.model.GraphQL';
+import { User } from 'src/domains/auth/decorators/user.decorator';
+import { showRole } from 'src/configs/auth.config';
+import { UserDBModel } from 'src/domains/users/models/users.model.DB';
 
 const pubSub = new PubSub();
 
 @Resolver(() => UserGraphQLModel)
 export class UsersResolver {
   constructor(private readonly usersService: UsersService) {}
+
+  @Query(() => UserGraphQLModel, {
+    description: getMessage('USER_ONLY'),
+  })
+  async whoami(@User() user: UserDBModel): Promise<UserGraphQLModel> {
+    return { email: user.email, role: showRole(user.roleId) };
+  }
 
   @Query(() => UsersGraphQLListModel, {
     description: getMessage('USER_ONLY'),

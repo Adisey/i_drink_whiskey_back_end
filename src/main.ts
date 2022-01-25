@@ -17,11 +17,12 @@ async function main() {
   // app.useGlobalPipes(new ValidationPipe()); // ToDo: 17.11.2021 - Fix for uploadPicture
   app.useGlobalFilters(new MongoErrorFilter());
   app.use(graphqlUploadExpress({ maxFileSize: 100000000, maxFiles: 10 }));
+  const isDebugMode = isTrue(configService.get<string>('IS_DEBUG_MODE'));
   const reflector = app.get(Reflector);
-  app.useGlobalGuards(new JwtAuthGuard(reflector));
+  app.useGlobalGuards(new JwtAuthGuard(reflector, isDebugMode));
   app.enableShutdownHooks();
 
-  if (isTrue(configService.get<string>('IS_DEBUG_MODE'))) {
+  if (isDebugMode) {
     const mongooseLogger = (collectionName, methodName, ...methodArgs) => {
       Logger.log(
         `${collectionName}.${methodName}(${methodArgs

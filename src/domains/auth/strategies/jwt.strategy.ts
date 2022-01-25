@@ -7,6 +7,7 @@ import { getMessage } from '../../../apolloError';
 import { ConfigService } from '../../../configs/app.config.service';
 import { UsersService } from 'src/domains/users/users.service';
 import { IAuthContentUser, JwtPayload } from '../models/auth.model';
+import { isTrue } from 'src/common/services';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
@@ -18,6 +19,7 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       ignoreExpiration: false,
       secretOrKey: configService.getENV('JWT_SECRET'),
+      isDebugMode: isTrue(configService.getENV('IS_DEBUG_MODE')),
     });
   }
 
@@ -25,7 +27,7 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
     const foundUser = await this.userService.findUserByEmail(payload.email);
     if (!foundUser) {
       const message = getMessage('USER_BAD');
-      Logger.error(message, payload.email, 'JwtStrategy');
+      this.isDebugMode && Logger.error(message, payload.email, 'JwtStrategy');
       throw new AuthenticationError(message);
     }
 

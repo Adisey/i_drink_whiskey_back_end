@@ -10,7 +10,10 @@ import { config } from 'src/domains/auth/config';
 
 @Injectable()
 export class JwtAuthGuard extends AuthGuard('jwt') {
-  constructor(private readonly reflector: Reflector) {
+  constructor(
+    private readonly reflector: Reflector,
+    private readonly isDebugMode: boolean,
+  ) {
     super();
   }
 
@@ -22,6 +25,12 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
   canActivate(
     context: ExecutionContext,
   ): boolean | Promise<boolean> | Observable<boolean> {
+    if (this.isDebugMode) {
+      const ctx = GqlExecutionContext.create(context);
+      const { body, headers } = ctx.getContext()?.req;
+      Logger.log(headers, body, 'API Request');
+    }
+
     const isPublic = this.reflector.get<boolean>(
       config.PUBLIC_KEY,
       context.getHandler(),
