@@ -23,7 +23,7 @@ export class WhiskyResolver {
 
   @Query(() => WhiskyGraphQLModel)
   @Public()
-  async getWhiskyId(@Args('id') id: string): Promise<WhiskyGraphQLModel> {
+  async getWhiskyById(@Args('id') id: string): Promise<WhiskyGraphQLModel> {
     const recipe = await this.whiskyService.getItemById(id);
     if (!recipe) {
       throw new NotFoundException(id);
@@ -33,7 +33,7 @@ export class WhiskyResolver {
 
   @Query(() => WhiskyGraphQLModel)
   @Public()
-  async getWhiskyWB(@Args('WB') WB: string): Promise<WhiskyGraphQLModel> {
+  async getWhiskyByWB(@Args('WB') WB: string): Promise<WhiskyGraphQLModel> {
     const recipe = await this.whiskyService.getItemByWB(WB);
     if (!recipe) {
       throw new NotFoundException(WB);
@@ -43,7 +43,9 @@ export class WhiskyResolver {
 
   @Query(() => WhiskyGraphQLModel)
   @Public()
-  async getWhiskyName(@Args('name') name: string): Promise<WhiskyGraphQLModel> {
+  async getWhiskyByName(
+    @Args('name') name: string,
+  ): Promise<WhiskyGraphQLModel> {
     const recipe = await this.whiskyService.getItemByName(name);
     if (!recipe) {
       throw new NotFoundException(name);
