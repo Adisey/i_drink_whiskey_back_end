@@ -88,7 +88,7 @@ export class WhiskyService {
   }
 
   async add(data: NewWhiskyInput): Promise<WhiskyGraphQLModel> {
-    const foundWhisky = await this.findByWB(data.WB);
+    const foundWhisky = data.WB && (await this.findByWB(data.WB));
 
     if (foundWhisky) {
       throw emitGraphQLError('WB_DUPLICATE', 'addWhisky', data.WB);

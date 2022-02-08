@@ -74,6 +74,7 @@ export class CountriesResolver {
   }
 
   @Subscription(() => CountryGraphQLModel)
+  @Public()
   countryAdded() {
     return pubSub.asyncIterator('countryAdded');
   }

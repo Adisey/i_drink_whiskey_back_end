@@ -15,6 +15,7 @@ import {
 import { User } from 'src/domains/auth/decorators/user.decorator';
 import { showRole } from 'src/configs/auth.config';
 import { UserDBModel } from 'src/domains/users/models/users.model.DB';
+import { Public } from 'src/domains/auth/decorators/public.decorator';
 
 const pubSub = new PubSub();
 
@@ -64,6 +65,7 @@ export class UsersResolver {
   @Subscription(() => UserGraphQLModel, {
     description: getMessage('USER_ONLY'),
   })
+  @Public()
   userAdded() {
     return pubSub.asyncIterator('userAdded');
   }

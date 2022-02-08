@@ -25,19 +25,28 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
   canActivate(
     context: ExecutionContext,
   ): boolean | Promise<boolean> | Observable<boolean> {
-    if (this.isDebugMode) {
-      const ctx = GqlExecutionContext.create(context);
-      const { body, headers } = ctx.getContext()?.req;
-      Logger.log(headers, body, 'API Request');
-    }
-
     const isPublic = this.reflector.get<boolean>(
       config.PUBLIC_KEY,
       context.getHandler(),
     );
+
     if (isPublic) {
       return true;
     }
+
+    const ctx = GqlExecutionContext.create(context);
+
+    if (!ctx.getContext()?.req) {
+      // ToDo: 08.02.2022 - need think about better check WS token
+      Logger.log('Connect', 'WS');
+      return true;
+    }
+
+    if (this.isDebugMode) {
+      const { body, headers } = ctx.getContext()?.req;
+      Logger.log(headers, body, 'API Request');
+    }
+
     return super.canActivate(context);
   }
 

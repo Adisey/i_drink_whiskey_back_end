@@ -69,6 +69,7 @@ export class RegionsResolver {
   }
 
   @Subscription(() => RegionGraphQLModel)
+  @Public()
   regionAdded() {
     return pubSub.asyncIterator('regionAdded');
   }

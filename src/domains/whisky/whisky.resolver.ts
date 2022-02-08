@@ -77,6 +77,7 @@ export class WhiskyResolver {
   // }
   //
   @Subscription(() => WhiskyGraphQLModel)
+  @Public()
   whiskyAdded() {
     return pubSub.asyncIterator('whiskyAdded');
   }

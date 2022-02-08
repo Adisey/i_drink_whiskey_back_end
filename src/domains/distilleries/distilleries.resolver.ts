@@ -72,6 +72,7 @@ export class DistilleriesResolver {
   }
 
   @Subscription(() => DistilleryGraphQLModel)
+  @Public()
   distilleryAdded() {
     return pubSub.asyncIterator('distilleryAdded');
   }
