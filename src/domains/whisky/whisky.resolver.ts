@@ -1,6 +1,11 @@
 //Core
 import { Args, Mutation, Query, Resolver, Subscription } from '@nestjs/graphql';
-import { NotFoundException, UsePipes, ValidationPipe } from '@nestjs/common';
+import {
+  NotFoundException,
+  UseGuards,
+  UsePipes,
+  ValidationPipe,
+} from '@nestjs/common';
 import { PubSub } from 'graphql-subscriptions';
 
 //Main
@@ -14,6 +19,7 @@ import {
   WhiskiesGraphQLListModel,
   WhiskyGraphQLModel,
 } from './models/whisky.model.GraphQL';
+import { AdminGuard } from 'src/domains/auth/guards';
 
 const pubSub = new PubSub();
 
@@ -70,12 +76,14 @@ export class WhiskyResolver {
     pubSub.publish('whiskyAdded', { whiskyAdded: whisky });
     return whisky;
   }
-  //
-  // @Mutation((returns) => Boolean)
-  // async removeRecipe(@Args('id') id: string) {
-  //   return this.recipesService.remove(id);
-  // }
-  //
+
+  @Mutation((returns) => Boolean)
+  @UseGuards(AdminGuard)
+  @UsePipes(new ValidationPipe())
+  async removeWhiskyById(@Args('id') id: string) {
+    return this.whiskyService.remove(id);
+  }
+
   @Subscription(() => WhiskyGraphQLModel)
   @Public()
   whiskyAdded() {

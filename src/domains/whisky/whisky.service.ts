@@ -42,6 +42,12 @@ export class WhiskyService {
     }
   }
 
+  async remove(id: string): Promise<WhiskyDBModel> {
+    if (mongoose.Types.ObjectId.isValid(id)) {
+      return await this.whiskyModel.findByIdAndRemove(id).exec();
+    }
+  }
+
   async findNameById(id: string): Promise<string> {
     return (await this.findById(id)).name;
   }

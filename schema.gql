@@ -124,6 +124,7 @@ type Mutation {
   """Only for users with admin rights!"""
   deleteUserByEmail(email: String!): UserGraphQLModel!
   login(data: Login!): AuthTokenGraphQLModel!
+  removeWhiskyById(id: String!): Boolean!
 
   """Only for registered users!"""
   uploadPicture(file: Upload!): FilesGraphQLUploadModel!
