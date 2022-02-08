@@ -15,6 +15,7 @@ const messageList = {
   USER_BAD: 'Could not log-in with the provided credentials!',
   USER_NOT_FOUND: 'User not found!',
   USER_ONLY: 'Only for registered users!',
+  WB_DUPLICATE: 'Whisky Base Id should not be duplicate!',
 };
 
 export type IMessageType = keyof typeof messageList;

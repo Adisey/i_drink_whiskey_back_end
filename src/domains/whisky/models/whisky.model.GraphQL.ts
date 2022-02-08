@@ -24,6 +24,9 @@ export class NewWhiskyInput extends NewDistilleryInput {
 
   @Field({ nullable: true })
   distillery?: string;
+
+  @Field({ nullable: true })
+  WB?: string;
 }
 
 @ObjectType({ description: 'Whisky' })
@@ -36,6 +39,9 @@ export class WhiskyGraphQLModel extends DistilleryGraphQLModel {
 
   @Field({ nullable: true })
   distillery?: string;
+
+  @Field({ nullable: true })
+  WB?: string;
 }
 
 @ObjectType({ description: 'Whiskies list' })

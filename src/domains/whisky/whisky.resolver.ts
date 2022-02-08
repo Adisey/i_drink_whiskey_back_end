@@ -23,13 +23,23 @@ export class WhiskyResolver {
 
   @Query(() => WhiskyGraphQLModel)
   @Public()
-  async getWhisky(@Args('id') id: string): Promise<WhiskyGraphQLModel> {
+  async getWhiskyId(@Args('id') id: string): Promise<WhiskyGraphQLModel> {
     const recipe = await this.whiskyService.getItem(id);
     if (!recipe) {
       throw new NotFoundException(id);
     }
     return recipe;
   }
+
+  // @Query(() => WhiskyGraphQLModel)
+  // @Public()
+  // async getWhiskyWB(@Args('WB') WB: string): Promise<WhiskyGraphQLModel> {
+  //   const recipe = await this.whiskyService.getItem(id);
+  //   if (!recipe) {
+  //     throw new NotFoundException(id);
+  //   }
+  //   return recipe;
+  // }
 
   @Query(() => WhiskiesGraphQLListModel)
   @Public()

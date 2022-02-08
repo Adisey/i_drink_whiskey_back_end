@@ -32,6 +32,10 @@ export class WhiskyService {
     return await this.whiskyModel.findOne({ name }).exec();
   }
 
+  async findByWB(WB: string): Promise<DocumentType<WhiskyDBModel>> {
+    return await this.whiskyModel.findOne({ WB }).exec();
+  }
+
   async findById(id: string): Promise<WhiskyDBModel> {
     if (mongoose.Types.ObjectId.isValid(id)) {
       return await this.whiskyModel.findById(id).exec();
@@ -44,10 +48,11 @@ export class WhiskyService {
 
   async getItem(itemId: string): Promise<WhiskyGraphQLModel> {
     const found = await this.findById(itemId);
-    const { id, name, description, distilleryId, age } = found;
+    const { id, name, description, distilleryId, age, WB } = found;
     const parent = distilleryId
       ? await this.distilleriesService.getItem(distilleryId)
       : { name: undefined };
+
     return {
       ...parent,
       distilleryId,
@@ -56,6 +61,7 @@ export class WhiskyService {
       name,
       description,
       age,
+      WB,
     };
   }
 
@@ -64,10 +70,10 @@ export class WhiskyService {
   }
 
   async add(data: NewWhiskyInput): Promise<WhiskyGraphQLModel> {
-    const foundWhisky = await this.findByName(data.name);
+    const foundWhisky = await this.findByWB(data.WB);
 
     if (foundWhisky) {
-      throw emitGraphQLError('NAME_DUPLICATE', 'addWhisky', data.name);
+      throw emitGraphQLError('WB_DUPLICATE', 'addWhisky', data.WB);
     }
 
     const { distilleryId, distillery, regionId, region, countryId, country } =
@@ -103,8 +109,7 @@ export class WhiskyService {
     return {
       list: mainList.list.map((whisky: WhiskyDBModel) => ({
         id: whisky.id,
-        name: whisky.name,
-        description: whisky.description,
+        ...whisky,
       })),
       totalCount: mainList.totalCount,
     };
