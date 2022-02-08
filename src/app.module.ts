@@ -37,7 +37,6 @@ import { WhiskyModule } from './domains/whisky/whisky.module';
       ],
       playground: false,
     }),
-
     AuthModule,
     CountriesModule,
     DistilleriesModule,
