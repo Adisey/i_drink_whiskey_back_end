@@ -2,6 +2,7 @@
 import { Module } from '@nestjs/common';
 import { GraphQLModule } from '@nestjs/graphql';
 import { TypegooseModule } from 'nestjs-typegoose';
+import { ApolloServerPluginLandingPageLocalDefault } from 'apollo-server-core';
 import { getMongoConfig } from 'src/configs/mongo.config';
 
 // System
@@ -29,7 +30,14 @@ import { WhiskyModule } from './domains/whisky/whisky.module';
       autoSchemaFile: 'schema.gql',
       sortSchema: true,
       context: ({ req }: any) => ({ req }),
+      plugins: [
+        ApolloServerPluginLandingPageLocalDefault({
+          footer: false,
+        }),
+      ],
+      playground: false,
     }),
+
     AuthModule,
     CountriesModule,
     DistilleriesModule,
