@@ -209,6 +209,8 @@ type Query {
   getDistillery(id: String!): DistilleryChildrenGraphQLModel!
   getRegion(id: String!): RegionChildrenGraphQLModel!
   getWhiskyId(id: String!): WhiskyGraphQLModel!
+  getWhiskyName(name: String!): WhiskyGraphQLModel!
+  getWhiskyWB(WB: String!): WhiskyGraphQLModel!
   pagesList: [PageGraphQLModel!]!
   pagesListTree: PagesTreeGraphQLModel!
 

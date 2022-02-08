@@ -46,23 +46,41 @@ export class WhiskyService {
     return (await this.findById(id)).name;
   }
 
-  async getItem(itemId: string): Promise<WhiskyGraphQLModel> {
-    const found = await this.findById(itemId);
-    const { id, name, description, distilleryId, age, WB } = found;
-    const parent = distilleryId
-      ? await this.distilleriesService.getItem(distilleryId)
-      : { name: undefined };
+  async addInfo(item: WhiskyDBModel): Promise<WhiskyGraphQLModel> {
+    if (!item) {
+      return { id: '' };
+    } else {
+      const { id, name, description, distilleryId, age, WB } = item;
+      const parent = distilleryId
+        ? await this.distilleriesService.getItem(distilleryId)
+        : { name: undefined };
 
-    return {
-      ...parent,
-      distilleryId,
-      distillery: parent?.name,
-      id,
-      name,
-      description,
-      age,
-      WB,
-    };
+      return {
+        ...parent,
+        distilleryId,
+        distillery: parent?.name,
+        id,
+        name,
+        description,
+        age,
+        WB,
+      };
+    }
+  }
+
+  async getItemById(itemId: string): Promise<WhiskyGraphQLModel> {
+    const found = await this.findById(itemId);
+    return await this.addInfo(found);
+  }
+
+  async getItemByWB(WB: string): Promise<WhiskyGraphQLModel> {
+    const found = await this.findByWB(WB);
+    return await this.addInfo(found);
+  }
+
+  async getItemByName(name: string): Promise<WhiskyGraphQLModel> {
+    const found = await this.findByName(name);
+    return await this.addInfo(found);
   }
 
   async create(data: NewWhiskyInput): Promise<WhiskyDBModel> {
@@ -92,7 +110,7 @@ export class WhiskyService {
       distilleryId: foundDistillery.distilleryId,
     });
 
-    return await this.getItem(newWhisky.id);
+    return await this.getItemById(newWhisky.id);
   }
 
   async listAll(): Promise<WhiskyGraphQLModel[]> {
