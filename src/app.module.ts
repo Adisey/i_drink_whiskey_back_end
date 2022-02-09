@@ -36,6 +36,10 @@ import { WhiskyModule } from './domains/whisky/whisky.module';
         }),
       ],
       playground: false,
+      cors: {
+        origin: 'https://studio.apollographql.com',
+        credentials: true,
+      },
     }),
     AuthModule,
     CountriesModule,
