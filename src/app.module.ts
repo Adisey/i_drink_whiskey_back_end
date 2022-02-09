@@ -32,7 +32,7 @@ import { WhiskyModule } from './domains/whisky/whisky.module';
       context: ({ req }: any) => ({ req }),
       plugins: [
         ApolloServerPluginLandingPageLocalDefault({
-          footer: false,
+          footer: true,
         }),
       ],
       playground: false,
